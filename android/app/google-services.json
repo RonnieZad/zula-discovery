@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "67417934822",
+    "project_id": "zula-discovery",
+    "storage_bucket": "zula-discovery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67417934822:android:53c8bcf253adf39373a427",
+        "android_client_info": {
+          "package_name": "com.worldover.zula_discovery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMPKEpt3DF5HgM02u_VTqcprU7Zp3TY00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
