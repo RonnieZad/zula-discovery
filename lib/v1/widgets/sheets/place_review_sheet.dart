@@ -2,13 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
+import 'package:zula/v1/models/location_model.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
 
 class PlaceReviewSheet extends StatelessWidget {
   const PlaceReviewSheet({
-    super.key,
+    super.key, required this.locationReviews,
   });
+
+  final List<LocationReview> locationReviews;
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +38,13 @@ class PlaceReviewSheet extends StatelessWidget {
             child: ListView.builder(
               padding: EdgeInsets.zero,
               shrinkWrap: true,
-              itemCount: 14,
+              itemCount: locationReviews.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(
-                        'https://ik.imagekit.io/ecjzuksxj/TravelBuddy/Instagram%20Photo%2020240204%20(1).jpg?updatedAt=1707042078279'),
+                      locationReviews[index].locationReviewContactPreview
+                        ),
                   ),
                   title: heading(
                       text: 'John Doe',
@@ -48,11 +52,11 @@ class PlaceReviewSheet extends StatelessWidget {
                       color: Colors.white),
                   subtitle: paragraph(
                       text:
-                          'The place is amazing, I had a great time',
+                          locationReviews[index].locationReviewContactReview,
                       fontSize: 20.sp,
                       color: Colors.white),
                   trailing: paragraph(
-                      text: '3rd Feb',
+                      text: locationReviews[index].locationReviewDate,
                       fontSize: 19.sp,
                       color: Colors.white),
                 );
