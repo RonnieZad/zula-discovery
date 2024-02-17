@@ -4,17 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
-// import 'package:platform_device_id/platform_device_id.dart';
-import 'package:vybe/v1/constants/strings.dart';
-import 'package:vybe/v1/controllers/auth_controller.dart';
-import 'package:vybe/v1/pager.dart';
-import 'package:vybe/v1/screens/dicover_page.dart';
-import 'package:vybe/v1/screens/homepage.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
-import 'package:vybe/v1/widgets/screen_overlay.dart';
+import 'package:zula/v1/constants/strings.dart';
+import 'package:zula/v1/controllers/auth_controller.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:zula/v1/widgets/image_blur_backdrop.dart';
 
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
@@ -88,27 +84,8 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   borderRadius: BorderRadius.circular(50.0),
                   color: Colors.white10,
                   child: label(text: 'Get Started Already!'),
-                  onPressed: () async {
-                    final deviceInfo = await deviceInfoPlugin.androidInfo;
-
-                    print(deviceInfo.id);
-                    print(deviceInfo.version.release);
-                      var uniqueDeviceId = '${deviceInfo.device}:${deviceInfo.id}' ;
-                      print(uniqueDeviceId);
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                            child: Column(
-                              children: [
-                                paragraph(text: deviceInfo.id)
-                              ],
-                            ),
-                          );
-                        });
-
-                    // print(deviceId);
-                    // authController.guestLogin(context);
+                  onPressed: () {
+                    authController.guestLogin(context);
                   }),
               20.ph,
               TextButton(
