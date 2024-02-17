@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vybe/v1/utils/typography.dart';
+import 'package:zula/v1/utils/typography.dart';
 
 class AuthController extends GetxController {
   final _userCredential = FirebaseAuth.instance;
@@ -13,25 +13,23 @@ class AuthController extends GetxController {
   guestLogin(context) async {
     try {
       await _userCredential.signInAnonymously();
-      print("Signed in with temporary account.");
-
+      debugPrint("Signed in with temporary account.");
     } on FirebaseAuthException catch (e) {
-            showDialog(context: context, builder: (context){
-        return Dialog(
-          child: Column(
-            children: [
-              paragraph(text: e.code)
-            ],
-          ),
-        );
-      });
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              child: Column(
+                children: [paragraph(text: e.code)],
+              ),
+            );
+          });
       switch (e.code) {
-        
         case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.");
+          debugPrint("Anonymous auth hasn't been enabled for this project.");
           break;
         default:
-          print("Unknown error.");
+          debugPrint("Unknown error.");
       }
     }
   }
@@ -42,10 +40,10 @@ class AuthController extends GetxController {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.");
+          debugPrint("Anonymous auth hasn't been enabled for this project.");
           break;
         default:
-          print("Unknown error.");
+          debugPrint("Unknown error.");
       }
     }
   }
