@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
 
 
 class Header extends StatelessWidget {
