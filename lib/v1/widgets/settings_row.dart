@@ -1,13 +1,11 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
-import 'package:vybe/v1/widgets/screen_overlay.dart';
-
-
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/link_parser.dart';
+import 'package:zula/v1/utils/typography.dart';
+import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class SettingsRow extends StatelessWidget {
   const SettingsRow({
@@ -34,13 +32,17 @@ class SettingsRow extends StatelessWidget {
               break;
 
             case 'helpCenter':
-              
+              ScreenOverlay.showConfirmationDialog(context,
+                  title: 'Help Center via Whatsapp',
+                  description:
+                      'This action will open whatsapp to start a chat with our team',
+                  action: () {
+                LinkParser.launchWhatsappHelpCenter();
+              });
 
               break;
 
             case 'changePassword':
-             
-             
               break;
 
             default:
@@ -53,7 +55,6 @@ class SettingsRow extends StatelessWidget {
         child: Column(
           children: [
             30.ph,
-          
             Stack(
               children: [
                 Column(
@@ -61,17 +62,17 @@ class SettingsRow extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(iconData, size: 24.w,color: Colors.white60),
+                        Icon(iconData, size: 24.w, color: Colors.white60),
                         10.pw,
-                        paragraph(text: title, fontSize: 24.sp, color: Colors.white60)
+                        paragraph(
+                            text: title, fontSize: 24.sp, color: Colors.white60)
                       ],
                     ),
                     6.ph,
                     SizedBox(
                         width: 390.w,
                         child: paragraph(
-                            color: Colors.white54
-                                ,
+                            color: Colors.white54,
                             text: subHeading,
                             fontSize: 21.sp))
                   ],

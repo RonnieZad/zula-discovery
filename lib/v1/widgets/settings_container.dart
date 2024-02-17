@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
-// import 'package:vybe/v1/utils/utils.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
+// import 'package:zula/v1/utils/utils.dart';
 
 class SettingsContainer extends StatelessWidget {
   const SettingsContainer(
@@ -66,7 +66,7 @@ class SettingsWidget extends StatelessWidget {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            caption(text: title, fontSize: 30.sp, color: Colors.white60),
+           title.isEmpty ?const SizedBox.shrink(): caption(text: title, fontSize: 30.sp, color: Colors.white60),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
