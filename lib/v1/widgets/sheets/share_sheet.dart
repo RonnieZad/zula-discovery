@@ -1,10 +1,9 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/link_parser.dart';
+import 'package:zula/v1/utils/typography.dart';
 
 class ShareSheet extends StatelessWidget {
   const ShareSheet({
@@ -14,70 +13,72 @@ class ShareSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 25.w),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          heading(
-              text: 'Share',
-              fontSize: 27.sp,
-              color: Colors.white),
+          heading(text: 'Share', fontSize: 27.sp, color: Colors.white),
           20.ph,
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Icon(LineIcons.facebook,
-                      color: Colors.white,
-                      size: 30.w),
-                  10.ph,
-                  paragraph(
-                      text: 'Facebook',
-                      fontSize: 20.sp,
-                      color: Colors.white70)
-                ],
+              GestureDetector(
+                onTap: () {
+                  LinkParser.launchWhatsappWithLink(
+                      'Check out the Zula Discovery app on playstore to find the perfect memory place, use the link below');
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      Icon(LineIcons.twitter, color: Colors.white, size: 35.w),
+                      10.ph,
+                      paragraph(
+                          text: 'X',
+                          fontSize: 22.sp,
+                          color: Colors.white70)
+                    ],
+                  ),
+                ),
               ),
-              20.pw,
-              Column(
-                children: [
-                  Icon(LineIcons.twitter,
-                      color: Colors.white,
-                      size: 30.w),
-                  10.ph,
-                  paragraph(
-                      text: 'Twitter',
-                      fontSize: 20.sp,
-                      color: Colors.white70)
-                ],
+              
+              GestureDetector(
+                onTap: () {
+                  LinkParser.launchWhatsappWithLink(
+                      'Check out the Zula Discovery app on playstore to find the perfect memory place, use the link below');
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      Icon(LineIcons.whatSApp, color: Colors.white, size: 35.w),
+                      10.ph,
+                      paragraph(
+                          text: 'Whatsapp',
+                          fontSize: 22.sp,
+                          color: Colors.white70)
+                    ],
+                  ),
+                ),
               ),
-              20.pw,
-              Column(
-                children: [
-                  Icon(LineIcons.instagram,
-                      color: Colors.white,
-                      size: 30.w),
-                  10.ph,
-                  paragraph(
-                      text: 'Instagram',
-                      fontSize: 20.sp,
-                      color: Colors.white70)
-                ],
-              ),
-              20.pw,
-              Column(
-                children: [
-                  Icon(LineIcons.sms,
-                      color: Colors.white,
-                      size: 30.w),
-                  10.ph,
-                  paragraph(
-                      text: 'SMS',
-                      fontSize: 20.sp,
-                      color: Colors.white70)
-                ],
+              
+              GestureDetector(
+                onTap: () {
+                  LinkParser.launchSMSWithLink(
+                      'Check out the Zula Discovery app on playstore to find the perfect memory place, use the link below');
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      Icon(LineIcons.sms, color: Colors.white, size: 35.w),
+                      10.ph,
+                      paragraph(
+                          text: 'SMS', fontSize: 22.sp, color: Colors.white70)
+                    ],
+                  ),
+                ),
               ),
             ],
           )
@@ -86,5 +87,3 @@ class ShareSheet extends StatelessWidget {
     );
   }
 }
-
-
