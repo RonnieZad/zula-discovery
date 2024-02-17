@@ -1,13 +1,70 @@
+
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vybe/v1/utils/typography.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
 
 class ScreenOverlay {
   ScreenOverlay._();
+
+  static showConfirmationDialog(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required Function action,
+  }) {
+    return showDialog(
+        context: context,
+        barrierColor: Colors.black87,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.r)),
+            backgroundColor: Colors.black,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    heading(text: title, color: Colors.white),
+                    10.ph,
+                    paragraph(
+                        text: description,
+                        color: Colors.white60),
+                    25.ph,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoButton(
+                            borderRadius: BorderRadius.circular(50.0),
+                            color: Colors.white10,
+                            child: label(text: 'Continue'),
+                            onPressed: () {
+                              action();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    10.ph,
+                    Center(
+                        child: TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child:
+                                label(text: 'Cancel', color: Colors.white60)))
+                  ]),
+            ),
+          );
+        });
+  }
 
   static showAppSheet(BuildContext context,
       {required Widget sheet, bool showDismissButton = false}) {
@@ -44,11 +101,14 @@ class ScreenOverlay {
                             right: 140.0,
                             child: FilledButton.icon(
                               style: ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll(Colors.white30)
+                                  backgroundColor:
+                                      MaterialStatePropertyAll(Colors.white30)),
+                              label:
+                                  paragraph(text: 'Close', color: Colors.black),
+                              icon: const Icon(
+                                CupertinoIcons.multiply,
+                                color: Colors.black,
                               ),
-                              
-                              label: paragraph(text: 'Close',color: Colors.black),
-                              icon: const Icon(CupertinoIcons.multiply, color: Colors.black,),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
