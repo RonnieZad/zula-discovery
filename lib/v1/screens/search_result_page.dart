@@ -1,73 +1,66 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import 'package:vybe/v1/constants/strings.dart';
-import 'package:vybe/v1/screens/explore_page.dart';
-import 'package:vybe/v1/screens/notification_center.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
-import 'package:vybe/v1/widgets/app_background.dart';
+import 'package:get/get.dart';
+import 'package:octo_image/octo_image.dart';
+import 'package:zula/v1/screens/explore_page.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
+import 'package:zula/v1/widgets/app_background.dart';
+import 'package:zula/v1/widgets/image_blur_backdrop.dart';
+
+import '../controllers/location_controller.dart';
 
 class SearchResultPage extends StatefulWidget {
-  const SearchResultPage({super.key});
+  const SearchResultPage({super.key,  this.hideBackButton = false});
+
+  final bool? hideBackButton;
 
   @override
   State<SearchResultPage> createState() => _SearchResultPageState();
 }
 
 class _SearchResultPageState extends State<SearchResultPage> {
-  final PageController _pageController = PageController(viewportFraction: 0.9);
-
-  late List<VideoPlayerController> _videoPlayerControllers;
-
-  @override
-  void initState() {
-    _videoPlayerControllers = List.generate(videoAssets.length, (index) {
-      return VideoPlayerController.networkUrl(
-          Uri.parse(videoAssets[index]['url']));
-    });
-
-    // Initialize all video controllers asynchronously
-    Future.wait(_videoPlayerControllers
-        .map((controller) => controller.initialize())).then((_) {
-      setState(() {
-        // Start playing the first video
-        _videoPlayerControllers[0].play();
-        _videoPlayerControllers[0].setLooping(true);
-      });
-    });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    // Dispose all video controllers when the widget is disposed
-    _videoPlayerControllers.forEach((controller) => controller.dispose());
-    super.dispose();
-  }
+  LocationController locationController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          const AppBackground(),
-          Container(
-            child: Positioned(
-              top: 0.h,
+      body: Obx(() {
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            const AppBackground(),
+            Positioned(
+              top: widget.hideBackButton! ? 50.h: 140.h,
               left: 0.0,
               right: 0.0,
               bottom: 100.0,
-              child: PageView.builder(
-                  controller: _pageController,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: videoAssets.length,
+              child: locationController.searchPageViewIsLoading.value ?
+              SizedBox(
+                width: 100.w,
+                height: 100.w,
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(
+                      
+                    ),
+                  ],
+                )):
+              
+              GridView.builder(
+                  padding:
+                      EdgeInsets.only(left: 20.w, right: 20.w, bottom: 120.h),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisExtent: 270,
+                      mainAxisSpacing: 15.w,
+                      crossAxisSpacing: 15.h,
+                      crossAxisCount: 2),
+                  itemCount:
+                      locationController.retrievedLocationSearches.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
@@ -75,158 +68,121 @@ class _SearchResultPageState extends State<SearchResultPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ExploreDetails()));
+                                builder: (context) => ExploreDetails(
+                                    locationDetails: locationController
+                                        .retrievedLocationSearches[index])));
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: Stack(
-                          alignment: Alignment.bottomCenter,
-                          clipBehavior: Clip.none,
-                          children: [
-                            Positioned(
-                              bottom: 50.h,
-                              left: 0.0,
-                              right: 0.0,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(40.r),
-                                child: SizedBox(
-                                  height: 1.39.sw,
-                                  width: double.infinity,
-                                  child: Stack(
-                                    children: [
-                                      _videoPlayerControllers.isNotEmpty
-                                          ? VisibilityDetector(
-                                              key: Key(
-                                                  videoAssets[index]['title']),
-                                              onVisibilityChanged:
-                                                  (visibilityInfo) {
-                                                var visiblePercentage =
-                                                    visibilityInfo
-                                                            .visibleFraction *
-                                                        100;
-
-                                                if (visiblePercentage > 50) {
-                                                  _videoPlayerControllers[index]
-                                                      .play();
-                                                  _videoPlayerControllers[index]
-                                                      .setLooping(true);
-                                                } else {
-                                                  _videoPlayerControllers[index]
-                                                      .pause();
-                                                }
-                                              },
-                                              child: VideoPlayer(
-                                                  _videoPlayerControllers[
-                                                      index]))
-                                          : const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                            gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                              Colors.transparent,
-                                              Colors.black87
-                                            ])),
-                                      ),
-                                      Positioned(
-                                        bottom: 65.h,
-                                        left: 15.w,
-                                        right: 15.w,
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                heading(
-                                                    text: videoAssets[index]
-                                                        ['title'],
-                                                    fontSize: 30.sp,
-                                                    color: Colors.white),
-                                                10.pw,
-                                                Icon(
-                                                  LucideIcons.badgeCheck,
-                                                  color: Colors.white,
-                                                  size: 20.w,
-                                                )
-                                              ],
-                                            ),
-                                            10.ph,
-                                            paragraph(
-                                                text: videoAssets[index]
-                                                    ['description'],
-                                                fontSize: 20.sp,
-                                                color: Colors.white,
-                                                textAlign: TextAlign.center),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.r),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Stack(
+                                children: [
+                                  OctoImage(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    placeholderBuilder:
+                                        OctoBlurHashFix.placeHolder(
+                                            'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                                    errorBuilder:
+                                        OctoError.icon(color: Colors.red),
+                                    image: CachedNetworkImageProvider(
+                                        locationController
+                                            .retrievedLocationSearches[index]
+                                            .locationPicture[0]
+                                            .locationPictureUrl),
+                                    fit: BoxFit.cover,
                                   ),
-                                ),
+                                  Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                          Colors.transparent,
+                                          Colors.black45
+                                        ])),
+                                  ),
+                                  Positioned(
+                                    bottom: 15.h,
+                                    left: 15.w,
+                                    right: 15.w,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        heading(
+                                            text: locationController
+                                                .retrievedLocationSearches[
+                                                    index]
+                                                .locationName,
+                                            fontSize: 25.sp,
+                                            color: Colors.white),
+                                        8.ph,
+                                        // paragraph(
+                                        //     text:
+                                        //         '${locationController.retrievedLocationSearches[index].categoryCount} places',
+                                        //     fontSize: 18.sp,
+                                        //     color: Colors.white)
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Positioned(
-                              bottom: 18.h,
-                              right: 120.w,
-                              left: 120.w,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 17.h),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(18)),
-                                child: Center(child: heading(text: 'Explore')),
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
-                  }),
+                  }). animate(onPlay: (controller) => controller.repeat())
+          
+          // .shake(hz: 2, curve: Curves.decelerate)
+          .shimmer(
+              delay: 700.ms,
+              duration: 2000.ms,
+              color: Theme.of(context).scaffoldBackgroundColor)
+          // .shake(hz: 2, curve: Curves.decelerate),
             ),
-          ),
-          Positioned(
-            top: 60.h,
-            left: 20.w,
-            right: 20.w,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Row(
-                      children: [
-                        Icon(CupertinoIcons.arrow_left,
-                            color: Colors.white, size: 30.w),
-                        20.pw,
-                        heading(
-                            text: 'Results',
-                            fontSize: 30.sp,
-                            color: Colors.white),
-                      ],
+          widget.hideBackButton!  ? const SizedBox.shrink():
+          
+            Positioned(
+              top: 60.h,
+              left: 20.w,
+              right: 20.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        children: [
+                          Icon(CupertinoIcons.arrow_left,
+                              color: Colors.white, size: 30.w),
+                          20.pw,
+                          heading(
+                              text: 'Search Results',
+                              fontSize: 30.sp,
+                              color: Colors.white),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    LucideIcons.filter,
-                    color: Colors.white,
-                  ),
-                )
-              ],
+                 
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
