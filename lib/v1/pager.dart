@@ -3,13 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vybe/v1/constants/strings.dart';
-import 'package:vybe/v1/screens/dicover_page.dart';
+import 'package:get/get.dart';
+import 'package:zula/v1/constants/strings.dart';
+import 'package:zula/v1/controllers/location_controller.dart';
+import 'package:zula/v1/screens/dicover_page.dart';
 
-import 'package:vybe/v1/screens/homepage.dart';
-import 'package:vybe/v1/screens/my_settings.dart';
-import 'package:vybe/v1/utils/extensions.dart';
-import 'package:vybe/v1/utils/typography.dart';
+import 'package:zula/v1/screens/homepage.dart';
+import 'package:zula/v1/screens/my_settings.dart';
+import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
 
 class AppCanvas extends StatefulWidget {
   const AppCanvas({super.key});
@@ -20,6 +22,7 @@ class AppCanvas extends StatefulWidget {
 
 class _AppCanvasState extends State<AppCanvas> {
   final PageController _appPageController = PageController();
+  LocationController locationController = Get.put(LocationController());
 
   List<Widget> appPages = [
     const MyHomePage(),
