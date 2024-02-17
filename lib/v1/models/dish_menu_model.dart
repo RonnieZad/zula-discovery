@@ -4,9 +4,10 @@ class Dish {
   final double price;
   final String imageUrl;
 
-  Dish(
-      {required this.name,
-      required this.description,
-      required this.price,
-      required this.imageUrl});
+  Dish({
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.imageUrl,
+  });
 }
