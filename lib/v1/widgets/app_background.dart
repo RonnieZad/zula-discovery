@@ -6,16 +6,16 @@ class AppBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration:  const BoxDecoration(
         gradient: LinearGradient(
-            stops: [0.0, 0.4, 1.0],
+            stops: [0.0, 0.5,0.9],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color.fromRGBO(20, 45, 66, 1),
-              Colors.black,
-              Colors.black,
-            ]),
+                     Color(0xFF69B4FF), // Modern Blue
+                  Color(0xFFD3C8F6), // Modern Lavender
+                  Color(0xFFFFB6B9), // Modern Pink/ Light 
+                ],),
       ),
     );
   }
