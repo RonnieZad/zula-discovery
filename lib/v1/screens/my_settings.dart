@@ -3,7 +3,6 @@
 //  Created by Ronald Zad Muhanguzi .
 //  2023, Enyumba App. All rights reserved.
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,9 +39,9 @@ class _MySettingsState extends State<MySettings> {
         children: [
           const AppBackground(),
           Padding(
-            padding: EdgeInsets.only(top: 150.h),
+            padding: EdgeInsets.only(top: 120.h),
             child: ListView(
-                padding: EdgeInsets.only(bottom: 100.h),
+                padding: EdgeInsets.zero,
                 physics: const BouncingScrollPhysics(),
                 children: <Widget>[
                   const SettingsWidget(
@@ -56,14 +55,14 @@ class _MySettingsState extends State<MySettings> {
                           title: 'Help Center',
                         ),
                         SettingsRow(
-                          routeName: '',
+                          routeName: 'termsOfService',
                           subHeading: 'Learn more about our Terms of Service',
                           iconData: LucideIcons.fileText,
                           title: 'Terms of Service',
                         ),
                         SettingsRow(
-                          routeName: '',
-                          subHeading: 'See our terms and conditions',
+                          routeName: 'privacyPolicy',
+                          subHeading: 'See our privacy plicy',
                           iconData: LucideIcons.fileText,
                           title: 'Privacy Policy',
                         ),
@@ -75,7 +74,7 @@ class _MySettingsState extends State<MySettings> {
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: CupertinoButton(
                         borderRadius: BorderRadius.circular(50.0),
-                        color: Colors.white10,
+                        color: Colors.white24,
                         child: label(text: 'Log out'),
                         onPressed: () {
                           ScreenOverlay.showConfirmationDialog(context,
@@ -91,12 +90,12 @@ class _MySettingsState extends State<MySettings> {
                   SvgPicture.asset(
                     'assets/images/zula_logo.svg',
                     width: 65.w,
-                    color: Colors.white30,
+                    color: Colors.white70,
                   ),
                   10.ph,
                   Center(
                       child: paragraph(
-                          text: 'Version: 1.0.1+3 Beta', color: Colors.white30))
+                          text: 'Version: 1.0.1+3 Beta', color: Colors.white70))
                 ]),
           ),
           const Header(
