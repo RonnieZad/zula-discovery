@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/controllers/auth_controller.dart';
+import 'package:zula/v1/screens/docs.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,15 +25,27 @@ class GetStartedPage extends StatefulWidget {
 class _GetStartedPageState extends State<GetStartedPage> {
   AuthController authController = Get.find();
 
+  @override
+  void initState() {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
+    super.initState();
+  }
+
   final deviceInfoPlugin = DeviceInfoPlugin();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: Stack(alignment: Alignment.bottomCenter, children: [
         Positioned(
           top: 0.0,
-          bottom: 120.0,
+          bottom: 0.0,
           left: 0.0,
           right: -250.0,
           child: ShaderMask(
@@ -39,7 +54,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: <Color>[Colors.white, Colors.transparent],
-                  stops: [0.6, 0.99],
+                  stops: [0.6, 1],
                 ).createShader(
                   Rect.fromLTRB(
                     0,
@@ -49,7 +64,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   ),
                 );
               },
-              blendMode: BlendMode.dstATop,
+              // blendMode: BlendMode.dstATop,
               child: OctoImage(
                 placeholderBuilder:
                     OctoBlurHashFix.placeHolder('LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
@@ -78,21 +93,30 @@ class _GetStartedPageState extends State<GetStartedPage> {
               paragraph(
                   text: 'Discover endless adventures. Your journey begins here',
                   color: Colors.white,
-                  textAlign: TextAlign.center),
+                  textAlign: TextAlign.center,
+                  fontSize: 24.sp),
               70.ph,
               CupertinoButton(
                   borderRadius: BorderRadius.circular(50.0),
-                  color: Colors.white10,
+                  color: brandPrimaryColor,
                   child: label(text: 'Get Started Already!'),
                   onPressed: () {
                     authController.guestLogin(context);
                   }),
               20.ph,
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DocsPages(
+                                termsOfServie: termsCondtionsText,
+                                headingText: 'Zula App\nTerms and Conditions',
+                              )));
+                },
                 child: label(
-                  text: 'See Terms and conditions',
-                  color: Colors.white60,
+                  text: 'See Terms and Conditions',
+                  color: brandPrimaryColor,
                 ),
               )
             ],
