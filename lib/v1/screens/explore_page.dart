@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
@@ -44,6 +45,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   late Gallery3DController controller;
   late WebViewController webViewController;
   ScrollController activityScrollController = ScrollController();
+  List<bool> extraInfoState = [false, false];
 
   @override
   void initState() {
@@ -64,29 +66,23 @@ class _ExploreDetailsState extends State<ExploreDetails> {
     controller = Gallery3DController(
         itemCount: widget.locationDetails.locationPicture.length,
         autoLoop: true,
-        ellipseHeight: 0,
-        minScale: 0.4);
+        minScale: 0.84);
     super.initState();
   }
 
   Widget buildGallery3D() {
     return Gallery3D(
         controller: controller,
-        // padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-        itemConfig: const GalleryItemConfig(
+        itemConfig:  GalleryItemConfig(
             width: 320,
             height: 460,
-            radius: 10,
-            isShowTransformMask: true,
+            radius: 15.r,
             shadows: [
-              BoxShadow(
-                  color: Color(0x90000000), offset: Offset(2, 0), blurRadius: 5)
+              const BoxShadow(color: Colors.white, blurRadius: 20, spreadRadius: 8)
             ]),
         width: MediaQuery.of(context).size.width,
         height: 500,
-        isClip: true,
-
-        // currentIndex: currentIndex,
+        isClip: false,
         onItemChanged: (index) {
           setState(() {
             currentIndex = index;
@@ -145,10 +141,27 @@ class _ExploreDetailsState extends State<ExploreDetails> {
             const AppBackground(),
             ParallaxWidget(
               top: topOne,
-              widget: BackgrounBlurView(
-                imageUrl: widget.locationDetails.locationPicture[currentIndex]
-                    .locationPictureUrl,
-              ),
+              widget: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[Colors.white, Colors.transparent],
+                      stops: [0.6, 0.99],
+                    ).createShader(
+                      Rect.fromLTRB(
+                        0,
+                        0,
+                        bounds.width,
+                        bounds.height,
+                      ),
+                    );
+                  },
+                  blendMode: BlendMode.dstATop,
+                  child: BackgrounBlurView(
+                    imageUrl: widget.locationDetails
+                        .locationPicture[currentIndex].locationPictureUrl,
+                  )),
             ),
             ListView(
               padding: EdgeInsets.only(top: 120.h),
@@ -169,12 +182,12 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                               heading(
                                   text: widget.locationDetails.locationName,
                                   fontSize: 27.sp,
-                                  color: Colors.white),
+                                  color: brandPrimaryColor),
                               5.ph,
                               paragraph(
                                   text: widget.locationDetails.locationCity,
                                   fontSize: 20.sp,
-                                  color: Colors.grey),
+                                  color: Colors.white),
                             ],
                           ),
                           Column(
@@ -183,7 +196,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                               heading(
                                   text: widget.locationDetails.locationCategory,
                                   fontSize: 27.sp,
-                                  color: Colors.white),
+                                  color: brandPrimaryColor),
                               5.ph,
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +214,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                       text:
                                           '${widget.locationDetails.locationRating}',
                                       fontSize: 20.sp,
-                                      color: Colors.white),
+                                      color: brandPrimaryColor),
                                 ],
                               ),
                             ],
@@ -211,8 +224,8 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                       20.ph,
                       paragraph(
                           text: widget.locationDetails.locationFullDescription,
-                          fontSize: 19.sp,
-                          color: Colors.white),
+                          fontSize: 21.sp,
+                          color: brandPrimaryColor),
                       10.ph,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -226,7 +239,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                     ));
                               },
                               icon: Icon(LucideIcons.quote,
-                                  color: Colors.white, size: 30.w)),
+                                  color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
                                 ScreenOverlay.showConfirmationDialog(context,
@@ -242,7 +255,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                 });
                               },
                               icon: Icon(LineIcons.alternateMapMarked,
-                                  color: Colors.white, size: 30.w)),
+                                  color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
                                 ScreenOverlay.showAppSheet(context,
@@ -252,7 +265,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                             .locationMenuActivity));
                               },
                               icon: Icon(Icons.restaurant_menu,
-                                  color: Colors.white, size: 30.w)),
+                                  color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
                                 ScreenOverlay.showAppSheet(context,
@@ -260,25 +273,25 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                         webViewController: webViewController));
                               },
                               icon: Icon(Icons.threed_rotation,
-                                  color: Colors.white, size: 30.w)),
+                                  color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {},
                               icon: Icon(LineIcons.heart,
-                                  color: Colors.white, size: 30.w)),
+                                  color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
                                 ScreenOverlay.showAppSheet(context,
                                     sheet: ShareSheet());
                               },
                               icon: Icon(LineIcons.share,
-                                  color: Colors.white, size: 30.w)),
+                                  color: brandPrimaryColor, size: 30.w)),
                         ],
                       ),
                       20.ph,
                       heading(
                           text: 'Activites',
                           fontSize: 27.sp,
-                          color: Colors.white),
+                          color: brandPrimaryColor),
                       15.ph,
                       SizedBox(
                         height: 240.h,
@@ -345,7 +358,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                               .locationActivity[index]
                                               .locationActivityName,
                                           fontSize: 20.sp,
-                                          color: Colors.white),
+                                          color: brandPrimaryColor),
                                     ],
                                   ),
                                 ),
@@ -356,7 +369,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                       heading(
                           text: 'What to expect',
                           fontSize: 27.sp,
-                          color: Colors.white),
+                          color: brandPrimaryColor),
                       35.ph,
                       GridView.builder(
                           padding: EdgeInsets.zero,
@@ -373,7 +386,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                 // mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(placeAmenities[index]['icon'],
-                                      color: Colors.white, size: 30.w),
+                                      color: brandPrimaryColor, size: 30.w),
                                   10.ph,
                                   paragraph(
                                       text: widget
@@ -381,46 +394,96 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                           .locationAmenity[index]
                                           .locationAmenityName,
                                       fontSize: 20.sp,
-                                      color: Colors.white54,
+                                      color: brandPrimaryColor.withOpacity(0.8),
                                       textAlign: TextAlign.center)
                                 ],
                               )),
-                      20.ph,
+                      
                       heading(
                           text: 'Extra Information',
                           fontSize: 27.sp,
-                          color: Colors.white),
-                      15.ph,
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 15.h),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white10),
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(10.r)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            paragraph(
-                                text:
-                                    'Opens at ${widget.locationDetails.locationExtraInfo.openingTime}',
-                                fontSize: 20.sp,
-                                color: Colors.white54),
-                            10.ph,
-                            paragraph(
-                                text:
-                                    'Closes at ${widget.locationDetails.locationExtraInfo.closingTime}',
-                                fontSize: 20.sp,
-                                color: Colors.white54),
-                            10.ph,
-                            paragraph(
-                                text: widget.locationDetails.locationExtraInfo
-                                    .description,
-                                fontSize: 20.sp,
-                                color: Colors.white54),
-                          ],
-                        ),
+                          color: brandPrimaryColor),
+                      35.ph,
+                      ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        itemCount: extraInfoState.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                extraInfoState = [false, false, false];
+                                extraInfoState[index] = true;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              margin: EdgeInsets.only(bottom: 10.h),
+                              duration: const Duration(milliseconds: 300),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.w, vertical: 15.h),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color:
+                                          brandPrimaryColor.withOpacity(0.4)),
+                                  color: extraInfoState[index]
+                                      ? brandPrimaryColor.withOpacity(0.2)
+                                      : brandPrimaryColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10.r)),
+                              child: extraInfoState[index]
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        paragraph(
+                                            text:
+                                                'Opens at ${widget.locationDetails.locationExtraInfo.openingTime}',
+                                            fontSize: 20.sp,
+                                            color: brandPrimaryColor
+                                                .withOpacity(0.8)),
+                                        10.ph,
+                                        paragraph(
+                                            text:
+                                                'Closes at ${widget.locationDetails.locationExtraInfo.closingTime}',
+                                            fontSize: 20.sp,
+                                            color: brandPrimaryColor
+                                                .withOpacity(0.8)),
+                                        10.ph,
+                                        paragraph(
+                                            text: widget.locationDetails
+                                                .locationExtraInfo.description,
+                                            fontSize: 20.sp,
+                                            color: brandPrimaryColor
+                                                .withOpacity(0.8)),
+                                      ],
+                                    )
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            paragraph(
+                                                text:
+                                                    'Opens at ${widget.locationDetails.locationExtraInfo.openingTime}',
+                                                fontSize: 20.sp,
+                                                color: brandPrimaryColor
+                                                    .withOpacity(0.8)),
+                                            Icon(
+                                              LucideIcons.chevronDown,
+                                              color: brandPrimaryColor
+                                                  .withOpacity(0.8),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          );
+                        },
                       ),
                       100.ph,
                     ],
@@ -442,16 +505,18 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
                           child: Container(
                             padding: const EdgeInsets.all(6),
-                            decoration: const BoxDecoration(color: Colors.black26),
+                            decoration:
+                                const BoxDecoration(color: Colors.white38),
                             child: Row(
                               children: [
                                 Icon(CupertinoIcons.arrow_left,
-                                    color: Colors.white, size: 30.w),
+                                    color: brandPrimaryColor.withOpacity(0.8),
+                                    size: 30.w),
                                 20.pw,
                                 heading(
                                     text: 'Back',
                                     fontSize: 30.sp,
-                                    color: Colors.white),
+                                    color: brandPrimaryColor.withOpacity(0.8)),
                               ],
                             ),
                           ),
@@ -460,12 +525,13 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                     : Row(
                         children: [
                           Icon(CupertinoIcons.arrow_left,
-                              color: Colors.white, size: 30.w),
+                              color: brandPrimaryColor.withOpacity(0.8),
+                              size: 30.w),
                           20.pw,
                           heading(
                               text: 'Back',
                               fontSize: 30.sp,
-                              color: Colors.white),
+                              color: brandPrimaryColor.withOpacity(0.8)),
                         ],
                       ),
               ),
