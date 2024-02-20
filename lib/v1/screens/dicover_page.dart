@@ -103,17 +103,15 @@ class _DiscoverPageState extends State<DiscoverPage> {
           children: [
             const AppBackground(),
             Positioned(
-                top: 65.h,
+                top: 40.h,
                 left: 20.w,
                 right: 20.w,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      title(
-                        text: 'Discover',
-                        color: Colors.white,
-                        fontSize: 40.sp,
-                      ),
+                      heading(
+                      text: 'Discover', fontSize: 38.sp, color: Colors.white),
+                     
                       const Spacer(),
                       IconButton(
                         icon: const Icon(
