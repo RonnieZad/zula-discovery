@@ -60,6 +60,8 @@ dependencies:
   url_launcher: ^6.2.4
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.6
+  ticket_widget: ^1.0.2
+  barcode_widget: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -137,3 +139,6 @@ flutter:
         - asset: assets/fonts/Poppins/Poppins-Regular.ttf
         - asset: assets/fonts/Poppins/Poppins-Medium.ttf
         - asset: assets/fonts/Poppins/Poppins-Light.ttf
+    - family: Rangile
+      fonts:
+        - asset: assets/fonts/Rangile.ttf      
