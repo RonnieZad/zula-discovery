@@ -64,13 +64,14 @@ Widget heading({
   textAlign = TextAlign.start,
   int delay = 0,
   double fontSize = 20,
+  String? fontFamily = 'Poppins',
 }) =>
      Text(text,
             style: TextStyle(
                 fontSize: fontSize.sp,
                 color: color,
                 fontWeight: FontWeight.w500,
-                fontFamily: 'Poppins'),
+                fontFamily: fontFamily),
             textAlign: textAlign);
 Widget subHeading(
         {String text = '',
