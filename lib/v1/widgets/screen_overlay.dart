@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 
@@ -24,25 +25,25 @@ class ScreenOverlay {
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.r)),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    heading(text: title, color: Colors.white),
+                    heading(text: title, color: brandPrimaryColor),
                     10.ph,
                     paragraph(
                         text: description,
-                        color: Colors.white60),
+                        color: brandPrimaryColor),
                     25.ph,
                     Row(
                       children: [
                         Expanded(
                           child: CupertinoButton(
                             borderRadius: BorderRadius.circular(50.0),
-                            color: Colors.white10,
+                            color: brandPrimaryColor.withOpacity(0.8),
                             child: label(text: 'Continue'),
                             onPressed: () {
                               action();
@@ -59,7 +60,7 @@ class ScreenOverlay {
                               Navigator.pop(context);
                             },
                             child:
-                                label(text: 'Cancel', color: Colors.white60)))
+                                label(text: 'Cancel', color: brandPrimaryColor)))
                   ]),
             ),
           );
@@ -91,9 +92,10 @@ class ScreenOverlay {
                       child: Stack(
                         children: [
                           Positioned(
+                            // top: 10.h,
                               left: 0.0,
                               right: 0.0,
-                              bottom: 130.h,
+                              bottom: 90.h,
                               child: sheet),
                           Positioned(
                             bottom: 30.h,
