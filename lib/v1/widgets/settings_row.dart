@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zula/v1/constants/strings.dart';
+import 'package:zula/v1/screens/docs.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/link_parser.dart';
 import 'package:zula/v1/utils/typography.dart';
@@ -28,8 +30,20 @@ class SettingsRow extends StatelessWidget {
         HapticFeedback.lightImpact();
         if (routeName != null) {
           switch (routeName) {
-            case 'reviewApp':
+            case 'termsOfService':
+            Navigator.push(context, MaterialPageRoute(builder: 
+            (context)=>DocsPages(termsOfServie: termsOfServie, headingText: 'Zula App\nTerms of Service',)));
               break;
+
+               case 'privacyPolicy':
+            Navigator.push(context, MaterialPageRoute(builder: 
+            (context)=>DocsPages(
+              textAlign: TextAlign.left,
+              termsOfServie: privacyPolicyText, headingText: 'Zula App\nPrivacy Policy',)));
+              break;
+
+
+              
 
             case 'helpCenter':
               ScreenOverlay.showConfirmationDialog(context,
@@ -62,17 +76,17 @@ class SettingsRow extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(iconData, size: 24.w, color: Colors.white60),
+                        Icon(iconData, size: 24.w, color: Colors.white),
                         10.pw,
                         paragraph(
-                            text: title, fontSize: 24.sp, color: Colors.white60)
+                            text: title, fontSize: 24.sp, color: Colors.white)
                       ],
                     ),
                     6.ph,
                     SizedBox(
                         width: 390.w,
                         child: paragraph(
-                            color: Colors.white54,
+                            color: Colors.white70,
                             text: subHeading,
                             fontSize: 21.sp))
                   ],
@@ -83,7 +97,7 @@ class SettingsRow extends StatelessWidget {
                   child: Icon(
                     CupertinoIcons.right_chevron,
                     size: 20.w,
-                    color: Colors.white54,
+                    color: Colors.white70,
                   ),
                 ),
               ],
