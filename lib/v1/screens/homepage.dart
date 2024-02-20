@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/controllers/controllers.dart';
 import 'package:zula/v1/screens/explore_page.dart';
 import 'package:zula/v1/screens/notification_center.dart';
@@ -29,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.white,
       body: Obx(() {
         return Stack(
           clipBehavior: Clip.none,
@@ -185,9 +186,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               .retrievedLocations[
                                                                   index]
                                                               .locationName,
-                                                          fontSize: 30.sp,
+                                                          fontSize: 50.sp,
+                                                          fontFamily: 'Rangile',
                                                           color: Colors.white),
-                                                      10.pw,
+                                                      5.pw,
                                                       Icon(
                                                         LucideIcons.badgeCheck,
                                                         color: Colors.white,
@@ -201,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           .retrievedLocations[
                                                               index]
                                                           .locationDescription,
-                                                      fontSize: 20.sp,
+                                                      fontSize: 22.sp,
                                                       color: Colors.white,
                                                       textAlign:
                                                           TextAlign.center),
@@ -222,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     padding:
                                         EdgeInsets.symmetric(vertical: 17.h),
                                     decoration: BoxDecoration(
-                                      color: Color.fromRGBO(20, 45, 66, 1),
+                                      color: brandPrimaryColor,
                                       borderRadius: BorderRadius.circular(15.r),
                                     ),
                                     child: Center(
@@ -239,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       }),
             ),
             Positioned(
-                top: 50.h,
+                top: 40.h,
                 left: 20.w,
                 right: 20.w,
                 child: Row(
@@ -250,14 +252,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         children: [
                           SvgPicture.asset(
                             'assets/images/zula_logo.svg',
-                            width: 100.w,
+                            width: 110.w,
                             color: Colors.white,
                           ),
                           4.ph,
                           paragraph(
                               text: 'Experience Everywhere!',
-                              color: Colors.white60,
-                              fontSize: 17.sp)
+                              color: Colors.white,
+                              fontSize: 21.sp)
                         ],
                       ),
                       const Spacer(),
