@@ -19,7 +19,7 @@ Widget title(
             style: TextStyle(
                 fontSize: fontSize.sp,
                 color: color,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w400,
                 fontFamily: fontFamily),
             textAlign: textAlign);
 Widget subtitle(
@@ -90,10 +90,11 @@ Widget paragraph(
         double fontSize = 18,
         TextAlign textAlign = TextAlign.start,
         TextOverflow? overflow, 
-        
+        // int lineSpacing 
         int delay = 0}) =>
    Text(text,
             style: TextStyle(
+            height: 1.8,
                 fontSize: fontSize.sp,
                 color: color,
                 fontWeight: FontWeight.w400,
@@ -140,7 +141,7 @@ Widget paragraphBold(
             textAlign: textAlign);
 Widget label({String text = '', Color? color, int delay = 0}) =>  Text(text,
         style: TextStyle(
-            fontSize: 17.sp,
+            fontSize: 18.sp,
             color: color,
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins'));

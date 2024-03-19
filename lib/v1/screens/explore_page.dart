@@ -1,17 +1,22 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gallery_3d/gallery3d.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/models/location_model.dart';
+// import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/link_parser.dart';
 import 'package:zula/v1/utils/typography.dart';
@@ -43,26 +48,14 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   double topTwo = 0;
 
   late Gallery3DController controller;
-  late WebViewController webViewController;
+
   ScrollController activityScrollController = ScrollController();
   List<bool> extraInfoState = [false, false];
 
+  MapController controllerz = MapController();
+
   @override
   void initState() {
-    webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onWebResourceError: (WebResourceError error) {},
-        ),
-      )
-      ..loadRequest(Uri.parse(widget.locationDetails.virtualTourPreviewUrl));
     controller = Gallery3DController(
         itemCount: widget.locationDetails.locationPicture.length,
         autoLoop: true,
@@ -73,13 +66,10 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   Widget buildGallery3D() {
     return Gallery3D(
         controller: controller,
-        itemConfig:  GalleryItemConfig(
-            width: 320,
-            height: 460,
-            radius: 15.r,
-            shadows: [
-              const BoxShadow(color: Colors.white, blurRadius: 20, spreadRadius: 8)
-            ]),
+        itemConfig:
+            GalleryItemConfig(width: 320, height: 460, radius: 15.r, shadows: [
+          const BoxShadow(color: Colors.white, blurRadius: 20, spreadRadius: 8)
+        ]),
         width: MediaQuery.of(context).size.width,
         height: 500,
         isClip: false,
@@ -91,6 +81,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
         onClickItem: (index) {
           if (kDebugMode) print("currentIndex:$index");
           ScreenOverlay.showAppSheet(context,
+              playHomeVideoFrame: false,
               sheet: ClipRRect(
                 borderRadius: BorderRadius.circular(10.r),
                 child: OctoImage(
@@ -118,6 +109,16 @@ class _ExploreDetailsState extends State<ExploreDetails> {
             fit: BoxFit.cover,
           );
         });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // add setCurrentScreeninstead of initState because might not always give you the
+    // expected results because initState() is called before the widget
+    // is fully initialized, so the screen might not be visible yet.
+    FirebaseAnalytics.instance
+        .logScreenView(screenName: "Location Detail Screen");
   }
 
   @override
@@ -164,7 +165,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                   )),
             ),
             ListView(
-              padding: EdgeInsets.only(top: 120.h),
+              padding: EdgeInsets.only(top: 60.h),
               shrinkWrap: true,
               children: [
                 buildGallery3D(),
@@ -199,22 +200,16 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor),
                               5.ph,
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                // crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(LucideIcons.star,
-                                      color: Colors.yellow, size: 20.w),
-                                  2.pw,
-                                  Icon(LucideIcons.star,
-                                      color: Colors.yellow, size: 20.w),
-                                  2.pw,
-                                  Icon(LucideIcons.star,
-                                      color: Colors.yellow, size: 20.w),
-                                  2.pw,
                                   paragraph(
                                       text:
                                           '${widget.locationDetails.locationRating}',
                                       fontSize: 20.sp,
                                       color: brandPrimaryColor),
+                                  5.pw,
+                                  Icon(LucideIcons.star,
+                                      color: Colors.yellow, size: 20.w),
                                 ],
                               ),
                             ],
@@ -233,6 +228,18 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           IconButton(
                               onPressed: () {
                                 ScreenOverlay.showAppSheet(context,
+                                    playHomeVideoFrame: false,
+                                    sheet: VirtualTourSheet(
+                                        virtualTourPreviewUrl: widget
+                                            .locationDetails
+                                            .virtualTourPreviewUrl));
+                              },
+                              icon: Icon(Icons.threed_rotation,
+                                  color: brandPrimaryColor, size: 30.w)),
+                          IconButton(
+                              onPressed: () {
+                                ScreenOverlay.showAppSheet(context,
+                                    playHomeVideoFrame: false,
                                     sheet: PlaceReviewSheet(
                                       locationReviews:
                                           widget.locationDetails.locationReview,
@@ -242,23 +249,112 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
-                                ScreenOverlay.showConfirmationDialog(context,
-                                    title: 'Open Maps',
-                                    description:
-                                        'This will open another applciaiton to show your map location',
-                                    action: () {
-                                  LinkParser.launchGoolgeMapsNavigation(
-                                      widget.locationDetails
-                                          .locationLatCoordinate,
-                                      widget.locationDetails
-                                          .locationLongCoordinate);
-                                });
+                                ScreenOverlay.showAppSheet(
+                                  context,
+                                  playHomeVideoFrame: false,
+                                  sheet: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 50.0, left: 8.0, right: 8.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      child: SizedBox(
+                                        width: 400.w,
+                                        height: 760.h,
+                                        child: FlutterMap(
+                                          options: MapOptions(
+                                              minZoom: 5,
+                                              maxZoom: 20,
+                                              zoom: 17,
+                                              center: LatLng(
+                                                  widget.locationDetails
+                                                      .locationLatCoordinate,
+                                                  widget.locationDetails
+                                                      .locationLongCoordinate)),
+                                          children: [
+                                            TileLayer(
+                                              maxNativeZoom: 30,
+                                              retinaMode: true,
+                                              maxZoom: 30,
+                                              tileProvider:
+                                                  NetworkTileProvider(),
+                                              urlTemplate:
+                                                  'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
+                                            ),
+                                            MarkerLayer(
+                                              markers: [
+                                                Marker(
+                                                  width: 180.0,
+                                                  height: 50.0,
+                                                  point: LatLng(
+                                                      widget.locationDetails
+                                                          .locationLatCoordinate,
+                                                      widget.locationDetails
+                                                          .locationLongCoordinate), // Set the marker position
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      ScreenOverlay
+                                                          .showConfirmationDialog(
+                                                              context,
+                                                              titleText:
+                                                                  'Open Maps',
+                                                              description:
+                                                                  'This will open another applicaiton to navigate to this location',
+                                                              action: () {
+                                                        LinkParser.launchGoolgeMapsNavigation(
+                                                            widget
+                                                                .locationDetails
+                                                                .locationLatCoordinate,
+                                                            widget
+                                                                .locationDetails
+                                                                .locationLongCoordinate);
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              brandPrimaryColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.r)),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          label(
+                                                              text:
+                                                                  'Go to Location',
+                                                              color:
+                                                                  Colors.white),
+                                                          10.pw,
+                                                          Icon(
+                                                            LucideIcons
+                                                                .locateFixed,
+                                                            color: Colors
+                                                                .white, // Customize the marker color
+                                                            size: 30.w,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
                               },
                               icon: Icon(LineIcons.alternateMapMarked,
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
                                 ScreenOverlay.showAppSheet(context,
+                                    playHomeVideoFrame: false,
                                     sheet: MenuActivitySheet(
                                         locationMenuActivity: widget
                                             .locationDetails
@@ -267,20 +363,13 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                               icon: Icon(Icons.restaurant_menu,
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
-                              onPressed: () {
-                                ScreenOverlay.showAppSheet(context,
-                                    sheet: VirtualTourSheet(
-                                        webViewController: webViewController));
-                              },
-                              icon: Icon(Icons.threed_rotation,
-                                  color: brandPrimaryColor, size: 30.w)),
-                          IconButton(
                               onPressed: () {},
                               icon: Icon(LineIcons.heart,
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
                                 ScreenOverlay.showAppSheet(context,
+                                    playHomeVideoFrame: false,
                                     sheet: ShareSheet());
                               },
                               icon: Icon(LineIcons.share,
@@ -304,6 +393,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                               return GestureDetector(
                                 onTap: () {
                                   ScreenOverlay.showAppSheet(context,
+                                      playHomeVideoFrame: false,
                                       sheet: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(10.r),
@@ -398,7 +488,6 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                       textAlign: TextAlign.center)
                                 ],
                               )),
-                      
                       heading(
                           text: 'Extra Information',
                           fontSize: 27.sp,
@@ -413,7 +502,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           return GestureDetector(
                             onTap: () {
                               setState(() {
-                                extraInfoState = [false, false, false];
+                                extraInfoState = [false, false];
                                 extraInfoState[index] = true;
                               });
                             },
@@ -491,51 +580,93 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                 ),
               ],
             ),
+
+            // Positioned(
+            //   top: topOne != 0 ? 54.h : 60.h,
+            //   left: topOne != 0 ? 16.w : 20.w,
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //     },
+            //     child: topOne != 0
+            //         ? ClipRRect(
+            //             borderRadius: BorderRadius.circular(10.r),
+            //             child: BackdropFilter(
+            //               filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+            //               child: Container(
+            //                 padding: const EdgeInsets.all(6),
+            //                 decoration:
+            //                     const BoxDecoration(color: Colors.white38),
+            //                 child: Row(
+            //                   children: [
+            //                     Icon(CupertinoIcons.arrow_left,
+            //                         color: brandPrimaryColor.withOpacity(0.8),
+            //                         size: 30.w),
+            //                     20.pw,
+            //                     heading(
+            //                         text: 'Back',
+            //                         fontSize: 30.sp,
+            //                         color: brandPrimaryColor.withOpacity(0.8)),
+            //                   ],
+            //                 ),
+            //               ),
+            //             ),
+            //           )
+            //         : Row(
+            //             children: [
+            //               Icon(CupertinoIcons.arrow_left,
+            //                   color: brandPrimaryColor.withOpacity(0.8),
+            //                   size: 30.w),
+            //               20.pw,
+            //               heading(
+            //                   text: 'Back',
+            //                   fontSize: 30.sp,
+            //                   color: brandPrimaryColor.withOpacity(0.8)),
+            //             ],
+            //           ),
+            //   ),
+            // ),
+
             Positioned(
-              top: topOne != 0 ? 54.h : 60.h,
-              left: topOne != 0 ? 16.w : 20.w,
+              bottom: 30.h,
+              left: 120.0,
+              right: 120.0,
               child: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
+                  HapticFeedback.selectionClick();
                 },
-                child: topOne != 0
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10.r),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration:
-                                const BoxDecoration(color: Colors.white38),
-                            child: Row(
-                              children: [
-                                Icon(CupertinoIcons.arrow_left,
-                                    color: brandPrimaryColor.withOpacity(0.8),
-                                    size: 30.w),
-                                20.pw,
-                                heading(
-                                    text: 'Back',
-                                    fontSize: 30.sp,
-                                    color: brandPrimaryColor.withOpacity(0.8)),
-                              ],
-                            ),
-                          ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(60.r),
+                    border: Border.all(color: Colors.white60, width: 0.8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(60.r),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 40.0, sigmaY: 40.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60.r),
+                            color: Colors.black38),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            paragraph(text: 'Close', color: Colors.white),
+                            10.pw,
+                            const Icon(
+                              CupertinoIcons.multiply,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
-                      )
-                    : Row(
-                        children: [
-                          Icon(CupertinoIcons.arrow_left,
-                              color: brandPrimaryColor.withOpacity(0.8),
-                              size: 30.w),
-                          20.pw,
-                          heading(
-                              text: 'Back',
-                              fontSize: 30.sp,
-                              color: brandPrimaryColor.withOpacity(0.8)),
-                        ],
                       ),
+                    ),
+                  ),
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),

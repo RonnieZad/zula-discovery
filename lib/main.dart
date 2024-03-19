@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -12,16 +16,45 @@ import 'package:zula/v1/pager.dart';
 import 'package:zula/v1/screens/get_started_page.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await GetStorage.init();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runZonedGuarded<Future<void>>(() async {
+    // Ensure that widget binding is initialized before running the app
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    // Preserve the native splash screen until manual removal
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    // Initialize local storage for the app
+    await GetStorage.init();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+    try {
+      await Firebase.initializeApp();
+      FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
+      // set observer
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
+    } catch (e) {
+      print("Failed to initialize Firebase: $e");
+    }
 
-  runApp(const MyApp());
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+    // Lock the device orientation to portrait mode
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+    // Customize system UI overlay style
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent, // Make status bar transparent
+          systemNavigationBarColor:
+              Color(0xFFFFB6B9), // Set navigation bar color
+          systemNavigationBarIconBrightness:
+              Brightness.light, // Navigation bar icons' brightness
+          statusBarIconBrightness:
+              Brightness.light), // Status bar icons' brightness
+    );
+
+    runApp(
+      const MyApp(),
+    );
+  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+  // Run the app
 }
 
 class MyApp extends StatefulWidget {
@@ -38,12 +71,21 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // add setCurrentScreeninstead of initState because might not always give you the
+    // expected results because initState() is called before the widget
+    // is fully initialized, so the screen might not be visible yet.
+    FirebaseAnalytics.instance.logAppOpen();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     AuthController authController = Get.put(AuthController());
     return MaterialApp(
-      title: 'Zula',
+      title: 'Zula Vibe',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromRGBO(20, 45, 66, 1)),
@@ -64,18 +106,10 @@ class _MyAppState extends State<MyApp> {
           child: StreamBuilder<User?>(
               stream: authController.onAuthStateChanged,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+                if (snapshot.hasData) {
+                  return const AppCanvas();
                 } else {
-                  if (snapshot.data == null) {
-                    return const GetStartedPage();
-                  } else {
-                    return const AppCanvas();
-                  }
+                  return const GetStartedPage();
                 }
               }),
         ),

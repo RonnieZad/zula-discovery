@@ -18,7 +18,14 @@ class ShareSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          heading(text: 'Share', fontSize: 27.sp, color: Colors.white),
+          Center(
+            child: title(
+                text: 'Share',
+                fontSize: 46.sp,
+                color: Colors.white,
+                fontFamily: 'Broncks',
+                textAlign: TextAlign.center),
+          ),
           20.ph,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,14 +42,11 @@ class ShareSheet extends StatelessWidget {
                       Icon(LineIcons.twitter, color: Colors.white, size: 35.w),
                       10.ph,
                       paragraph(
-                          text: 'X',
-                          fontSize: 22.sp,
-                          color: Colors.white70)
+                          text: 'X', fontSize: 22.sp, color: Colors.white70)
                     ],
                   ),
                 ),
               ),
-              
               GestureDetector(
                 onTap: () {
                   LinkParser.launchWhatsappWithLink(
@@ -62,7 +66,6 @@ class ShareSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              
               GestureDetector(
                 onTap: () {
                   LinkParser.launchSMSWithLink(
@@ -80,8 +83,10 @@ class ShareSheet extends StatelessWidget {
                   ),
                 ),
               ),
+              
             ],
-          )
+          ),
+          60.ph,
         ],
       ),
     );

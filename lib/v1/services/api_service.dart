@@ -33,12 +33,13 @@ class ApiService {
 
 // static String authApi({version = 'v1', environment = 'staging'}) => 'https://${environment}-auth-api.zoficash.com/api/$version';
   static String authApi({version = 'v1', environment = 'staging'}) =>
-      'https://zula-api-gateway.fly.dev/auth';
+      'https://zula-api-gateway-v1.fly.dev/auth';
+      
 
   static String applicationApi({version = 'v1', environment = 'staging'}) =>
-      'https://zula-api-gateway.fly.dev/application';
+      'https://zula-api-gateway-v1.fly.dev/application';
   static String paymentApi({version = 'v1', environment = 'staging'}) =>
-      'https://zula-api-gateway.fly.dev/payment';
+      'https://zula-api-gateway-v1.fly.dev/payment';
 
   static String networkApi({version = 'v1', environment = 'staging'}) => '';
 

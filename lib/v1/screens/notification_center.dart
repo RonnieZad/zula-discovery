@@ -16,53 +16,38 @@ class NotificationCenter extends StatefulWidget {
 }
 
 class _NotificationCenterState extends State<NotificationCenter> {
+
+
+
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return Container(
+      height: 0.7.sh,
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Column(
         children: [
-      const AppBackground(),
-          Positioned(
-            top: 60.h,
-            left: 20.w,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Row(
-                  children: [
-                    Icon(CupertinoIcons.arrow_left,
-                        color: Colors.white, size: 30.w),
-                    20.pw,
-                    heading(
-                        text: 'Notification Center',
-                        fontSize: 30.sp,
-                        color: Colors.white),
-                  ],
-                ),
+          title(
+              text: 'Notification Center',
+              fontSize: 46.sp,
+              color: Colors.white,
+              fontFamily: 'Broncks',
+              textAlign: TextAlign.center
               ),
-            ),
-          ),
-          Positioned(
-top: 160.h,
-            left: 20.w,
-            right: 20.w,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  heading(
-                      text: 'Updates will appear here', color: Colors.white70),
-                  20.ph,
-                  Icon(
-                    LucideIcons.bellMinus,
-                    size: 60.w,
-                    color: Colors.white70,
-                  )
-                ],
-              ),
+          250.ph,
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                heading(
+                    text: 'Updates will appear here', color: Colors.white70),
+                20.ph,
+                Icon(
+                  LucideIcons.bellMinus,
+                  size: 60.w,
+                  color: Colors.white70,
+                )
+              ],
             ),
           )
         ],

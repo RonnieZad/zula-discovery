@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,12 +9,14 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/controllers/controllers.dart';
+import 'package:zula/v1/screens/dicover_page.dart';
 import 'package:zula/v1/screens/explore_page.dart';
 import 'package:zula/v1/screens/notification_center.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zula/v1/widgets/app_background.dart';
+import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -28,9 +31,17 @@ class _MyHomePageState extends State<MyHomePage> {
   LocationController locationController = Get.find();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // add setCurrentScreeninstead of initState because might not always give you the
+    // expected results because initState() is called before the widget
+    // is fully initialized, so the screen might not be visible yet.
+    FirebaseAnalytics.instance.logScreenView(screenName: "HomePage Screen");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: Obx(() {
         return Stack(
           clipBehavior: Clip.none,
@@ -84,6 +95,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       controller: _pageController,
                       scrollDirection: Axis.horizontal,
                       itemCount: locationController.retrievedLocations.length,
+                      onPageChanged: (selectedPage) {
+                        setState(() {
+                          locationController.currentVideoFrameIndex =
+                              selectedPage;
+                        });
+                      },
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
@@ -124,7 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     .videoPlayerControllers
                                                     .isNotEmpty
                                                 ? VisibilityDetector(
-                                                    key: Key(locationController.retrievedLocations[index]
+                                                    key: Key(locationController
+                                                        .retrievedLocations[
+                                                            index]
                                                         .locationName),
                                                     onVisibilityChanged:
                                                         (visibilityInfo) {
@@ -132,9 +151,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           visibilityInfo
                                                                   .visibleFraction *
                                                               100;
+                                                      print(visiblePercentage);
 
                                                       if (visiblePercentage >
-                                                          50) {
+                                                              50 &&
+                                                          locationController
+                                                                  .currentPageIndex
+                                                                  .value ==
+                                                              0) {
                                                         locationController
                                                             .videoPlayerControllers[
                                                                 index]
@@ -241,46 +265,61 @@ class _MyHomePageState extends State<MyHomePage> {
                       }),
             ),
             Positioned(
-                top: 40.h,
-                left: 20.w,
-                right: 20.w,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              top: 40.h,
+              left: 20.w,
+              right: 20.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/zula_logo.svg',
-                            width: 110.w,
-                            color: Colors.white,
-                          ),
-                          4.ph,
-                          paragraph(
-                              text: 'Experience Everywhere!',
-                              color: Colors.white,
-                              fontSize: 21.sp)
-                        ],
+                      SvgPicture.asset(
+                        'assets/images/zula_logo.svg',
+                        width: 110.w,
+                        color: Colors.white,
                       ),
-                      const Spacer(),
-                      IconButton(
-                        icon:  Icon(
-                          LucideIcons.bell,
+                      2.ph,
+                      paragraph(
+                          text: 'Experience Everywhere!',
                           color: Colors.white,
-                          size: 35.w,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NotificationCenter()));
-                        },
-                      ),
-                    ])),
+                          fontSize: 21.sp)
+                    ],
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      LucideIcons.compass,
+                      color: Colors.white,
+                      size: 35.w,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DiscoverPage()));
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      LucideIcons.bell,
+                      color: Colors.white,
+                      size: 35.w,
+                    ),
+                    onPressed: () {
+                      ScreenOverlay.showAppSheet(context,
+                          sheet: const NotificationCenter());
+
+                      locationController.pauseAllVideoPlayback();
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         );
       }),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

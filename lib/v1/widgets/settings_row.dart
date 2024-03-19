@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/screens/docs.dart';
 import 'package:zula/v1/utils/extensions.dart';
@@ -47,7 +48,7 @@ class SettingsRow extends StatelessWidget {
 
             case 'helpCenter':
               ScreenOverlay.showConfirmationDialog(context,
-                  title: 'Help Center via Whatsapp',
+                  titleText: 'Help Center via Whatsapp',
                   description:
                       'This action will open whatsapp to start a chat with our team',
                   action: () {
@@ -66,9 +67,10 @@ class SettingsRow extends StatelessWidget {
       },
       child: Container(
         color: Colors.transparent,
+        margin: EdgeInsets.symmetric(vertical: 15.h),
         child: Column(
           children: [
-            30.ph,
+            
             Stack(
               children: [
                 Column(
@@ -76,17 +78,17 @@ class SettingsRow extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(iconData, size: 24.w, color: Colors.white),
+                        Icon(iconData, size: 24.w, color: brandPrimaryColor),
                         10.pw,
-                        paragraph(
-                            text: title, fontSize: 24.sp, color: Colors.white)
+                        heading(
+                            text: title, fontSize: 24.sp, color: brandPrimaryColor)
                       ],
                     ),
                     6.ph,
                     SizedBox(
                         width: 390.w,
                         child: paragraph(
-                            color: Colors.white70,
+                            color: brandPrimaryColor.withOpacity(0.8),
                             text: subHeading,
                             fontSize: 21.sp))
                   ],
@@ -97,7 +99,7 @@ class SettingsRow extends StatelessWidget {
                   child: Icon(
                     CupertinoIcons.right_chevron,
                     size: 20.w,
-                    color: Colors.white70,
+                    color: brandPrimaryColor.withOpacity(0.6),
                   ),
                 ),
               ],

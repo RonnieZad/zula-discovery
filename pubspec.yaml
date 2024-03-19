@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.1+3
+version: 1.0.4+10
 
 environment:
-  sdk: '>=3.1.2 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -38,6 +38,7 @@ dependencies:
   lucide_icons: ^0.257.0
   flutter_screenutil: ^5.9.0
   flutter_svg_provider: ^1.0.3
+  flutter_map: ^6.1.0
   line_icons: ^2.0.3
   video_player: ^2.8.2
   visibility_detector: ^0.4.0+2
@@ -62,6 +63,11 @@ dependencies:
   flutter_native_splash: ^2.3.6
   ticket_widget: ^1.0.2
   barcode_widget: ^2.0.4
+  google_generative_ai: ^0.2.0
+  flutter_markdown: ^0.6.20
+  intl: ^0.19.0
+  latlong2: ^0.9.0
+  lottie: 3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -78,13 +84,13 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/images/zula_bg.png"
-  adaptive_icon_background: "#0D1E2B"
+  adaptive_icon_background: "#69B4FF"
   adaptive_icon_foreground: "assets/images/zula_bg.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
 
 flutter_native_splash:
-  color_android: "#0D1E2B"  
-  color_ios: "#0D1E2B"
+  color_android: "#69B4FF"  
+  color_ios: "#69B4FF"
   image_android: assets/images/zula_bg.png
     # Android 12 handles the splash screen differently than previous versions.  Please visit
   # https://developer.android.com/guide/topics/ui/splash-screen
@@ -100,7 +106,7 @@ flutter_native_splash:
     image: assets/images/zula_bg.png
 
     # Splash screen background color.
-    color: "#0D1E2B"    
+    color: "#69B4FF"    
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -141,4 +147,7 @@ flutter:
         - asset: assets/fonts/Poppins/Poppins-Light.ttf
     - family: Rangile
       fonts:
-        - asset: assets/fonts/Rangile.ttf      
+        - asset: assets/fonts/Rangile.ttf   
+    - family: Broncks
+      fonts:
+        - asset: assets/fonts/Broncks.ttf          

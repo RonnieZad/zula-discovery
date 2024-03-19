@@ -9,6 +9,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:zula/v1/controllers/location_controller.dart';
+import 'package:zula/v1/screens/ai_chat.dart';
 import 'package:zula/v1/screens/search_result_page.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
@@ -109,9 +110,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      heading(
-                      text: 'Discover', fontSize: 38.sp, color: Colors.white),
-                     
+                      title(
+                          text: 'Discover',
+                          fontSize: 46.sp,
+                          color: Colors.white,
+                          fontFamily: 'Broncks',
+                          textAlign: TextAlign.center),
                       const Spacer(),
                       IconButton(
                         icon: const Icon(
@@ -130,72 +134,18 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          ScreenOverlay.showAppSheet(context,
-                              sheet: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        heading(
-                                            text: 'Search with Zula AI',
-                                            color: Colors.white),
-                                        10.pw,
-                                        const Icon(
-                                          CupertinoIcons.sparkles,
-                                          color: Colors.white,
-                                        )
-                                      ],
-                                    ),
-                                    10.ph,
-                                    Container(
-                                      padding: EdgeInsets.all(8.w),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.r),
-                                          border: Border.all(
-                                              width: 0.4,
-                                              color: Colors.white60)),
-                                      child: TextFormField(
-                                        maxLines: 5,
-                                        decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText:
-                                                'eg find me a cute cosy restaurant for a dinner date with ambient lighting, low noise and live band',
-                                            hintStyle: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                color: Colors.white60)),
-                                      ),
-                                    ),
-                                    10.ph,
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: CupertinoButton(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            color: Colors.white54,
-                                            child: label(text: 'Search'),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatWidget()));
                         },
                       ),
                     ])),
             Positioned(
-              top: 160.h,
+              top: 130.h,
               left: 20.w,
               right: 20.w,
-              bottom: 0.0,
+              bottom: 90.0,
               child: locationController.discoverViewIsLoading.value
                   ? GridView.builder(
                           padding: EdgeInsets.only(bottom: 120.h),
@@ -349,6 +299,26 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             );
                           }),
             ),
+          Positioned(
+                            bottom: 30.h,
+                            left: 120.0,
+                            right: 120.0,
+                            child: FilledButton.icon(
+                              style: const ButtonStyle(
+                                padding: MaterialStatePropertyAll(EdgeInsets.symmetric(vertical: 15)),
+                                  backgroundColor:
+                                      MaterialStatePropertyAll(Colors.white30)),
+                              label:
+                                  paragraph(text: 'Close', color: Colors.white),
+                              icon: const Icon(
+                                CupertinoIcons.multiply,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          )
           ],
         );
       }),

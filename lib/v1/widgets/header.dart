@@ -9,8 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:zula/v1/screens/dicover_page.dart';
+import 'package:zula/v1/screens/notification_center.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
+import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -29,10 +33,13 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
+        filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 10.0),
         child: Container(
           padding: EdgeInsets.only(
-              bottom: 10.h, top: 40.h, left: hasBackButton! ? 20.w : 20.w),
+              bottom: 10.h,
+              top: 40.h,
+              right: 20.w,
+              left: hasBackButton! ? 20.w : 20.w),
           width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -52,13 +59,51 @@ class Header extends StatelessWidget {
                           ))
                       : const SizedBox.shrink(),
                   hasBackButton! ? 10.pw : 0.ph,
-              titleText.isEmpty ? const SizedBox.shrink():    heading(
-                      text: titleText, fontSize: 38.sp, color: Colors.white),
+                  titleText.isEmpty
+                      ? const SizedBox.shrink()
+                      : title(
+              text: titleText,
+              fontSize: 46.sp,
+              color: Colors.white,
+              fontFamily: 'Broncks',
+              textAlign: TextAlign.center
+              ),
+                      
+                     
+                  if (hasBackButton == false) ...[
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(
+                        LucideIcons.compass,
+                        color: Colors.white,
+                        size: 35.w,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DiscoverPage()));
+                      },
+                    ),
+                    // 10.pw,
+                    IconButton(
+                      icon: Icon(
+                        LucideIcons.bell,
+                        color: Colors.white,
+                        size: 35.w,
+                      ),
+                      onPressed: () {
+                        ScreenOverlay.showAppSheet(context,
+                            sheet: NotificationCenter());
+                      },
+                    ),
+                  ]
                 ],
               ),
               10.ph,
-              headingText.isEmpty ? const SizedBox.shrink():  
-              heading(text: headingText, color: Colors.white70),
+              headingText.isEmpty
+                  ? const SizedBox.shrink()
+                  : heading(text: headingText, color: Colors.white70),
             ],
           ),
         ),

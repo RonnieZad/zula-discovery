@@ -1,18 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:zula/v1/models/dish_menu_model.dart';
-
-
-
 
 List<String> imageUrlList = [
-  "https://ik.imagekit.io/ecjzuksxj/TravelBuddy/Instagram%20Photo%2020240204%20(1).jpg?updatedAt=1707042078279",
-  "https://ik.imagekit.io/ecjzuksxj/TravelBuddy/Instagram%20Photo.jpg?updatedAt=1707042078319",
-  "https://ik.imagekit.io/ecjzuksxj/TravelBuddy/Instagram%20(1).jpg?updatedAt=1707042078312",
-  "https://ik.imagekit.io/ecjzuksxj/TravelBuddy/Instagram%20Photo%2020240204.jpg?updatedAt=1707042078234",
-  "https://ik.imagekit.io/ecjzuksxj/TravelBuddy/Instagram%20Photo%20202.jpg?updatedAt=1707042076864",
-  "https://ik.imagekit.io/ecjzuksxj/TravelBuddy/Instagram.jpg?updatedAt=1707042077364"
+  "https://www.extremeadventures.co.ug/wp-content/uploads/2023/07/quad-bikes-1-1200.jpg",
+  "https://pbs.twimg.com/media/F8AvbCRWUAcfLzM.jpg",
+  "https://media-cdn.tripadvisor.com/media/photo-s/0b/1d/51/6f/the-lawns.jpg",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/18/4f/e8/ce/renovated-interior.jpg?w=1200&h=-1&s=1",
+  "https://www.silverbackgorillatours.com/wp-content/uploads/2019/03/uganda-national-parks.jpg",
+  "https://www.extremeadventures.co.ug/wp-content/uploads/2023/07/go-karting-1-1200.jpg"
 ];
 
 final List<Map<String, dynamic>> placeAmenities = [
@@ -48,9 +44,8 @@ final List<Map<String, dynamic>> placeAmenities = [
 
 List<Map<String, dynamic>> bottomNavbar = [
   {'icon': CupertinoIcons.collections, 'label': 'Home'},
-  {'icon': CupertinoIcons.compass, 'label': 'Zula'},
-  {'icon': CupertinoIcons.ticket, 'label': 'Events'},
-  {'icon': CupertinoIcons.gear, 'label': 'Settings'}
+  {'icon': CupertinoIcons.ticket, 'label': 'Tickets'},
+  {'icon': CupertinoIcons.gear, 'label': 'Setup'}
 ];
 
 String termsOfServie = '''
@@ -78,7 +73,6 @@ Welcome to Zula App! These Terms of Service ("Terms") govern your access to and 
 10. Changes to Terms: Zula App reserves the right to modify or revise these Terms at any time without prior notice. Users are encouraged to review the terms regularly for any updates or changes.
 
 By using Zula App, you acknowledge that you have read, understood, and agreed to these Terms. If you do not agree with any part of these Terms, please do not use Zula App.''';
-
 
 String privacyPolicyText = '''
 
@@ -117,7 +111,6 @@ This Privacy Policy ("Policy") describes how Zula App collects, uses, and disclo
    - If you have any questions or concerns about this Privacy Policy, please contact us at [contact email or address].
 
 By using Zula App, you acknowledge that you have read, understood, and agreed to this Privacy Policy. If you do not agree with any part of this Policy, please do not use Zula App.''';
-
 
 String termsCondtionsText = '''
 Welcome to Zula App! These Terms and Conditions ("Terms") govern your access to and use of Zula App, including any content, functionality, and services offered through the app. By accessing or using Zula App, you agree to be bound by these Terms.

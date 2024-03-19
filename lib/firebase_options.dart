@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,16 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA4bPMabXCKHC2h2onaTdHEgE3xwHc5xFk',
-    appId: '1:67417934822:web:6352280d705f35ac73a427',
-    messagingSenderId: '67417934822',
-    projectId: 'zula-discovery',
-    authDomain: 'zula-discovery.firebaseapp.com',
-    storageBucket: 'zula-discovery.appspot.com',
-    measurementId: 'G-S4QWNZ23HC',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBMPKEpt3DF5HgM02u_VTqcprU7Zp3TY00',
     appId: '1:67417934822:android:53c8bcf253adf39373a427',
@@ -68,14 +64,5 @@ class DefaultFirebaseOptions {
     projectId: 'zula-discovery',
     storageBucket: 'zula-discovery.appspot.com',
     iosBundleId: 'com.example.vybe',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDmU2VoSy9UtzjB2okcjAEdDxKM9k6t8c4',
-    appId: '1:67417934822:ios:3fd82abe45f8fc8573a427',
-    messagingSenderId: '67417934822',
-    projectId: 'zula-discovery',
-    storageBucket: 'zula-discovery.appspot.com',
-    iosBundleId: 'com.example.vybe.RunnerTests',
   );
 }

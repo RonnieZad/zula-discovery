@@ -5,6 +5,8 @@ import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/services/api_service.dart';
 
 class LocationController extends GetxController {
+  var currentPageIndex = 0.obs;
+
   late List<VideoPlayerController> videoPlayerControllers;
 
   final _locationCategories = <LocationCategory>[].obs;
@@ -17,12 +19,27 @@ class LocationController extends GetxController {
   var discoverViewIsLoading = true.obs;
   var homePageViewIsLoading = true.obs;
   var searchPageViewIsLoading = true.obs;
+  int currentVideoFrameIndex = 0;
 
   @override
   onInit() {
     getLocations();
     getLocationCategories();
     super.onInit();
+  }
+
+  pauseAllVideoPlayback() {
+    if (videoPlayerControllers.isNotEmpty) {
+      videoPlayerControllers.forEach((element) {
+        element.pause();
+      });
+    }
+  }
+
+  resumeFramePlay() {
+    if (currentPageIndex.value == 0) {
+      videoPlayerControllers[currentVideoFrameIndex].play();
+    }
   }
 
   getLocations() {
@@ -103,7 +120,7 @@ class LocationController extends GetxController {
         .then((_) {
       for (var controller in videoPlayerControllers) {
         // Start playing the video
-        controller.play();
+        // controller.play();
         controller.setLooping(true);
       }
     });

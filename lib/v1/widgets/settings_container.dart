@@ -63,6 +63,12 @@ class SettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+
+      decoration: BoxDecoration(
+        color: Colors.white70,
+        borderRadius: BorderRadius.circular(20.r)
+      ),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

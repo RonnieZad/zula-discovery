@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,6 +37,7 @@ class AuthController extends GetxController {
 
   guestLogout() {
     try {
+      FirebaseAnalytics.instance.logEvent(name: 'App Sign out');
       _userCredential.signOut();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
