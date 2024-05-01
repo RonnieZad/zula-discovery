@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gallery_3d/gallery3d.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,11 +17,9 @@ import 'package:octo_image/octo_image.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/models/location_model.dart';
-// import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/link_parser.dart';
 import 'package:zula/v1/utils/typography.dart';
-import 'package:zula/v1/widgets/app_background.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
 import 'package:zula/v1/widgets/parallax_widget.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
@@ -68,7 +67,10 @@ class _ExploreDetailsState extends State<ExploreDetails> {
         controller: controller,
         itemConfig:
             GalleryItemConfig(width: 320, height: 460, radius: 15.r, shadows: [
-          const BoxShadow(color: Colors.white, blurRadius: 20, spreadRadius: 8)
+          BoxShadow(
+              color: brandPrimaryColor.withOpacity(0.3),
+              blurRadius: 10,
+              spreadRadius: 3)
         ]),
         width: MediaQuery.of(context).size.width,
         height: 500,
@@ -82,19 +84,31 @@ class _ExploreDetailsState extends State<ExploreDetails> {
           if (kDebugMode) print("currentIndex:$index");
           ScreenOverlay.showAppSheet(context,
               playHomeVideoFrame: false,
-              sheet: ClipRRect(
-                borderRadius: BorderRadius.circular(10.r),
-                child: OctoImage(
-                  height: 700,
-                  width: double.infinity,
-                  placeholderBuilder: OctoBlurHashFix.placeHolder(
-                      'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                  errorBuilder: OctoError.icon(color: Colors.red),
-                  image: CachedNetworkImageProvider(
-                    widget.locationDetails.locationPicture[index]
-                        .locationPictureUrl,
-                  ),
-                  fit: BoxFit.cover,
+              sheet: SizedBox(
+                height: 760.h,
+                child: PageView.builder(
+                  itemCount: widget.locationDetails.locationPicture.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 15.h),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: OctoImage(
+                          
+                          width: double.infinity,
+                          placeholderBuilder: OctoBlurHashFix.placeHolder(
+                              'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                          errorBuilder: OctoError.icon(color: Colors.red),
+                          image: CachedNetworkImageProvider(
+                            widget.locationDetails.locationPicture[index]
+                                .locationPictureUrl,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ));
         },
@@ -118,7 +132,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
     // expected results because initState() is called before the widget
     // is fully initialized, so the screen might not be visible yet.
     FirebaseAnalytics.instance
-        .logScreenView(screenName: "Location Detail Screen");
+        .logScreenView(screenName: "LocationDetailScreen");
   }
 
   @override
@@ -139,7 +153,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
         },
         child: Stack(
           children: [
-            const AppBackground(),
+            // const AppBackground(),
             ParallaxWidget(
               top: topOne,
               widget: ShaderMask(
@@ -165,7 +179,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                   )),
             ),
             ListView(
-              padding: EdgeInsets.only(top: 60.h),
+              padding: EdgeInsets.only(top: 70.h),
               shrinkWrap: true,
               children: [
                 buildGallery3D(),
@@ -188,7 +202,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                               paragraph(
                                   text: widget.locationDetails.locationCity,
                                   fontSize: 20.sp,
-                                  color: Colors.white),
+                                  color: brandPrimaryColor),
                             ],
                           ),
                           Column(
@@ -253,13 +267,13 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   context,
                                   playHomeVideoFrame: false,
                                   sheet: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 50.0, left: 8.0, right: 8.0),
+                                    padding: EdgeInsets.only(
+                                        bottom: 30.h, left: 10.w, right: 10.w),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(8.r),
                                       child: SizedBox(
                                         width: 400.w,
-                                        height: 760.h,
+                                        height: 730.h,
                                         child: FlutterMap(
                                           options: MapOptions(
                                               minZoom: 5,
@@ -370,7 +384,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                               onPressed: () {
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
-                                    sheet: ShareSheet());
+                                    sheet: const ShareSheet());
                               },
                               icon: Icon(LineIcons.share,
                                   color: brandPrimaryColor, size: 30.w)),
@@ -383,7 +397,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           color: brandPrimaryColor),
                       15.ph,
                       SizedBox(
-                        height: 240.h,
+                        height: 245.h,
                         child: ListView.builder(
                             controller: activityScrollController,
                             scrollDirection: Axis.horizontal,
@@ -394,24 +408,30 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                 onTap: () {
                                   ScreenOverlay.showAppSheet(context,
                                       playHomeVideoFrame: false,
-                                      sheet: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                        child: OctoImage(
-                                          height: 700,
-                                          width: double.infinity,
-                                          placeholderBuilder:
-                                              OctoBlurHashFix.placeHolder(
-                                                  'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                                          errorBuilder:
-                                              OctoError.icon(color: Colors.red),
-                                          image: CachedNetworkImageProvider(
-                                            widget
-                                                .locationDetails
-                                                .locationActivity[index]
-                                                .locationActivityPictureUrl,
+                                      sheet: Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: 30.h,
+                                            left: 10.w,
+                                            right: 10.w),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                          child: OctoImage(
+                                            height: 720.h,
+                                            width: double.infinity,
+                                            placeholderBuilder:
+                                                OctoBlurHashFix.placeHolder(
+                                                    'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                                            errorBuilder: OctoError.icon(
+                                                color: Colors.red),
+                                            image: CachedNetworkImageProvider(
+                                              widget
+                                                  .locationDetails
+                                                  .locationActivity[index]
+                                                  .locationActivityPictureUrl,
+                                            ),
+                                            fit: BoxFit.cover,
                                           ),
-                                          fit: BoxFit.cover,
                                         ),
                                       ));
                                 },
@@ -493,37 +513,58 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           fontSize: 27.sp,
                           color: brandPrimaryColor),
                       35.ph,
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        itemCount: extraInfoState.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                extraInfoState = [false, false];
-                                extraInfoState[index] = true;
-                              });
-                            },
-                            child: AnimatedContainer(
-                              margin: EdgeInsets.only(bottom: 10.h),
-                              duration: const Duration(milliseconds: 300),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w, vertical: 15.h),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color:
-                                          brandPrimaryColor.withOpacity(0.4)),
-                                  color: extraInfoState[index]
-                                      ? brandPrimaryColor.withOpacity(0.2)
-                                      : brandPrimaryColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(10.r)),
-                              child: extraInfoState[index]
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            extraInfoState = [false, false];
+                            extraInfoState[0] = true;
+                          });
+                        },
+                        child: AnimatedContainer(
+                          margin: EdgeInsets.only(bottom: 10.h),
+                          duration: const Duration(milliseconds: 300),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 15.h),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: brandPrimaryColor.withOpacity(0.4)),
+                              color: extraInfoState[0]
+                                  ? brandPrimaryColor.withOpacity(0.2)
+                                  : brandPrimaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10.r)),
+                          child: extraInfoState[0]
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    paragraph(
+                                        text:
+                                            'Opens at ${widget.locationDetails.locationExtraInfo.openingTime}',
+                                        fontSize: 20.sp,
+                                        color:
+                                            brandPrimaryColor.withOpacity(0.8)),
+                                    10.ph,
+                                    paragraph(
+                                        text:
+                                            'Closes at ${widget.locationDetails.locationExtraInfo.closingTime}',
+                                        fontSize: 20.sp,
+                                        color:
+                                            brandPrimaryColor.withOpacity(0.8)),
+                                    10.ph,
+                                    paragraph(
+                                        text: widget.locationDetails
+                                            .locationExtraInfo.description,
+                                        fontSize: 20.sp,
+                                        color:
+                                            brandPrimaryColor.withOpacity(0.8)),
+                                  ],
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         paragraph(
                                             text:
@@ -531,101 +572,28 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                             fontSize: 20.sp,
                                             color: brandPrimaryColor
                                                 .withOpacity(0.8)),
-                                        10.ph,
-                                        paragraph(
-                                            text:
-                                                'Closes at ${widget.locationDetails.locationExtraInfo.closingTime}',
-                                            fontSize: 20.sp,
-                                            color: brandPrimaryColor
-                                                .withOpacity(0.8)),
-                                        10.ph,
-                                        paragraph(
-                                            text: widget.locationDetails
-                                                .locationExtraInfo.description,
-                                            fontSize: 20.sp,
-                                            color: brandPrimaryColor
-                                                .withOpacity(0.8)),
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            paragraph(
-                                                text:
-                                                    'Opens at ${widget.locationDetails.locationExtraInfo.openingTime}',
-                                                fontSize: 20.sp,
-                                                color: brandPrimaryColor
-                                                    .withOpacity(0.8)),
-                                            Icon(
-                                              LucideIcons.chevronDown,
-                                              color: brandPrimaryColor
-                                                  .withOpacity(0.8),
-                                            )
-                                          ],
-                                        ),
+                                        Icon(
+                                          LucideIcons.chevronDown,
+                                          color: brandPrimaryColor
+                                              .withOpacity(0.8),
+                                        )
                                       ],
                                     ),
-                            ),
-                          );
-                        },
+                                  ],
+                                ),
+                        ),
                       ),
                       100.ph,
                     ],
                   ),
                 ),
-              ],
+              ]
+                  .animate(interval: 300.ms)
+                  .then(delay: 240.ms)
+                  .blurXY(begin: 1, end: 0)
+                  .slideY(begin: 0.2, end: 0.0)
+                  .fade(duration: 500.ms),
             ),
-
-            // Positioned(
-            //   top: topOne != 0 ? 54.h : 60.h,
-            //   left: topOne != 0 ? 16.w : 20.w,
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //     },
-            //     child: topOne != 0
-            //         ? ClipRRect(
-            //             borderRadius: BorderRadius.circular(10.r),
-            //             child: BackdropFilter(
-            //               filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-            //               child: Container(
-            //                 padding: const EdgeInsets.all(6),
-            //                 decoration:
-            //                     const BoxDecoration(color: Colors.white38),
-            //                 child: Row(
-            //                   children: [
-            //                     Icon(CupertinoIcons.arrow_left,
-            //                         color: brandPrimaryColor.withOpacity(0.8),
-            //                         size: 30.w),
-            //                     20.pw,
-            //                     heading(
-            //                         text: 'Back',
-            //                         fontSize: 30.sp,
-            //                         color: brandPrimaryColor.withOpacity(0.8)),
-            //                   ],
-            //                 ),
-            //               ),
-            //             ),
-            //           )
-            //         : Row(
-            //             children: [
-            //               Icon(CupertinoIcons.arrow_left,
-            //                   color: brandPrimaryColor.withOpacity(0.8),
-            //                   size: 30.w),
-            //               20.pw,
-            //               heading(
-            //                   text: 'Back',
-            //                   fontSize: 30.sp,
-            //                   color: brandPrimaryColor.withOpacity(0.8)),
-            //             ],
-            //           ),
-            //   ),
-            // ),
 
             Positioned(
               bottom: 30.h,

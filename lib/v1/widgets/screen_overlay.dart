@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +29,8 @@ class ScreenOverlay {
         builder: (context) {
           TickerController tickerController = Get.find();
           return Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.r),
               child: Obx(() {
@@ -38,7 +39,7 @@ class ScreenOverlay {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      const AppBackground(),
+                      // const AppBackground(),
                       tickerController.showPaymentProcessing.value
                           ? Padding(
                               padding: EdgeInsets.symmetric(
@@ -153,7 +154,6 @@ class ScreenOverlay {
                       child: Stack(
                         children: [
                           Positioned(
-                              // top: 10.h,
                               left: 0.0,
                               right: 0.0,
                               bottom: 90.h,
@@ -163,16 +163,16 @@ class ScreenOverlay {
                             left: 120.0,
                             right: 120.0,
                             child: FilledButton.icon(
-                              style: const ButtonStyle(
-                                  padding: MaterialStatePropertyAll(
+                              style: ButtonStyle(
+                                  padding: const MaterialStatePropertyAll(
                                       EdgeInsets.symmetric(vertical: 15)),
-                                  backgroundColor:
-                                      MaterialStatePropertyAll(Colors.white30)),
-                              label:
-                                  paragraph(text: 'Close', color: Colors.white),
-                              icon: const Icon(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      brandPrimaryColor.withOpacity(0.1))),
+                              label: paragraph(
+                                  text: 'Close', color: brandPrimaryColor),
+                              icon: Icon(
                                 CupertinoIcons.multiply,
-                                color: Colors.white,
+                                color: brandPrimaryColor,
                               ),
                               onPressed: () {
                                 Navigator.pop(context);
@@ -206,7 +206,7 @@ class _AppTextBoxState extends State<AppTextBox> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white54),
+        border: Border.all(color: brandPrimaryColor.withOpacity(0.4)),
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: TextFormField(

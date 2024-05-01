@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -324,10 +325,14 @@ class EventTicketWidget extends StatelessWidget {
                                                         }
                                                 });
                                           } else {}
-                                        }),
+                                        }).animate()
+                    .then(delay: 940.ms)
+                   .slideY(begin: 0.12, end: 0, delay: 600.ms, duration: 7800.ms, curve: Curves.elasticInOut),
                                   ),
                                   30.ph,
-                                ],
+                                ] .animate(interval: 100.ms).then(delay: 240.ms) .blurXY(begin: 1, end: 0)
+                    .slideY(begin: 0.2, end: 0.0)
+                    .fade(duration: 500.ms),
                               ),
                             ));
                       },

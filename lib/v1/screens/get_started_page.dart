@@ -3,7 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
@@ -36,13 +36,13 @@ class _GetStartedPageState extends State<GetStartedPage>
       duration: const Duration(seconds: 5),
       vsync: this,
     )..repeat(reverse: true);
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.transparent,
+    //     systemNavigationBarColor: Colors.white,
+    //     systemNavigationBarIconBrightness: Brightness.dark,
+    //   ),
+    // );
     super.initState();
   }
 
@@ -57,7 +57,8 @@ class _GetStartedPageState extends State<GetStartedPage>
     // add setCurrentScreeninstead of initState because might not always give you the
     // expected results because initState() is called before the widget
     // is fully initialized, so the screen might not be visible yet.
-    FirebaseAnalytics.instance.logScreenView(screenName: "GetStarted Page Screen");
+    FirebaseAnalytics.instance
+        .logScreenView(screenName: "GetStartedPageScreen");
   }
 
   @override
@@ -69,11 +70,11 @@ class _GetStartedPageState extends State<GetStartedPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.black,
+      // backgroundColor: Colors.white,
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         return Stack(alignment: Alignment.bottomCenter, children: [
-          AppBackground(),
+          const AppBackground(),
           RollingCards(
             controller: _controller,
             cards: rowOne,
@@ -103,7 +104,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                     colors: [Colors.white10, Colors.white])),
           ),
           Positioned(
-            bottom: 10.h,
+            bottom: 20.h,
             left: 20.w,
             right: 20.w,
             top: 0.0,
@@ -132,10 +133,17 @@ class _GetStartedPageState extends State<GetStartedPage>
                       color: brandPrimaryColor.withOpacity(0.7),
                       child: label(text: 'Get Started Already!'),
                       onPressed: () {
-                        authController.guestLogin(context);
-                        FirebaseAnalytics.instance.logSignUp(signUpMethod: 'Annoynmous Login');
-                      }),
+                        authController.signInWithGoogle();
+                        // authController.guestLogin(context);
+
+                        FirebaseAnalytics.instance
+                            .logSignUp(signUpMethod: 'AnnoynmousLogin');
+                      }) .animate()
+                    .then(delay: 940.ms)
+                   .slideY(begin: 0.25, end: 0, delay: 600.ms, duration: 7800.ms, curve: Curves.elasticInOut)
+                           
                 ),
+                   
                 20.ph,
                 TextButton(
                   onPressed: () {
@@ -152,7 +160,9 @@ class _GetStartedPageState extends State<GetStartedPage>
                     color: brandPrimaryColor,
                   ),
                 )
-              ],
+              ].animate(interval: 300.ms).then(delay: 240.ms) .blurXY(begin: 1, end: 0)
+                    .slideY(begin: 0.2, end: 0.0)
+                    .fade(duration: 500.ms),
             ),
           )
         ]);

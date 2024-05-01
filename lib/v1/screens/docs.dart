@@ -1,9 +1,12 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
-import 'package:zula/v1/widgets/app_background.dart';
 import 'package:zula/v1/widgets/widgets.dart';
 
 class DocsPages extends StatelessWidget {
@@ -21,13 +24,14 @@ class DocsPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          const AppBackground(),
+          // const AppBackground(),
           ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.w),
             children: [
-              140.ph,
+              100.ph,
               Center(
                   child: title(
                       text: headingText,
@@ -40,11 +44,47 @@ class DocsPages extends StatelessWidget {
                   textAlign: textAlign ?? TextAlign.justify)
             ],
           ),
-          const Header(
-            titleText: 'Back',
-            headingText: '',
-            hasBackButton: true,
-          ),
+                Positioned(
+              bottom: 30.h,
+              left: 120.0,
+              right: 120.0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  HapticFeedback.selectionClick();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(60.r),
+                    border: Border.all(color: Colors.white60, width: 0.8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(60.r),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 40.0, sigmaY: 40.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60.r),
+                            color: Colors.black38),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            paragraph(text: 'Close', color: Colors.white),
+                            10.pw,
+                            const Icon(
+                              CupertinoIcons.multiply,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+         
         ],
       ),
     );

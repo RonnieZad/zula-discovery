@@ -7,10 +7,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/screens/explore_page.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
-import 'package:zula/v1/widgets/app_background.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
 
 import '../controllers/location_controller.dart';
@@ -36,17 +36,17 @@ class _SearchResultPageState extends State<SearchResultPage> {
     // add setCurrentScreeninstead of initState because might not always give you the
     // expected results because initState() is called before the widget
     // is fully initialized, so the screen might not be visible yet.
-    FirebaseAnalytics.instance.logScreenView(screenName: "Search Screen");
+    FirebaseAnalytics.instance.logScreenView(screenName: "SearchScreen");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Obx(() {
         return Stack(
           clipBehavior: Clip.none,
           children: [
-            const AppBackground(),
             Positioned(
                 top: widget.hideBackButton! ? 50.h : 140.h,
                 left: 0.0,
@@ -178,12 +178,12 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             child: Row(
                               children: [
                                 Icon(CupertinoIcons.arrow_left,
-                                    color: Colors.white, size: 30.w),
+                                    color: brandPrimaryColor, size: 30.w),
                                 20.pw,
                                 heading(
                                     text: 'Search Results',
                                     fontSize: 30.sp,
-                                    color: Colors.white),
+                                    color: brandPrimaryColor),
                               ],
                             ),
                           ),

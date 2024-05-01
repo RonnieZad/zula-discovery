@@ -10,7 +10,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:zula/firebase_options.dart';
 import 'package:zula/v1/controllers/auth_controller.dart';
 import 'package:zula/v1/pager.dart';
 import 'package:zula/v1/screens/get_started_page.dart';
@@ -19,14 +18,19 @@ void main() async {
   runZonedGuarded<Future<void>>(() async {
     // Ensure that widget binding is initialized before running the app
     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
+    );
     // Preserve the native splash screen until manual removal
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
     // Initialize local storage for the app
     await GetStorage.init();
 
     try {
       await Firebase.initializeApp();
-      FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
+      FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
       // set observer
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
     } catch (e) {
@@ -39,16 +43,14 @@ void main() async {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     // Customize system UI overlay style
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent, // Make status bar transparent
-          systemNavigationBarColor:
-              Color(0xFFFFB6B9), // Set navigation bar color
-          systemNavigationBarIconBrightness:
-              Brightness.light, // Navigation bar icons' brightness
-          statusBarIconBrightness:
-              Brightness.light), // Status bar icons' brightness
+    SystemUiOverlayStyle uiMode = const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
     );
+    SystemChrome.setSystemUIOverlayStyle(uiMode);
 
     runApp(
       const MyApp(),
@@ -85,7 +87,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     AuthController authController = Get.put(AuthController());
     return MaterialApp(
-      title: 'Zula Vibe',
+      title: 'Zula App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromRGBO(20, 45, 66, 1)),

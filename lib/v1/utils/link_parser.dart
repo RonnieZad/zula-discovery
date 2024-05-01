@@ -14,8 +14,7 @@ class LinkParser {
     }
   }
 
-   static void launchWhatsappHelpCenter(
-      ) async {
+  static void launchWhatsappHelpCenter() async {
     const url =
         'https://wa.me/256702703612?text=Hi Zula Team, I need assistance on.....';
 
@@ -26,7 +25,7 @@ class LinkParser {
     }
   }
 
-   static void launchWhatsappWithLink(String? link) async {
+  static void launchWhatsappWithLink(String? link) async {
     final facebookUrl = 'https://api.whatsapp.com/send?text=$link';
     if (link != null) {
       if (await canLaunchUrl(Uri.parse(facebookUrl))) {
@@ -34,9 +33,7 @@ class LinkParser {
       } else {
         throw 'Could not launch $facebookUrl';
       }
-    } else {
-     
-    }
+    } else {}
   }
 
   static void launchSMSWithLink(String? link) async {
@@ -47,8 +44,6 @@ class LinkParser {
       } else {
         throw 'Could not launch $smsUrl';
       }
-    } else {
-     
-    }
+    } else {}
   }
 }

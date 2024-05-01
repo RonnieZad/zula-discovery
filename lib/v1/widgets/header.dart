@@ -3,6 +3,7 @@
 //  Created by Ronald Zad Muhanguzi .
 //  2023, Enyumba App. All rights reserved.
 
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/screens/dicover_page.dart';
 import 'package:zula/v1/screens/notification_center.dart';
 import 'package:zula/v1/utils/extensions.dart';
@@ -33,11 +35,12 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 10.0),
+        filter: ImageFilter.blur(sigmaX: 55.0, sigmaY: 10.0),
         child: Container(
+          color: Colors.white70,
           padding: EdgeInsets.only(
               bottom: 10.h,
-              top: 40.h,
+              top: Platform.isAndroid ? 40.h : 60.h,
               right: 20.w,
               left: hasBackButton! ? 20.w : 20.w),
           width: double.infinity,
@@ -53,48 +56,45 @@ class Header extends StatelessWidget {
                             HapticFeedback.lightImpact();
                             Navigator.pop(context);
                           },
-                          child: const Icon(
+                          child: Icon(
                             LineIcons.arrowLeft,
-                            color: Colors.white,
+                            color: brandPrimaryColor,
                           ))
                       : const SizedBox.shrink(),
                   hasBackButton! ? 10.pw : 0.ph,
                   titleText.isEmpty
                       ? const SizedBox.shrink()
                       : title(
-              text: titleText,
-              fontSize: 46.sp,
-              color: Colors.white,
-              fontFamily: 'Broncks',
-              textAlign: TextAlign.center
-              ),
-                      
-                     
+                          text: titleText,
+                          fontSize: 46.sp,
+                          color: brandPrimaryColor,
+                          fontFamily: 'Broncks',
+                          textAlign: TextAlign.center),
                   if (hasBackButton == false) ...[
                     const Spacer(),
                     IconButton(
                       icon: Icon(
                         LucideIcons.compass,
-                        color: Colors.white,
+                        color: brandPrimaryColor,
                         size: 35.w,
                       ),
                       onPressed: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DiscoverPage()));
+                                builder: (context) => const DiscoverPage()));
                       },
                     ),
                     // 10.pw,
                     IconButton(
                       icon: Icon(
                         LucideIcons.bell,
-                        color: Colors.white,
+                        color: brandPrimaryColor,
                         size: 35.w,
                       ),
                       onPressed: () {
                         ScreenOverlay.showAppSheet(context,
-                            sheet: NotificationCenter());
+                            sheet: const NotificationCenter());
                       },
                     ),
                   ]
@@ -103,7 +103,12 @@ class Header extends StatelessWidget {
               10.ph,
               headingText.isEmpty
                   ? const SizedBox.shrink()
-                  : heading(text: headingText, color: Colors.white70),
+                  : heading(
+                      text: headingText,
+                      color: brandPrimaryColor,
+                      fontSize: 20.sp),
+              bottomWidget != null ? 10.ph : const SizedBox.shrink(),
+              bottomWidget != null ? bottomWidget! : const SizedBox.shrink()
             ],
           ),
         ),

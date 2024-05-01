@@ -3,6 +3,8 @@ import 'dart:convert';
 class Ticket {
   String artworkPictureUrl;
   String eventTitle;
+  String eventDescription;
+  String eventCategory;
   String eventLocation;
   String eventDate;
   double locationLatCoordinate;
@@ -12,7 +14,9 @@ class Ticket {
   Ticket({
     required this.artworkPictureUrl,
     required this.eventTitle,
+    required this.eventDescription,
     required this.eventLocation,
+    required this.eventCategory,
     required this.eventDate,
     required this.locationLatCoordinate,
     required this.locationLongCoordinate,
@@ -23,6 +27,8 @@ class Ticket {
     return Ticket(
       artworkPictureUrl: json["artwork_picture_url"],
       eventTitle: json["event_title"],
+      eventDescription: json["event_description"],
+      eventCategory: json["event_category"],
       eventLocation: json["event_location"],
       eventDate: json["event_date"],
       locationLatCoordinate: json["location_lat_coordinate"].toDouble(),
@@ -35,6 +41,8 @@ class Ticket {
   Map<String, dynamic> toJson() => {
         "artwork_picture_url": artworkPictureUrl,
         "event_title": eventTitle,
+        "event_category": eventCategory,
+        "event_description": eventDescription,
         "event_location": eventLocation,
         "event_date": eventDate,
         "location_lat_coordinate": locationLatCoordinate,

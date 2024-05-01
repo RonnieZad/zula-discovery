@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 class Helper {
   Helper._();
 
-    static String? getTextDigit(String? textToFormat, {decimalPlaces = 0}) {
+  static String? getTextDigit(String? textToFormat, {decimalPlaces = 0}) {
     if (textToFormat != null && textToFormat.isNotEmpty) {
       textToFormat = textToFormat.contains('.') &&
               textToFormat.split('.')[1] == '0'

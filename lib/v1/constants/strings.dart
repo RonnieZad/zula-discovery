@@ -11,6 +11,14 @@ List<String> imageUrlList = [
   "https://www.extremeadventures.co.ug/wp-content/uploads/2023/07/go-karting-1-1200.jpg"
 ];
 
+final List<String> searchSuggestions = [
+  'Restaurants',
+  'Clubs',
+  'Gardens',
+  'Experiences',
+  'Stays'
+];
+
 final List<Map<String, dynamic>> placeAmenities = [
   {
     'icon': LucideIcons.wifi,
@@ -42,8 +50,67 @@ final List<Map<String, dynamic>> placeAmenities = [
   },
 ];
 
+final List<Map<String, dynamic>> experienceTabCategories = [
+  {
+    'icon': LucideIcons.album,
+    'label': 'All',
+  },
+  {
+    'icon': LucideIcons.vegan,
+    'label': 'Art',
+  },
+  {
+    'icon': LineIcons.biking,
+    'label': 'Biking',
+  },
+  {
+    'icon': LucideIcons.tent,
+    'label': 'Camping',
+  },
+  {
+    'icon': LucideIcons.music,
+    'label': 'Concerts',
+  },
+  {
+    'icon': LucideIcons.waves,
+    'label': 'Culture',
+  },
+  {
+    'icon': LucideIcons.drumstick,
+    'label': 'Foods',
+  },
+  {
+    'icon': LineIcons.hiking,
+    'label': 'Hiking',
+  },
+  {
+    'icon': LineIcons.heart,
+    'label': 'Health',
+  },
+  {
+    'icon': LineIcons.film,
+    'label': 'Movies',
+  },
+  {
+    'icon': LucideIcons.footprints,
+    'label': 'Nature',
+  },
+  {
+    'icon': LucideIcons.workflow,
+    'label': 'Seminars',
+  },
+  {
+    'icon': LineIcons.binoculars,
+    'label': 'Sight Seeing',
+  },
+  {
+    'icon': LucideIcons.activity,
+    'label': 'Sports',
+  },
+];
+
 List<Map<String, dynamic>> bottomNavbar = [
-  {'icon': CupertinoIcons.collections, 'label': 'Home'},
+  {'icon': CupertinoIcons.collections, 'label': 'Places'},
   {'icon': CupertinoIcons.ticket, 'label': 'Tickets'},
   {'icon': CupertinoIcons.gear, 'label': 'Setup'}
 ];

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +17,6 @@ import 'package:zula/v1/screens/notification_center.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:zula/v1/widgets/app_background.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -33,25 +34,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // add setCurrentScreeninstead of initState because might not always give you the
-    // expected results because initState() is called before the widget
-    // is fully initialized, so the screen might not be visible yet.
-    FirebaseAnalytics.instance.logScreenView(screenName: "HomePage Screen");
+
+    FirebaseAnalytics.instance.logScreenView(screenName: "HomePageScreen");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Obx(() {
         return Stack(
           clipBehavior: Clip.none,
           children: [
-            const AppBackground(),
             Positioned(
               top: 0.h,
               left: 0.0,
               right: 0.0,
-              bottom: 90.h,
+              bottom: Platform.isAndroid ? 90.h: 90.h,
               child: locationController.homePageViewIsLoading.value
                   ? Container(
                       height: 0.2.sh,
@@ -120,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               clipBehavior: Clip.none,
                               children: [
                                 Positioned(
-                                  bottom: 50.h,
+                                  bottom: 40.h,
                                   left: 0.0,
                                   right: 0.0,
                                   child: Container(
@@ -133,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(15.r),
                                       child: SizedBox(
-                                        height: .674.sh,
+                                        height: .68.sh,
                                         width: double.infinity,
                                         child: Stack(
                                           children: [
@@ -241,7 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                                 Positioned(
-                                  bottom: 18.h,
+                                  bottom: 13.h,
                                   right: 120.w,
                                   left: 120.w,
                                   child: Container(
@@ -265,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       }),
             ),
             Positioned(
-              top: 40.h,
+              top: Platform.isAndroid ? 40.h: 60.h,
               left: 20.w,
               right: 20.w,
               child: Row(
@@ -277,34 +276,34 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       SvgPicture.asset(
                         'assets/images/zula_logo.svg',
-                        width: 110.w,
-                        color: Colors.white,
+                        width: 100.w,
+                        color: brandPrimaryColor,
                       ),
                       2.ph,
                       paragraph(
                           text: 'Experience Everywhere!',
-                          color: Colors.white,
-                          fontSize: 21.sp)
+                          color: brandPrimaryColor,
+                          fontSize: 20.sp)
                     ],
                   ),
                   const Spacer(),
                   IconButton(
                     icon: Icon(
                       LucideIcons.compass,
-                      color: Colors.white,
+                      color: brandPrimaryColor,
                       size: 35.w,
                     ),
                     onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DiscoverPage()));
+                              builder: (context) => const DiscoverPage()));
                     },
                   ),
                   IconButton(
                     icon: Icon(
                       LucideIcons.bell,
-                      color: Colors.white,
+                      color: brandPrimaryColor,
                       size: 35.w,
                     ),
                     onPressed: () {
