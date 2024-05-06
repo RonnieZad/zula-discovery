@@ -127,7 +127,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                 30.ph,
                 SizedBox(
                   height: 64.h,
-                  width: 350,
+                  width: double.infinity,
                   child: CupertinoButton(
                       borderRadius: BorderRadius.circular(50.0),
                       color: brandPrimaryColor.withOpacity(0.7),
