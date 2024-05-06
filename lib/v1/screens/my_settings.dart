@@ -38,17 +38,17 @@ class _MySettingsState extends State<MySettings> {
   List<Map<String, dynamic>> settingsOptions = [
     {
       'title': 'Account',
-      'description': 'Password\nPhone Number\nNotifications',
+      'description': 'Email Address\nPhone Number\nNotifications',
       'icon': LucideIcons.user
     },
-    {
-      'title': 'Preferences',
-      'description': 'Theme\nLanguage\nInterests',
-      'icon': LucideIcons.settings
-    },
+    // {
+    //   'title': 'Preferences',
+    //   'description': 'Theme\nLanguage\nInterests',
+    //   'icon': LucideIcons.settings
+    // },
     {
       'title': 'Privacy',
-      'description': 'Authentication\nPermissions\nData sharing',
+      'description': 'Terms\nPrivacy\nPermissions',
       'icon': LucideIcons.shield
     },
     {
@@ -183,7 +183,7 @@ class AppAboutSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   paragraph(text: 'App Version'),
-                  paragraph(text: 'v1.0.8+16 Beta'),
+                  paragraph(text: 'v1.0.11+33 Beta'),
                 ],
               ),
               20.ph,
@@ -191,57 +191,11 @@ class AppAboutSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   paragraph(text: 'Last Updated'),
-                  paragraph(text: '25/04/2024'),
+                  paragraph(text: '04/05/2024'),
                 ],
               ),
-              20.ph,
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DocsPages(
-                                termsOfServie: termsCondtionsText,
-                                headingText: 'Zula App\nTerms and Conditions',
-                              )));
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Row(
-                    children: [
-                      paragraph(text: 'Terms'),
-                      const Spacer(),
-                      paragraph(text: 'Visit Link'),
-                      10.pw,
-                      const Icon(Icons.link)
-                    ],
-                  ),
-                ),
-              ),
-              20.ph,
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DocsPages(
-                                termsOfServie: privacyPolicyText,
-                                headingText: 'Zula App\nPrivacy Policy',
-                              )));
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Row(
-                    children: [
-                      paragraph(text: 'Privacy Policy'),
-                      const Spacer(),
-                      paragraph(text: 'Visit Link'),
-                      10.pw,
-                      const Icon(Icons.link)
-                    ],
-                  ),
-                ),
-              ),
+          
+            
             ],
           ),
         ),
@@ -295,45 +249,85 @@ class AppPrivacySection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  paragraph(text: '2FA'),
-                  Switch(
-                      trackColor: MaterialStatePropertyAll(brandSecondaryColor),
-                      value: true,
-                      onChanged: (value) {})
-                ],
+                  
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DocsPages(
+                                termsOfServie: termsCondtionsText,
+                                headingText: 'Zula App\nTerms and Conditions',
+                              )));
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      paragraph(text: 'Terms'),
+                      const Spacer(),
+                      paragraph(text: 'Visit Link'),
+                      10.pw,
+                      const Icon(Icons.link)
+                    ],
+                  ),
+                ),
               ),
               20.ph,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  paragraph(text: 'Permissions'),
-                  paragraph(text: 'All Accepted'),
-                ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DocsPages(
+                                termsOfServie: privacyPolicyText,
+                                headingText: 'Zula App\nPrivacy Policy',
+                              )));
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      paragraph(text: 'Privacy Policy'),
+                      const Spacer(),
+                      paragraph(text: 'Visit Link'),
+                      10.pw,
+                      const Icon(Icons.link)
+                    ],
+                  ),
+                ),
               ),
-              20.ph,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  paragraph(text: 'Data Sharing'),
-                  paragraph(text: 'Turned Off'),
-                ],
-              ),
+            
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     paragraph(text: '2FA'),
+              //     Switch(
+              //         trackColor: MaterialStatePropertyAll(brandSecondaryColor),
+              //         value: true,
+              //         onChanged: (value) {})
+              //   ],
+              // ),
+              // 20.ph,
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     paragraph(text: 'Permissions'),
+              //     paragraph(text: 'All Accepted'),
+              //   ],
+              // ),
+              // 20.ph,
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     paragraph(text: 'Data Sharing'),
+              //     paragraph(text: 'Turned Off'),
+              //   ],
+              // ),
             ],
           ),
         ),
-        35.ph,
-        SizedBox(
-          height: 64.h,
-          width: 350,
-          child: CupertinoButton(
-              borderRadius: BorderRadius.circular(50.0),
-              color: brandPrimaryColor.withOpacity(0.7),
-              child: label(text: 'Log Out'),
-              onPressed: () {}),
-        ),
+   
         30.ph,
       ],
     );
@@ -487,18 +481,18 @@ class AppAccountSection extends StatelessWidget {
                     paragraph(text: authController.lastSignInDate.value),
                   ],
                 ),
-                10.ph,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    paragraph(text: 'Notifications'),
-                    Switch(
-                        trackColor:
-                            MaterialStatePropertyAll(brandSecondaryColor),
-                        value: true,
-                        onChanged: (value) {})
-                  ],
-                ),
+                // 10.ph,
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     paragraph(text: 'Notifications'),
+                //     Switch(
+                //         trackColor:
+                //             MaterialStatePropertyAll(brandSecondaryColor),
+                //         value: true,
+                //         onChanged: (value) {})
+                //   ],
+                // ),
               ],
             ),
           ),
