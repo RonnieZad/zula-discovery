@@ -5,9 +5,12 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/retry.dart';
+import 'package:http/retry.dart';
 
 enum Services {
   authentication,
@@ -34,7 +37,6 @@ class ApiService {
 // static String authApi({version = 'v1', environment = 'staging'}) => 'https://${environment}-auth-api.zoficash.com/api/$version';
   static String authApi({version = 'v1', environment = 'staging'}) =>
       'https://zula-api-gateway-v1.fly.dev/auth';
-      
 
   static String applicationApi({version = 'v1', environment = 'staging'}) =>
       'https://zula-api-gateway-v1.fly.dev/application';
@@ -61,40 +63,87 @@ class ApiService {
   ///Generic get request method, takes params [endpoint] : `String`, [tokenRequired] : `bool`, [apiVersion] : `String`
   ///and returns response if response body is not empty, and gracefully throws error statusCode 500 if any
   ///and catches any network exception that may result
-  static Future<Map<String, dynamic>> getRequest(
-      {required String endPoint,
-      required Services service,
-      bool tokenRequired = true,
-      apiVersion = 'v1'}) async {
+
+  // static Future<Map<String, dynamic>> getRequest(
+  //     {required String endPoint,
+  //     required Services service,
+  //     bool tokenRequired = true,
+  //     apiVersion = 'v1'}) async {
+  //   try {
+  //     // CustomOverlay.showLoaderOverlay(duration: 2);
+  //     // String token = tokenRequired ? GetStorage().read('token') : '';
+  //     // ignore: prefer_typing_uninitialized_variables
+  //     var requestResponse;
+  //     var client = RetryClient(http.Client(), retries: 5);
+
+  //     await client
+  //         .get(
+  //           Uri.parse(
+  //               getApi(apiService: service, version: apiVersion) + endPoint),
+  //           // headers: {'Authorization': 'Bearer $token'}
+  //         )
+  //         .timeout(
+  //           Duration(seconds: 20),
+  //           onTimeout: () {
+  //             print("opppsss");
+  //             return requestResponse;
+  //           },
+  //         )
+  //         .then((response) async => requestResponse = {
+  //               'statusCode': response.statusCode,
+  //               'payload':
+  //                   response.body.isNotEmpty ? jsonDecode(response.body) : {},
+  //             })
+  //         .catchError((onError) {
+  //           // Errors.displayException(onError);
+  //           return requestResponse = {
+  //             'statusCode': 500,
+  //             'payload': {'error': 'Something wrong happened'}
+  //           };
+  //         });
+  //     return requestResponse;
+  //   } on Exception catch (exception) {
+  //     // Errors.displayException(exception);
+  //     return {
+  //       'statusCode': 500,
+  //       'payload': {'error': 'Something wrong happened'}
+  //     };
+  //   }
+  // }
+
+  static Future<Map<String, dynamic>> getRequest({
+    required String endPoint,
+    required Services service,
+    bool tokenRequired = true,
+    String apiVersion = 'v1',
+  }) async {
     try {
-      // CustomOverlay.showLoaderOverlay(duration: 2);
-      // String token = tokenRequired ? GetStorage().read('token') : '';
-      // ignore: prefer_typing_uninitialized_variables
-      var requestResponse;
-      await http
+      var client = RetryClient(http.Client(), retries: 20);
+      var response = await client
           .get(
-              Uri.parse(
-                  getApi(apiService: service, version: apiVersion) + endPoint),
-              // headers: {'Authorization': 'Bearer $token'}
-              )
-          .then((response) async => requestResponse = {
-                'statusCode': response.statusCode,
-                'payload':
-                    response.body.isNotEmpty ? jsonDecode(response.body) : {},
-              })
-          .catchError((onError) {
-            // Errors.displayException(onError);
-            return requestResponse = {
-              'statusCode': 500,
-              'payload': {'error': 'Something wrong happened'}
-            };
-          });
-      return requestResponse;
-    } on Exception catch (exception) {
-      // Errors.displayException(exception);
+            Uri.parse(
+                getApi(apiService: service, version: apiVersion) + endPoint),
+          )
+          .timeout(const Duration(seconds: 10));
+      log("from there___ ${response.body}");
+      return {
+        'statusCode': response.statusCode,
+        'payload': response.body.isNotEmpty ? jsonDecode(response.body) : {},
+      };
+    } on http.ClientException catch (_) {
       return {
         'statusCode': 500,
-        'payload': {'error': 'Something wrong happened'}
+        'payload': {"status": 500, 'error': 'Client exception occurred'}
+      };
+    } on TimeoutException catch (_) {
+      return {
+        'statusCode': 500,
+        'payload': {"status": 500, 'error': 'Request timed out'}
+      };
+    } catch (_) {
+      return {
+        'statusCode': 500,
+        'payload': {"status": 500, 'error': 'Something wrong happened'}
       };
     }
   }
