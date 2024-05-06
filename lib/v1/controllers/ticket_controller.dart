@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -32,7 +34,7 @@ class TickerController extends GetxController {
     ApiService.getRequest(
             endPoint: '/get_event_tickets', service: Services.application)
         .then((response) {
-      print(response['payload']['tickets']);
+      log(response['payload']['tickets'].toString());
       ticketPageIsLoading(false);
       if (response['payload']['status'] >= 200 &&
           response['payload']['status'] < 300) {
