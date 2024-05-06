@@ -25,6 +25,7 @@ class AppCanvas extends StatefulWidget {
 
 class _AppCanvasState extends State<AppCanvas> {
   final PageController _appPageController = PageController();
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   LocationController locationController = Get.put(LocationController());
   TickerController tickerController = Get.put(TickerController());
 
@@ -33,8 +34,6 @@ class _AppCanvasState extends State<AppCanvas> {
     const TicketPage(),
     const MySettings()
   ];
-
-  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   @override
   Widget build(BuildContext context) {
