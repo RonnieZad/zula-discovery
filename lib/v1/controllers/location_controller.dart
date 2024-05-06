@@ -24,7 +24,7 @@ class LocationController extends GetxController {
   @override
   onInit() {
     getLocations();
-    getLocationCategories();
+    
     super.onInit();
   }
 
@@ -54,6 +54,7 @@ class LocationController extends GetxController {
         initializeVideoPlayers();
       }
       homePageViewIsLoading(false);
+      getLocationCategories();
     });
   }
 

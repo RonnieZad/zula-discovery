@@ -136,6 +136,7 @@ class ScreenOverlay {
 
     return showCupertinoModalPopup(
         filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+        // barrierColor: Colors.black26,
         context: context,
         builder: (context) {
           return PopScope(

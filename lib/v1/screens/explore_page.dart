@@ -236,6 +236,8 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           fontSize: 21.sp,
                           color: brandPrimaryColor),
                       10.ph,
+                    
+                    
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -390,6 +392,8 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor, size: 30.w)),
                         ],
                       ),
+                    
+                    
                       20.ph,
                       heading(
                           text: 'Activites',
@@ -513,6 +517,8 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           fontSize: 27.sp,
                           color: brandPrimaryColor),
                       35.ph,
+                    
+                    
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -583,6 +589,8 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                 ),
                         ),
                       ),
+                     
+                     
                       100.ph,
                     ],
                   ),

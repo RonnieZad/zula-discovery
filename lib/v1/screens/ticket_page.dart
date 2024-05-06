@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+// import 'package:palette_generator/palette_generator.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/controllers/ticket_controller.dart';
@@ -30,6 +31,8 @@ class _TicketPageState extends State<TicketPage>
     super.didChangeDependencies();
     FirebaseAnalytics.instance.logScreenView(screenName: "TicketPageScreen");
   }
+
+ 
 
   @override
   void initState() {
