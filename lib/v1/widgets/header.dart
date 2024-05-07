@@ -74,9 +74,9 @@ class Header extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                       icon: Icon(
-                        LucideIcons.compass,
+                        LineIcons.compass,
                         color: brandPrimaryColor,
-                        size: 35.w,
+                        size: 40.w,
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -88,9 +88,9 @@ class Header extends StatelessWidget {
                     // 10.pw,
                     IconButton(
                       icon: Icon(
-                        LucideIcons.bell,
+                        LineIcons.bell,
                         color: brandPrimaryColor,
-                        size: 35.w,
+                        size: 40.w,
                       ),
                       onPressed: () {
                         ScreenOverlay.showAppSheet(context,
