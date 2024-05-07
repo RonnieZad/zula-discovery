@@ -136,7 +136,7 @@ class ScreenOverlay {
 
     return showCupertinoModalPopup(
         filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-        // barrierColor: Colors.black26,
+        barrierColor: Colors.white70,
         context: context,
         builder: (context) {
           return PopScope(
@@ -157,12 +157,13 @@ class ScreenOverlay {
                           Positioned(
                               left: 0.0,
                               right: 0.0,
-                              bottom: 90.h,
+                              bottom: 95.h,
                               child: sheet),
                           Positioned(
-                            bottom: 30.h,
+                            bottom: 25.h,
                             left: 120.0,
                             right: 120.0,
+                            
                             child: FilledButton.icon(
                               style: ButtonStyle(
                                   padding: const MaterialStatePropertyAll(
