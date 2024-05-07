@@ -110,9 +110,9 @@ final List<Map<String, dynamic>> experienceTabCategories = [
 ];
 
 List<Map<String, dynamic>> bottomNavbar = [
-  {'icon': CupertinoIcons.collections, 'label': 'Places'},
-  {'icon': CupertinoIcons.ticket, 'label': 'Tickets'},
-  {'icon': CupertinoIcons.gear, 'label': 'Setup'}
+  {'icon': LineIcons.mapPin, 'label': 'Places'},
+  {'icon': LineIcons.alternateTicket, 'label': 'Tickets'},
+  {'icon': LineIcons.cog, 'label': 'Setup'}
 ];
 
 String termsOfServie = '''
