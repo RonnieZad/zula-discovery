@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/models/ticket_model.dart';
 import 'package:zula/v1/services/api_service.dart';
@@ -20,9 +20,9 @@ class TickerController extends GetxController {
   var ticketPageIsLoading = true.obs;
   final _eventTickets = <Ticket>[].obs;
   final filteredEventTickets = <Ticket>[].obs;
-  // final _eventTickets = <Ticket>[].obs;
+
   List<Ticket> get retrievedEventTickets => _eventTickets;
-  // List<Ticket> get filteredEventTickets => _eventTickets;
+  
 
   @override
   onInit() {
