@@ -365,7 +365,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   ),
                                 );
                               },
-                              icon: Icon(LineIcons.alternateMapMarked,
+                              icon: Icon(LineIcons.map,
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
@@ -376,7 +376,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                             .locationDetails
                                             .locationMenuActivity));
                               },
-                              icon: Icon(Icons.restaurant_menu,
+                              icon: Icon(Icons.restaurant,
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {},
