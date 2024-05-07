@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +7,15 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:zula/v1/services/api_service.dart';
 import 'package:zula/v1/utils/typography.dart';
 
 class AuthController extends GetxController {
   final _userCredential = FirebaseAuth.instance;
+
+  // create a getter stream
+  Stream<User?> get onAuthStateChanged => _userCredential.authStateChanges();
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   var profilePic = ''.obs;
   var phoneNumber = '-'.obs;
@@ -27,9 +34,31 @@ class AuthController extends GetxController {
     lastSignInDate.value = GetStorage().read('lastSignInDate') ?? '';
   }
 
-  // create a getter stream
-  Stream<User?> get onAuthStateChanged => _userCredential.authStateChanges();
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  privateServerAuth({required String emailAddress, required String name}) {
+    try {
+      ApiService.postRequest(
+          endPoint: '/account_registration',
+          service: Services.authentication,
+          body: {
+            "role": "client",
+            "email_address": emailAddress,
+            "password": emailAddress,
+            "name": name,
+          }).then((response) async {
+        if (response['payload']['status'] >= 200 &&
+            response['payload']['status'] <= 300) {
+          log(response['payload']['data'].toString());
+
+          GetStorage().write('token', response['payload']['token']);
+          GetStorage().write('user_id', response['payload']['data']['id']);
+          GetStorage().write(
+              'user_phone_number', response['payload']['data']['phone_number']);
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   Future<void> signInWithGoogle() async {
     try {
@@ -48,6 +77,7 @@ class AuthController extends GetxController {
       final User? user = userCredential.user;
 
       if (user != null) {
+        privateServerAuth(emailAddress: user.email!, name: user.displayName!);
         GetStorage().write('profilePic', user.photoURL ?? '');
         GetStorage().write('name', user.displayName ?? '');
         GetStorage().write('phoneNumber', user.phoneNumber ?? '-');
