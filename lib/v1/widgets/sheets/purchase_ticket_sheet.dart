@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,13 +35,13 @@ class PurchaseTicketSheet extends StatelessWidget {
           title(
               text: 'Choose your Tickets',
               fontSize: 46.sp,
-              color: Colors.white,
+              color: brandPrimaryColor,
               fontFamily: 'Broncks',
               textAlign: TextAlign.center),
           20.ph,
           paragraph(
               text: 'Select ticket type you wish to purchase below.',
-              color: Colors.white54),
+              ),
           30.ph,
           ListView.builder(
             shrinkWrap: true,
@@ -53,7 +55,7 @@ class PurchaseTicketSheet extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white10),
+                      border: Border.all(color: brandPrimaryColor.withOpacity(0.3)),
                       color: Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(10.r)),
                   child: Column(
@@ -70,13 +72,13 @@ class PurchaseTicketSheet extends StatelessWidget {
                               heading(
                                   text:
                                       '${ticketData.ticketCategory[index].ticketName} - Ugx ${Helper.getTextDigit((ticketData.ticketCategory[index].ticketPrice.toString()))}',
-                                  color: Colors.white70),
+                                  ),
                               5.ph,
                               Obx(() {
                                 return paragraph(
                                     text:
                                         'Ugx ${Helper.getTextDigit((ticketData.ticketCategory[index].ticketPrice * ticketController.ticketsToBuy[index]).toString())} + Ugx ${Helper.getTextDigit((1000 * ticketController.ticketsToBuy[index]).toString())}',
-                                    color: Colors.white54);
+                                    );
                               })
                             ],
                           ),
@@ -86,7 +88,7 @@ class PurchaseTicketSheet extends StatelessWidget {
                                 return heading(
                                     text:
                                         '${ticketController.ticketsToBuy[index]}',
-                                    color: Colors.white);
+                                    );
                               }),
                               15.pw,
                               Column(
@@ -101,7 +103,7 @@ class PurchaseTicketSheet extends StatelessWidget {
                                     child: Container(
                                       width: 59.w,
                                       decoration: BoxDecoration(
-                                          color: Colors.white30,
+                                          color: brandPrimaryColor.withOpacity(0.4),
                                           borderRadius:
                                               BorderRadius.circular(4.r)),
                                       child: const Icon(LucideIcons.chevronUp,
@@ -118,7 +120,7 @@ class PurchaseTicketSheet extends StatelessWidget {
                                     child: Container(
                                       width: 59.w,
                                       decoration: BoxDecoration(
-                                          color: Colors.white30,
+                                          color: brandPrimaryColor.withOpacity(0.4),
                                           borderRadius:
                                               BorderRadius.circular(4.r)),
                                       child: const Icon(LucideIcons.chevronDown,
@@ -134,7 +136,7 @@ class PurchaseTicketSheet extends StatelessWidget {
                       15.ph,
                       paragraphSmallItalic(
                         text: 'Sales Close 29 February 2024',
-                        color: Colors.white54,
+                        
                       )
                     ],
                   ));
@@ -143,7 +145,7 @@ class PurchaseTicketSheet extends StatelessWidget {
           20.ph,
           Obx(() {
             return title(
-                color: Colors.white60,
+               
                 fontSize: 34.sp,
                 text:
                     'Total: Ugx ${Helper.getTextDigit(ticketController.totalAmount.value.toString())}');

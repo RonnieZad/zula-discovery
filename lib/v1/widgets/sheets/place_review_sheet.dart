@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
@@ -23,7 +24,7 @@ class PlaceReviewSheet extends StatelessWidget {
           title(
               text: 'Reviews and Ratings',
               fontSize: 46.sp,
-              color: Colors.white,
+              color: brandPrimaryColor,
               fontFamily: 'Broncks',
               textAlign: TextAlign.center),
           30.ph,
@@ -34,7 +35,6 @@ class PlaceReviewSheet extends StatelessWidget {
             itemBuilder: (context, index) {
               return ListTile(
                 leading: ClipOval(
-                  
                   child: Image.network(
                     locationReviews[index].locationReviewContactPreview,
                     width: 60.0,
@@ -42,14 +42,12 @@ class PlaceReviewSheet extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                title: heading(
-                    text: locationReviews[index].locationReviewContactName,
-                    fontSize: 24.sp,
-                    color: Colors.white),
+                title: label(
+                  text: locationReviews[index].locationReviewContactName,
+                ),
                 subtitle: paragraph(
                     text: locationReviews[index].locationReviewContactReview,
-                    fontSize: 22.sp,
-                    color: Colors.white),
+                    fontSize: 18.sp),
                 // trailing: paragraph(
                 //     text: locationReviews[index].locationReviewDate,
                 //     fontSize: 19.sp,

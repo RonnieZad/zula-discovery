@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/helper.dart';
@@ -22,7 +23,7 @@ class MenuActivitySheet extends StatelessWidget {
           child: title(
               text: 'Menu / Activities',
               fontSize: 46.sp,
-              color: Colors.white,
+              color: brandPrimaryColor,
               fontFamily: 'Broncks',
               textAlign: TextAlign.center),
         ),
@@ -37,7 +38,7 @@ class MenuActivitySheet extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.white30),
+                border: Border.all(color: brandPrimaryColor.withOpacity(0.4)),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Column(
@@ -61,20 +62,20 @@ class MenuActivitySheet extends StatelessWidget {
                           text: locationMenuActivity[index]
                               .locationMenuActivityTitle,
                           fontSize: 24.sp,
-                          color: Colors.white),
+                          ),
                       paragraphBold(
                           text:
                               'UGX${Helper.getTextDigit(locationMenuActivity[index].locationMenuActivityPrice.toString())}',
                           fontSize: 20.sp,
-                          color: Colors.white),
+                          ),
                     ],
                   ),
                   10.ph,
                   paragraph(
                       text: locationMenuActivity[index]
                           .locationMenuActivityDescription,
-                      color: Colors.white70,
-                      fontSize: 22.sp),
+                      
+                      fontSize: 18.sp),
                 ],
               ),
             );
