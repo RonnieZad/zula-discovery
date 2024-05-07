@@ -1,0 +1,34 @@
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:zula/v1/models/notification_model.dart';
+import 'package:zula/v1/services/api_service.dart';
+
+class NotificationController extends GetxController {
+
+  var notficationPageIsLoading = true.obs;
+  final _notificationEvents = <NotificationModel>[].obs;
+
+  List<NotificationModel> get retrievedNotifications => _notificationEvents;
+
+  @override
+  onInit() {
+    getNotifications();
+    super.onInit();
+  }
+
+  getNotifications() {
+    ApiService.getRequest(
+      endPoint: '/get_user_notifications/${GetStorage().read('user_id')}',
+      service: Services.application,
+    ).then((response) {
+      notficationPageIsLoading(false);
+      if (response['payload']['status'] >= 200 &&
+          response['payload']['status'] < 300) {
+        _notificationEvents.value =
+            (response['payload']['notifications'] as List)
+                .map((e) => NotificationModel.fromJson(e))
+                .toList();
+      }
+    });
+  }
+}
