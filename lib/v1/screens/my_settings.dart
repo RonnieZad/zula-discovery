@@ -6,7 +6,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -166,7 +165,7 @@ class AppAboutSection extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           decoration: BoxDecoration(
-              color: Colors.white70, borderRadius: BorderRadius.circular(20.r)),
+              color: brandPrimaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,7 +243,7 @@ class AppPrivacySection extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           decoration: BoxDecoration(
-              color: Colors.white70, borderRadius: BorderRadius.circular(20.r)),
+              color: brandPrimaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,7 +354,7 @@ class AppPreferencesSection extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           decoration: BoxDecoration(
-              color: Colors.white70, borderRadius: BorderRadius.circular(20.r)),
+              color: brandPrimaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -444,7 +443,7 @@ class AppAccountSection extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             decoration: BoxDecoration(
-                color: Colors.white70,
+                color: brandPrimaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20.r)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
