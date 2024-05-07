@@ -13,7 +13,7 @@ extension ImagePath on String {
   String get toJpeg => 'assets/images/$this.jpeg';
   String get toJpg => 'assets/images/$this.jpg';
   String get toMp4 => 'assets/files/$this.mp4';
-  String get toJson => 'assets/lotties/$this.json';
+  String get toJson => 'assets/images/$this.json';
 }
 
 extension EmptyPadding on num {
