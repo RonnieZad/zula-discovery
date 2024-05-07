@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-// import 'package:palette_generator/palette_generator.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/controllers/ticket_controller.dart';
@@ -32,8 +31,6 @@ class _TicketPageState extends State<TicketPage>
     FirebaseAnalytics.instance.logScreenView(screenName: "TicketPageScreen");
   }
 
- 
-
   @override
   void initState() {
     tickerController.filteredEventTickets.value =
@@ -57,14 +54,26 @@ class _TicketPageState extends State<TicketPage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          LucideIcons.imageMinus,
+                          LucideIcons.imageOff,
                           size: 120.w,
                         ),
                         15.ph,
-                        heading(text: 'No events found')
-                      ].animate(onPlay: (controller) => controller.repeat(),)
-                    .then(delay: 440.ms)
-                   .slideY(begin: 0.1, end: 0, delay: 600.ms, duration: 3800.ms, curve: Curves.elasticInOut),
+                        15.ph,
+                        paragraph(
+                            text:
+                                'No Locations found\nCheck your internet or Refresh',
+                            textAlign: TextAlign.center),
+                      ]
+                          .animate(
+                            onPlay: (controller) => controller.repeat(),
+                          )
+                          .then(delay: 440.ms)
+                          .slideY(
+                              begin: 0.1,
+                              end: 0,
+                              delay: 600.ms,
+                              duration: 3800.ms,
+                              curve: Curves.elasticInOut),
                     ),
                   )
                 : ListView.builder(
