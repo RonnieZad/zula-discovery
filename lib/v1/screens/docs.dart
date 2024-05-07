@@ -4,10 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
-import 'package:zula/v1/widgets/widgets.dart';
 
 class DocsPages extends StatelessWidget {
   const DocsPages({
@@ -27,7 +25,6 @@ class DocsPages extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // const AppBackground(),
           ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.w),
             children: [
@@ -44,47 +41,46 @@ class DocsPages extends StatelessWidget {
                   textAlign: textAlign ?? TextAlign.justify)
             ],
           ),
-                Positioned(
-              bottom: 30.h,
-              left: 120.0,
-              right: 120.0,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  HapticFeedback.selectionClick();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(60.r),
-                    border: Border.all(color: Colors.white60, width: 0.8),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(60.r),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 40.0, sigmaY: 40.0),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60.r),
-                            color: Colors.black38),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            paragraph(text: 'Close', color: Colors.white),
-                            10.pw,
-                            const Icon(
-                              CupertinoIcons.multiply,
-                              color: Colors.white,
-                            )
-                          ],
-                        ),
+          Positioned(
+            bottom: 30.h,
+            left: 120.0,
+            right: 120.0,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                HapticFeedback.selectionClick();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(60.r),
+                  border: Border.all(color: Colors.white60, width: 0.8),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(60.r),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 40.0, sigmaY: 40.0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60.r),
+                          color: Colors.black38),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          paragraph(text: 'Close', color: Colors.white),
+                          10.pw,
+                          const Icon(
+                            CupertinoIcons.multiply,
+                            color: Colors.white,
+                          )
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
-            )
-         
+            ),
+          )
         ],
       ),
     );
