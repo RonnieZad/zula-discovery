@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/screens/explore_page.dart';
@@ -53,14 +54,15 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 right: 0.0,
                 bottom: 100.0,
                 child: locationController.searchPageViewIsLoading.value
-                    ? SizedBox(
-                        width: 100.w,
-                        height: 100.w,
-                        child: const Column(
-                          children: [
-                            CircularProgressIndicator(),
-                          ],
-                        ))
+                    ? Column(
+                        children: [
+                          240.ph,
+                          Lottie.asset('splash_animation'.toJson,
+                              width: 100.w, height: 100.w),
+                          10.ph,
+                          paragraph(text: 'Loading, please wait')
+                        ],
+                      )
                     : GridView.builder(
                             padding: EdgeInsets.only(
                                 left: 20.w, right: 20.w, bottom: 120.h),
