@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:zula/v1/models/location_category.dart';
@@ -54,6 +56,7 @@ class LocationController extends GetxController {
         initializeVideoPlayers();
       }
       homePageViewIsLoading(false);
+      print(homePageViewIsLoading.value);
       getLocationCategories();
     });
   }
@@ -76,6 +79,7 @@ class LocationController extends GetxController {
   }
 
   locationSearchByQuery({required String query}) {
+    log('-->> $query');
     searchPageViewIsLoading(true);
     _locationSearches.clear();
     ApiService.getRequest(
