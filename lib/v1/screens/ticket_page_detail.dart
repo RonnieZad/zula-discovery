@@ -231,7 +231,7 @@ class _TicketPageDetailState extends State<TicketPageDetail> {
                         height: 60.w,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Theme.of(context).primaryColor),
+                            color: brandPrimaryColor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
