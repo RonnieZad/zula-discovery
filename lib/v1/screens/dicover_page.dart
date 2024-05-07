@@ -82,8 +82,9 @@ class CustomSearchDelegate extends SearchDelegate<String> {
             // You can handle the tap on a suggestion item.
             HapticFeedback.lightImpact();
             close(context, filteredSuggestions[index]);
+            
             locationController.locationSearchByQuery(
-                query: filteredSuggestions[index]);
+                query: filteredSuggestions[index].replaceRange(filteredSuggestions[index].length-1, filteredSuggestions[index].length, ''));
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -232,6 +233,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
+
                                 locationController.locationSearchByCategory(
                                     category: locationController
                                         .retrievedLocationCategories[index]
