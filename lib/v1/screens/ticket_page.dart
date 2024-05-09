@@ -1,17 +1,18 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/controllers/ticket_controller.dart';
 import 'package:zula/v1/screens/ticket_page_detail.dart';
-import 'package:zula/v1/utils/extensions.dart';
-import 'package:zula/v1/utils/typography.dart';
 import 'package:zula/v1/widgets/event_ticket_widget.dart';
 import 'package:zula/v1/widgets/header.dart';
+import 'package:zula/v1/widgets/screen_helpers.dart';
 
 class TicketPage extends StatefulWidget {
   const TicketPage({super.key});
@@ -49,47 +50,23 @@ class _TicketPageState extends State<TicketPage>
         return Stack(
           children: [
             tickerController.filteredEventTickets.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          LucideIcons.imageOff,
-                          size: 120.w,
-                        ),
-                        15.ph,
-                        15.ph,
-                        paragraph(
-                            text:
-                                'No Locations found\nCheck your internet or Refresh',
-                            textAlign: TextAlign.center),
-                      ]
-                          .animate(
-                            onPlay: (controller) => controller.repeat(),
-                          )
-                          .then(delay: 440.ms)
-                          .slideY(
-                              begin: 0.1,
-                              end: 0,
-                              delay: 600.ms,
-                              duration: 3800.ms,
-                              curve: Curves.elasticInOut),
-                    ),
-                  )
+                ? const NoContentWidget(
+                    label: 'No Events found\nCheck your internet or Refresh')
                 : ListView.builder(
                         padding: EdgeInsets.only(
-                            top: 245.h, bottom: 90.h, left: 20.w, right: 20.w),
+                            top: Platform.isAndroid ? 235.h : 250.h, bottom: 90.h, left: 20.w, right: 20.w),
                         itemCount: tickerController.filteredEventTickets.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                               onTap: () {
+                                HapticFeedback.lightImpact();
                                 tickerController.ticketsToBuy.value =
                                     List.filled(
                                         tickerController
                                             .filteredEventTickets[index]
                                             .ticketCategory
                                             .length,
-                                        1);
+                                        0);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -125,6 +102,7 @@ class _TicketPageState extends State<TicketPage>
                           ))
                       .toList(),
                   onTap: (tabIndex) {
+                    HapticFeedback.lightImpact();
                     tickerController.filterEventCategory(tabIndex);
                   }),
             )
