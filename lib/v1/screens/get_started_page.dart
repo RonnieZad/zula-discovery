@@ -16,6 +16,8 @@ import 'package:zula/v1/utils/typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:zula/v1/widgets/app_background.dart';
+import 'package:zula/v1/widgets/app_button.dart';
+import 'package:zula/v1/widgets/content_loading_widget.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
 
 class GetStartedPage extends StatefulWidget {
@@ -73,99 +75,111 @@ class _GetStartedPageState extends State<GetStartedPage>
       // backgroundColor: Colors.white,
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-        return Stack(alignment: Alignment.bottomCenter, children: [
-          const AppBackground(),
-          RollingCards(
-            controller: _controller,
-            cards: rowOne,
-            relativeRects: [
-              RelativeRect.fromSize(
-                  Rect.fromLTWH(15.w, -80.h, 160.w, 10.h), Size(420.w, 100.h)),
-              RelativeRect.fromSize(
-                  Rect.fromLTWH(15.w, 0.h, 160.w, 10.h), Size(420.w, 100.h)),
-            ],
-          ),
-          RollingCards(
-            controller: _controller,
-            cards: rowTwo,
-            relativeRects: [
-              RelativeRect.fromSize(
-                  Rect.fromLTWH(245.w, -10.h, 160.w, 10.h), Size(420.w, 100.h)),
-              RelativeRect.fromSize(
-                  Rect.fromLTWH(245.w, -80.h, 160.w, 10.h), Size(420.w, 100.h)),
-            ],
-          ),
-          Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.5, 0.75],
-                    colors: [Colors.white10, Colors.white])),
-          ),
-          Positioned(
-            bottom: 20.h,
-            left: 20.w,
-            right: 20.w,
-            top: 0.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Spacer(),
-                SvgPicture.asset(
-                  'assets/images/zula_logo.svg',
-                  width: 260.w,
-                  color: brandPrimaryColor,
-                ),
-                10.ph,
-                paragraph(
-                    text:
-                        'Discover endless adventures. Your journey begins here',
-                    color: brandPrimaryColor.withOpacity(0.8),
-                    textAlign: TextAlign.center,
-                    fontSize: 22.5.sp),
-                30.ph,
-                SizedBox(
-                  height: 64.h,
-                  width: double.infinity,
-                  child: CupertinoButton(
-                      borderRadius: BorderRadius.circular(50.0),
-                      color: brandPrimaryColor.withOpacity(0.7),
-                      child: label(text: 'Get Started Already!'),
-                      onPressed: () {
-                        authController.signInWithGoogle();
-                        // authController.guestLogin(context);
-
-                        FirebaseAnalytics.instance
-                            .logSignUp(signUpMethod: 'AnnoynmousLogin');
-                      }) .animate()
-                    .then(delay: 940.ms)
-                   .slideY(begin: 0.25, end: 0, delay: 600.ms, duration: 7800.ms, curve: Curves.elasticInOut)
-                           
-                ),
-                   
-                20.ph,
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DocsPages(
-                                  termsOfServie: termsCondtionsText,
-                                  headingText: 'Zula App\nTerms and Conditions',
-                                )));
-                  },
-                  child: label(
-                    text: 'See Terms and Conditions',
+        return Obx(() {
+          return Stack(alignment: Alignment.bottomCenter, children: [
+            const AppBackground(),
+            RollingCards(
+              controller: _controller,
+              cards: rowOne,
+              relativeRects: [
+                RelativeRect.fromSize(Rect.fromLTWH(15.w, -80.h, 160.w, 10.h),
+                    Size(420.w, 100.h)),
+                RelativeRect.fromSize(
+                    Rect.fromLTWH(15.w, 0.h, 160.w, 10.h), Size(420.w, 100.h)),
+              ],
+            ),
+            RollingCards(
+              controller: _controller,
+              cards: rowTwo,
+              relativeRects: [
+                RelativeRect.fromSize(Rect.fromLTWH(245.w, -10.h, 160.w, 10.h),
+                    Size(420.w, 100.h)),
+                RelativeRect.fromSize(Rect.fromLTWH(245.w, -80.h, 160.w, 10.h),
+                    Size(420.w, 100.h)),
+              ],
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0.5, 0.75],
+                      colors: [Colors.white10, Colors.white])),
+            ),
+            Positioned(
+              bottom: 20.h,
+              left: 20.w,
+              right: 20.w,
+              top: 0.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Spacer(),
+                  SvgPicture.asset(
+                    'assets/images/zula_logo.svg',
+                    width: 260.w,
                     color: brandPrimaryColor,
                   ),
-                )
-              ].animate(interval: 300.ms).then(delay: 240.ms) .blurXY(begin: 1, end: 0)
+                  10.ph,
+                  paragraph(
+                      text:
+                          'Discover endless adventures. Your journey begins here',
+                      color: brandPrimaryColor.withOpacity(0.8),
+                      textAlign: TextAlign.center,
+                      fontSize: 22.5.sp),
+                  30.ph,
+                  AppButton(
+                          hasPadding: false,
+                          labelText: 'Get Started Already!',
+                          action: () {
+                            authController.signInWithGoogle();
+                            // authController.guestLogin(context);
+
+                            FirebaseAnalytics.instance
+                                .logSignUp(signUpMethod: 'AnnoynmousLogin');
+                          })
+                      .animate()
+                      .then(delay: 940.ms)
+                      .slideY(
+                          begin: 0.25,
+                          end: 0,
+                          delay: 600.ms,
+                          duration: 7800.ms,
+                          curve: Curves.elasticInOut),
+                  20.ph,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DocsPages(
+                                    termsOfServie: termsCondtionsText,
+                                    headingText:
+                                        'Zula App\nTerms and Conditions',
+                                  )));
+                    },
+                    child: label(
+                      text: 'See Terms and Conditions',
+                      color: brandPrimaryColor,
+                    ),
+                  )
+                ]
+                    .animate(interval: 300.ms)
+                    .then(delay: 240.ms)
+                    .blurXY(begin: 1, end: 0)
                     .slideY(begin: 0.2, end: 0.0)
                     .fade(duration: 500.ms),
+              ),
             ),
-          )
-        ]);
+            authController.isAuthLoading.value
+                ? Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.white,
+                    child: const ContentLoadingWidget(hasPadding: false))
+                : const SizedBox.shrink()
+          ]);
+        });
       }),
     );
   }
