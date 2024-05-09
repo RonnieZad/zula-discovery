@@ -10,12 +10,15 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gallery_3d/gallery3d.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
+import 'package:zula/v1/controllers/location_controller.dart';
 import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/link_parser.dart';
@@ -27,7 +30,6 @@ import 'package:zula/v1/widgets/sheets/menu_activity_sheet.dart';
 import 'package:zula/v1/widgets/sheets/place_review_sheet.dart';
 import 'package:zula/v1/widgets/sheets/share_sheet.dart';
 import 'package:zula/v1/widgets/sheets/virtual_tour_sheet.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class ExploreDetails extends StatefulWidget {
   const ExploreDetails({
@@ -41,10 +43,13 @@ class ExploreDetails extends StatefulWidget {
   State<ExploreDetails> createState() => _ExploreDetailsState();
 }
 
-class _ExploreDetailsState extends State<ExploreDetails> {
+class _ExploreDetailsState extends State<ExploreDetails>
+    with SingleTickerProviderStateMixin {
   int currentIndex = 0;
   double topOne = 0;
   double topTwo = 0;
+
+  LocationController locationController = Get.find();
 
   late Gallery3DController controller;
 
@@ -52,9 +57,16 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   List<bool> extraInfoState = [false, false];
 
   MapController controllerz = MapController();
+  PageController galleryPageController = PageController(viewportFraction: 0.9);
+  late AnimationController likeAnimationController;
 
   @override
   void initState() {
+    likeAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    );
+
     controller = Gallery3DController(
         itemCount: widget.locationDetails.locationPicture.length,
         autoLoop: true,
@@ -65,15 +77,18 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   Widget buildGallery3D() {
     return Gallery3D(
         controller: controller,
-        itemConfig:
-            GalleryItemConfig(width: 320, height: 460, radius: 15.r, shadows: [
-          BoxShadow(
-              color: brandPrimaryColor.withOpacity(0.3),
-              blurRadius: 10,
-              spreadRadius: 3)
-        ]),
+        itemConfig: GalleryItemConfig(
+            width: 380.w,
+            height: 600,
+            radius: 15.r,
+            shadows: [
+              BoxShadow(
+                  color: brandPrimaryColor.withOpacity(0.3),
+                  blurRadius: 10,
+                  spreadRadius: 3)
+            ]),
         width: MediaQuery.of(context).size.width,
-        height: 500,
+        height: 600.h,
         isClip: false,
         onItemChanged: (index) {
           setState(() {
@@ -81,31 +96,63 @@ class _ExploreDetailsState extends State<ExploreDetails> {
           });
         },
         onClickItem: (index) {
-          if (kDebugMode) print("currentIndex:$index");
+          HapticFeedback.selectionClick();
           ScreenOverlay.showAppSheet(context,
               playHomeVideoFrame: false,
               sheet: SizedBox(
                 height: 760.h,
                 child: PageView.builder(
+                  controller: galleryPageController,
                   itemCount: widget.locationDetails.locationPicture.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.w, vertical: 15.h),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16.r),
-                        child: OctoImage(
-                          
-                          width: double.infinity,
-                          placeholderBuilder: OctoBlurHashFix.placeHolder(
-                              'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                          errorBuilder: OctoError.icon(color: Colors.red),
-                          image: CachedNetworkImageProvider(
-                            widget.locationDetails.locationPicture[index]
-                                .locationPictureUrl,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 5.w, vertical: 15.h),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16.r),
+                            child: OctoImage(
+                              width: double.infinity,
+                              height: double.infinity,
+                              placeholderBuilder: OctoBlurHashFix.placeHolder(
+                                  'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                              errorBuilder: OctoError.icon(color: Colors.red),
+                              image: CachedNetworkImageProvider(
+                                widget.locationDetails.locationPicture[index]
+                                    .locationPictureUrl,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          fit: BoxFit.cover,
-                        ),
+                          Positioned(
+                            top: 10.0,
+                            right: 10.0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.r),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                    sigmaX: 40.0, sigmaY: 40.0),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 15.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      color: Colors.black38),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      paragraph(
+                                          text:
+                                              '${index + 1} out of ${widget.locationDetails.locationPicture.length}',
+                                          color: Colors.white),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     );
                   },
@@ -113,14 +160,48 @@ class _ExploreDetailsState extends State<ExploreDetails> {
               ));
         },
         itemBuilder: (context, index) {
-          return OctoImage(
-            placeholderBuilder:
-                OctoBlurHashFix.placeHolder('LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-            errorBuilder: OctoError.icon(color: Colors.red),
-            image: CachedNetworkImageProvider(
-              widget.locationDetails.locationPicture[index].locationPictureUrl,
-            ),
-            fit: BoxFit.cover,
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              OctoImage(
+                width: 420.w,
+                height: 600.h,
+                placeholderBuilder:
+                    OctoBlurHashFix.placeHolder('LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                errorBuilder: OctoError.icon(color: Colors.red),
+                image: CachedNetworkImageProvider(
+                  widget.locationDetails.locationPicture[index]
+                      .locationPictureUrl,
+                ),
+                fit: BoxFit.cover,
+              ),
+              Positioned(
+                top: 10.0,
+                right: 10.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 40.0, sigmaY: 40.0),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 15.w),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.r),
+                          color: Colors.black38),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          paragraph(
+                              text:
+                                  '${index + 1} out of ${widget.locationDetails.locationPicture.length}',
+                              color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           );
         });
   }
@@ -153,7 +234,6 @@ class _ExploreDetailsState extends State<ExploreDetails> {
         },
         child: Stack(
           children: [
-            // const AppBackground(),
             ParallaxWidget(
               top: topOne,
               widget: ShaderMask(
@@ -179,10 +259,11 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                   )),
             ),
             ListView(
-              padding: EdgeInsets.only(top: 70.h),
+              padding: EdgeInsets.only(top: 65.h),
               shrinkWrap: true,
               children: [
                 buildGallery3D(),
+                35.ph,
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Column(
@@ -214,16 +295,17 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor),
                               5.ph,
                               Row(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   paragraph(
                                       text:
-                                          '${widget.locationDetails.locationRating}',
+                                          '${widget.locationDetails.likeCount}',
                                       fontSize: 20.sp,
                                       color: brandPrimaryColor),
                                   5.pw,
-                                  Icon(LucideIcons.star,
-                                      color: Colors.yellow, size: 20.w),
+                                  paragraph(
+                                      text: 'Likes',
+                                      fontSize: 20.sp,
+                                      color: brandPrimaryColor),
                                 ],
                               ),
                             ],
@@ -236,13 +318,12 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           fontSize: 21.sp,
                           color: brandPrimaryColor),
                       10.ph,
-                    
-                    
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           IconButton(
                               onPressed: () {
+                                HapticFeedback.selectionClick();
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
                                     sheet: VirtualTourSheet(
@@ -254,6 +335,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
+                                HapticFeedback.selectionClick();
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
                                     sheet: PlaceReviewSheet(
@@ -265,6 +347,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
+                                HapticFeedback.selectionClick();
                                 ScreenOverlay.showAppSheet(
                                   context,
                                   playHomeVideoFrame: false,
@@ -369,6 +452,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
+                                HapticFeedback.selectionClick();
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
                                     sheet: MenuActivitySheet(
@@ -379,11 +463,38 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                               icon: Icon(Icons.restaurant,
                                   color: brandPrimaryColor, size: 30.w)),
                           IconButton(
-                              onPressed: () {},
-                              icon: Icon(LineIcons.heart,
-                                  color: brandPrimaryColor, size: 30.w)),
+                                  onPressed: () {
+                                    HapticFeedback.selectionClick();
+                                    likeAnimationController.forward();
+
+                                    locationController
+                                        .favoriteLocation(
+                                            locationId:
+                                                widget.locationDetails.id)
+                                        .then((updatedCountLike) {
+                                      HapticFeedback.selectionClick();
+                                      likeAnimationController.reset();
+                                      if (updatedCountLike != null) {
+                                        setState(() {
+                                          widget.locationDetails.likeCount =
+                                              updatedCountLike;
+                                        });
+                                      }
+                                    });
+                                  },
+                                  icon: Icon(LineIcons.heart,
+                                      color: brandPrimaryColor, size: 30.w))
+                              .animate(
+                                autoPlay: false,
+                                controller: likeAnimationController,
+                                onComplete: (animController) {
+                                  animController.repeat();
+                                },
+                              )
+                              .scaleXY(begin: 1.0, end: 0.6),
                           IconButton(
                               onPressed: () {
+                                HapticFeedback.selectionClick();
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
                                     sheet: const ShareSheet());
@@ -392,8 +503,6 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                   color: brandPrimaryColor, size: 30.w)),
                         ],
                       ),
-                    
-                    
                       20.ph,
                       heading(
                           text: 'Activites',
@@ -410,6 +519,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
+                                  HapticFeedback.selectionClick();
                                   ScreenOverlay.showAppSheet(context,
                                       playHomeVideoFrame: false,
                                       sheet: Padding(
@@ -493,11 +603,11 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           shrinkWrap: true,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisSpacing: 10.0,
-                                  crossAxisSpacing: 10.0,
-                                  crossAxisCount: 3),
+                            mainAxisSpacing: 10.0,
+                            crossAxisSpacing: 10.0,
+                            crossAxisCount: 3,
+                          ),
                           itemBuilder: (context, index) => Column(
-                                // mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(placeAmenities[index]['icon'],
                                       color: brandPrimaryColor, size: 30.w),
@@ -517,13 +627,11 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           fontSize: 27.sp,
                           color: brandPrimaryColor),
                       35.ph,
-                    
-                    
                       GestureDetector(
                         onTap: () {
+                          HapticFeedback.selectionClick();
                           setState(() {
-                            extraInfoState = [false, false];
-                            extraInfoState[0] = true;
+                            extraInfoState[0] = !extraInfoState[0];
                           });
                         },
                         child: AnimatedContainer(
@@ -589,20 +697,20 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                                 ),
                         ),
                       ),
-                     
-                     
                       100.ph,
                     ],
                   ),
                 ),
               ]
-                  .animate(interval: 300.ms)
-                  .then(delay: 240.ms)
-                  .blurXY(begin: 1, end: 0)
-                  .slideY(begin: 0.2, end: 0.0)
+                  .animate(interval: 250.ms)
+                  .blurXY(duration: 900.ms, begin: 1, end: 0)
+                  .slideY(
+                      duration: 550.ms,
+                      begin: 0.01,
+                      end: 0.0,
+                      curve: Curves.decelerate)
                   .fade(duration: 500.ms),
             ),
-
             Positioned(
               bottom: 30.h,
               left: 120.0,
