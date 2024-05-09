@@ -11,7 +11,7 @@ import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/controllers/location_controller.dart';
 import 'package:zula/v1/controllers/ticket_controller.dart';
 import 'package:zula/v1/screens/homepage.dart';
-import 'package:zula/v1/screens/my_settings.dart';
+import 'package:zula/v1/screens/settings.dart';
 import 'package:zula/v1/screens/ticket_page.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
@@ -54,8 +54,8 @@ class _AppCanvasState extends State<AppCanvas> {
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.only(
-                    bottom: Platform.isAndroid ? 15.h : 30.h,
-                    top: 10.h,
+                    bottom: Platform.isAndroid ? 8.h : 30.h,
+                    top: 4.h,
                     left: 40.w,
                     right: 40.w),
                 child: Row(
@@ -63,13 +63,13 @@ class _AppCanvasState extends State<AppCanvas> {
                   children: bottomNavbar
                       .map((nav) => GestureDetector(
                             onTap: () {
+                              HapticFeedback.lightImpact();
                               analytics.logEvent(
                                   name: 'pages_tracked',
                                   parameters: {
                                     "page_name": nav['label'],
                                     "page_index": bottomNavbar.indexOf(nav)
                                   });
-                              HapticFeedback.selectionClick();
                               _appPageController
                                   .jumpToPage(bottomNavbar.indexOf(nav));
                               setState(() {
