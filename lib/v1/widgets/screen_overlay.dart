@@ -10,7 +10,6 @@ import 'package:zula/v1/controllers/location_controller.dart';
 import 'package:zula/v1/controllers/ticket_controller.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
-import 'package:zula/v1/widgets/app_background.dart';
 
 class ScreenOverlay {
   ScreenOverlay._();
@@ -30,12 +29,13 @@ class ScreenOverlay {
           TickerController tickerController = Get.find();
           return Dialog(
             backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.r),
               child: Obx(() {
                 return SizedBox(
-                  height: 460,
+                  // height: showTextBox ? 460.h : null,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -67,22 +67,22 @@ class ScreenOverlay {
                             )
                           : Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w, vertical: 15.h),
+                                  horizontal: 20.w, vertical: 25.h),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     title(
-                                        text: titleText,
-                                        fontSize: 46.sp,
-                                        color: brandPrimaryColor,
-                                        fontFamily: 'Broncks',
-                                        textAlign: TextAlign.center),
+                                      text: titleText,
+                                      fontSize: 46.sp,
+                                      color: brandPrimaryColor,
+                                      fontFamily: 'Broncks',
+                                    ),
                                     10.ph,
                                     paragraph(
-                                        text: description,
-                                        color: brandPrimaryColor,
-                                        textAlign: TextAlign.center),
+                                      text: description,
+                                      color: brandPrimaryColor,
+                                    ),
                                     if (showTextBox == true) ...[
                                       25.ph,
                                       AppTextBox(
@@ -141,51 +141,53 @@ class ScreenOverlay {
         builder: (context) {
           return PopScope(
             canPop: !showDismissButton,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SizedBox(
-                  width: double.infinity,
-                  child: Material(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10.r),
-                        topRight: Radius.circular(10.r),
-                      ),
-                      color: Colors.white24,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                              left: 0.0,
-                              right: 0.0,
-                              bottom: 95.h,
-                              child: sheet),
-                          Positioned(
-                            bottom: 25.h,
-                            left: 120.0,
-                            right: 120.0,
-                            
-                            child: FilledButton.icon(
-                              style: ButtonStyle(
-                                  padding: const MaterialStatePropertyAll(
-                                      EdgeInsets.symmetric(vertical: 15)),
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      brandPrimaryColor.withOpacity(0.1))),
-                              label: paragraph(
-                                  text: 'Close', color: brandPrimaryColor),
-                              icon: Icon(
-                                CupertinoIcons.multiply,
-                                color: brandPrimaryColor,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SizedBox(
+                    width: double.infinity,
+                    child: Material(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.r),
+                          topRight: Radius.circular(10.r),
+                        ),
+                        color: Colors.white24,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                left: 0.0,
+                                right: 0.0,
+                                bottom: 95.h,
+                                child: sheet),
+                            Positioned(
+                              bottom: 25.h,
+                              left: 120.0,
+                              right: 120.0,
+                              child: FilledButton.icon(
+                                style: ButtonStyle(
+                                    padding: const MaterialStatePropertyAll(
+                                        EdgeInsets.symmetric(vertical: 15)),
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        brandPrimaryColor.withOpacity(0.1))),
+                                label: paragraph(
+                                    text: 'Close', color: brandPrimaryColor),
+                                icon: Icon(
+                                  CupertinoIcons.multiply,
+                                  color: brandPrimaryColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  if (playHomeVideoFrame) {
+                                    locationController.resumeFramePlay();
+                                  }
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                if (playHomeVideoFrame) {
-                                  locationController.resumeFramePlay();
-                                }
-                              },
-                            ),
-                          )
-                        ],
-                      ))),
+                            )
+                          ],
+                        ))),
+              ),
             ),
           );
         });
