@@ -10,6 +10,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/controllers/auth_controller.dart';
 import 'package:zula/v1/pager.dart';
 import 'package:zula/v1/screens/get_started_page.dart';
@@ -34,7 +35,7 @@ void main() async {
       // set observer
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
     } catch (e) {
-      print("Failed to initialize Firebase: $e");
+      debugPrint("Failed to initialize Firebase: $e");
     }
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -46,7 +47,7 @@ void main() async {
     SystemUiOverlayStyle uiMode = const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.dark,
       statusBarBrightness: Brightness.light,
       statusBarIconBrightness: Brightness.dark,
     );
@@ -87,10 +88,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     AuthController authController = Get.put(AuthController());
     return MaterialApp(
-      title: 'Zula App',
+      title: 'Zula Vibe App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromRGBO(20, 45, 66, 1)),
+            seedColor: brandPrimaryColor),
         useMaterial3: true,
       ),
       home: ScreenUtilInit(
