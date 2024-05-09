@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/models/ticket_model.dart';
@@ -12,22 +13,44 @@ class TickerController extends GetxController {
   var ticketsToBuy = [].obs;
   var totalAmount = 0.0.obs;
 
+  var savedEventTicketsLoading = true.obs;
+
   TextEditingController phoneNumberTextEditingController =
       TextEditingController();
 
   var showPaymentProcessing = false.obs;
 
   var ticketPageIsLoading = true.obs;
+  var savedEventPageLoading = true.obs;
   final _eventTickets = <Ticket>[].obs;
+  final _savedEventTickets = <Ticket>[].obs;
   final filteredEventTickets = <Ticket>[].obs;
 
   List<Ticket> get retrievedEventTickets => _eventTickets;
-  
+  List<Ticket> get savedEventTickets => _savedEventTickets;
 
   @override
   onInit() {
     getEventTickets();
     super.onInit();
+  }
+
+  Future<int?> favoriteEventTicket({required String eventId}) {
+    return ApiService.postRequest(
+        endPoint: '/favorite_event',
+        service: Services.application,
+        body: {
+          'user_id': GetStorage().read('user_id') ??
+              '5248a3fa-81c3-4170-b136-34c0f0a54ef2',
+          'ticket_id': eventId
+        }).then((response) {
+      print(response);
+      if (response['payload']['status'] >= 200 &&
+          response['payload']['status'] < 300) {
+        return response['payload']['updated_count_like'];
+      }
+      return null;
+    });
   }
 
   getEventTickets() {
@@ -43,6 +66,26 @@ class TickerController extends GetxController {
             .toList();
         filteredEventTickets.value = _eventTickets;
       }
+    });
+  }
+
+  getUserSavedEvents() {
+    ApiService.getRequest(
+            endPoint:
+                '/get_saved_ticket_events/${GetStorage().read('user_id') ?? '5248a3fa-81c3-4170-b136-34c0f0a54ef2'}',
+            service: Services.application)
+        .then((response) {
+      if (response['payload']['status'] >= 200 &&
+          response['payload']['status'] < 300) {
+        if (response['payload']['tickets'] != null) {
+          _savedEventTickets.value = (response['payload']['tickets'] as List)
+              .map((e) => Ticket.fromJson(e))
+              .toList();
+        } else {
+          _savedEventTickets.clear();
+        }
+      }
+      savedEventPageLoading(false);
     });
   }
 
