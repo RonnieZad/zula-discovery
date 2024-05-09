@@ -19,10 +19,12 @@ import 'package:zula/v1/models/ticket_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/link_parser.dart';
 import 'package:zula/v1/utils/typography.dart';
+import 'package:zula/v1/widgets/app_button.dart';
 import 'package:zula/v1/widgets/event_ticket_widget.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
 import 'package:zula/v1/widgets/sheets/purchase_ticket_sheet.dart';
+import 'package:zula/v1/widgets/sheets/share_sheet.dart';
 
 class TicketPageDetail extends StatefulWidget {
   const TicketPageDetail({super.key, required this.ticketData});
@@ -32,9 +34,22 @@ class TicketPageDetail extends StatefulWidget {
   State<TicketPageDetail> createState() => _TicketPageDetailState();
 }
 
-class _TicketPageDetailState extends State<TicketPageDetail> {
+class _TicketPageDetailState extends State<TicketPageDetail>
+    with SingleTickerProviderStateMixin {
   TickerController tickerController = Get.find();
   List<bool> extraInfoState = [false, false];
+  PageController galleryPageController = PageController(viewportFraction: 0.9);
+
+  late AnimationController likeAnimationController;
+
+  @override
+  void initState() {
+    likeAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,20 +95,48 @@ class _TicketPageDetailState extends State<TicketPageDetail> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        // IconButton(
+                        //     onPressed: () {},
+                        //     icon: Icon(Icons.threed_rotation,
+                        //         color: brandPrimaryColor, size: 30.w)),
+                        // IconButton(
+                        //     onPressed: () {},
+                        //     icon: Icon(LucideIcons.quote,
+                        //         color: brandPrimaryColor, size: 30.w)),
                         IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.threed_rotation,
-                                color: brandPrimaryColor, size: 30.w)),
+                                onPressed: () {
+                                  likeAnimationController.forward();
+                                  HapticFeedback.selectionClick();
+                                  tickerController
+                                      .favoriteEventTicket(
+                                          eventId: widget.ticketData.id)
+                                      .then((updatedCountLike) {
+                                    likeAnimationController.reset();
+                                    if (updatedCountLike != null) {
+                                      setState(() {
+                                        widget.ticketData.interestedCount =
+                                            updatedCountLike;
+                                      });
+                                    }
+                                  });
+                                  ;
+                                },
+                                icon: Icon(LineIcons.heart,
+                                    color: brandPrimaryColor, size: 30.w))
+                            .animate(
+                              autoPlay: false,
+                              controller: likeAnimationController,
+                              onComplete: (animController) {
+                                animController.repeat();
+                              },
+                            )
+                            .scaleXY(begin: 1.0, end: 0.6),
                         IconButton(
-                            onPressed: () {},
-                            icon: Icon(LucideIcons.quote,
-                                color: brandPrimaryColor, size: 30.w)),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(LineIcons.heart,
-                                color: brandPrimaryColor, size: 30.w)),
-                        IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              ScreenOverlay.showAppSheet(context,
+                                  playHomeVideoFrame: false,
+                                  sheet: const ShareSheet());
+                            },
                             icon: Icon(LineIcons.share,
                                 color: brandPrimaryColor, size: 30.w)),
                       ],
@@ -127,7 +170,7 @@ class _TicketPageDetailState extends State<TicketPageDetail> {
                     color: brandPrimaryColor),
                 15.ph,
                 SizedBox(
-                  height: 400.h,
+                  height: 410.h,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15.r),
                     child: GridView.builder(
@@ -147,29 +190,76 @@ class _TicketPageDetailState extends State<TicketPageDetail> {
                                   sheet: SizedBox(
                                     height: 760.h,
                                     child: PageView.builder(
-                                      itemCount: 6,
+                                      controller: galleryPageController,
+                                      itemCount: widget
+                                          .ticketData.ticketEventAlbum.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: EdgeInsets.symmetric(
-                                              horizontal: 20.w, vertical: 15.h),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(16.r),
-                                            child: OctoImage(
-                                              width: double.infinity,
-                                              placeholderBuilder:
-                                                  OctoBlurHashFix.placeHolder(
-                                                      'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                                              errorBuilder: OctoError.icon(
-                                                  color: Colors.red),
-                                              image: CachedNetworkImageProvider(
-                                                widget
-                                                    .ticketData
-                                                    .ticketEventAlbum[index]
-                                                    .assetUrl,
+                                              horizontal: 5.w, vertical: 15.h),
+                                          child: Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(16.r),
+                                                child: OctoImage(
+                                                  height: double.infinity,
+                                                  width: double.infinity,
+                                                  placeholderBuilder:
+                                                      OctoBlurHashFix.placeHolder(
+                                                          'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                                                  errorBuilder: OctoError.icon(
+                                                      color: Colors.red),
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                    widget
+                                                        .ticketData
+                                                        .ticketEventAlbum[index]
+                                                        .assetUrl,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
-                                              fit: BoxFit.cover,
-                                            ),
+                                              Positioned(
+                                                top: 10.0,
+                                                right: 10.0,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.r),
+                                                  child: BackdropFilter(
+                                                    filter: ImageFilter.blur(
+                                                        sigmaX: 40.0,
+                                                        sigmaY: 40.0),
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 5,
+                                                              horizontal: 15.w),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.r),
+                                                          color:
+                                                              Colors.black38),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          paragraph(
+                                                              text:
+                                                                  '${index + 1} out of ${widget.ticketData.ticketEventAlbum.length}',
+                                                              color:
+                                                                  Colors.white),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         );
                                       },
@@ -230,8 +320,7 @@ class _TicketPageDetailState extends State<TicketPageDetail> {
                         width: 60.w,
                         height: 60.w,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: brandPrimaryColor),
+                            shape: BoxShape.circle, color: brandPrimaryColor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -494,26 +583,23 @@ class _TicketPageDetailState extends State<TicketPageDetail> {
                   ),
                 ),
                 30.ph,
-                SizedBox(
-                    height: 64.h,
-                    width: double.infinity,
-                    child: CupertinoButton(
-                            borderRadius: BorderRadius.circular(50.0),
-                            color: brandPrimaryColor.withOpacity(0.7),
-                            child: label(text: 'Purchase Ticket'),
-                            onPressed: () {
-                              ScreenOverlay.showAppSheet(context,
-                                  sheet: PurchaseTicketSheet(
-                                      ticketData: widget.ticketData));
-                            })
-                        .animate()
-                        .then(delay: 940.ms)
-                        .slideY(
-                            begin: 0.25,
-                            end: 0,
-                            delay: 600.ms,
-                            duration: 7800.ms,
-                            curve: Curves.elasticInOut)),
+                AppButton(
+                        hasPadding: false,
+                        labelText: 'Purchase Ticket',
+                        action: () {
+                          HapticFeedback.lightImpact();
+                          ScreenOverlay.showAppSheet(context,
+                              sheet: PurchaseTicketSheet(
+                                  ticketData: widget.ticketData));
+                        })
+                    .animate()
+                    .then(delay: 940.ms)
+                    .slideY(
+                        begin: 0.25,
+                        end: 0,
+                        delay: 600.ms,
+                        duration: 7800.ms,
+                        curve: Curves.elasticInOut),
                 140.ph
               ],
             ),
