@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -114,6 +113,34 @@ List<Map<String, dynamic>> bottomNavbar = [
   {'icon': LineIcons.alternateTicket, 'label': 'Tickets'},
   {'icon': LineIcons.cog, 'label': 'Setup'}
 ];
+
+  List<Map<String, dynamic>> settingsOptions = [
+    {
+      'title': 'Account',
+      'description': 'Email Address\nPhone Number\nNotifications',
+      'icon': LucideIcons.user
+    },
+    // {
+    //   'title': 'Preferences',
+    //   'description': 'Theme\nLanguage\nInterests',
+    //   'icon': LucideIcons.settings
+    // },
+    {
+      'title': 'Privacy',
+      'description': 'Terms\nPrivacy\nPermissions',
+      'icon': LucideIcons.shield
+    },
+    {
+      'title': 'About',
+      'description': 'App Version\nTerms\nPrivacy Policy',
+      'icon': LucideIcons.info
+    },
+    // {
+    //   'title': 'About',
+    //   'description': 'App Version\nTerms\nPrivacy Policy',
+    //   'icon': LucideIcons.info
+    // }
+  ];
 
 String termsOfServie = '''
 
