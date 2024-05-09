@@ -154,6 +154,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         },
                       ),
                     ])),
+          
+          
             Positioned(
               top: 130.h,
               left: 20.w,
@@ -313,6 +315,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             );
                           }),
             ),
+          
+          
             Positioned(
               bottom: 30.h,
               left: 120.0,
