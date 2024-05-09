@@ -22,6 +22,7 @@ class AuthController extends GetxController {
   var name = ''.obs;
   var emailAddress = ''.obs;
   var lastSignInDate = ''.obs;
+  var isAuthLoading = false.obs;
 
   @override
   onInit() {
@@ -62,6 +63,7 @@ class AuthController extends GetxController {
 
   Future<void> signInWithGoogle() async {
     try {
+      isAuthLoading(true);
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -77,6 +79,7 @@ class AuthController extends GetxController {
       final User? user = userCredential.user;
 
       if (user != null) {
+        isAuthLoading(false);
         privateServerAuth(emailAddress: user.email!, name: user.displayName!);
         GetStorage().write('profilePic', user.photoURL ?? '');
         GetStorage().write('name', user.displayName ?? '');
