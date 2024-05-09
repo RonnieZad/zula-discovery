@@ -7,7 +7,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:zula/v1/constants/colors.dart';
@@ -18,6 +17,7 @@ import 'package:zula/v1/screens/notification_center.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zula/v1/widgets/screen_helpers.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
               top: 0.h,
               left: 0.0,
               right: 0.0,
-              bottom: Platform.isAndroid ? 90.h: 90.h,
+              bottom: Platform.isAndroid ? 90.h : 90.h,
               child: locationController.homePageViewIsLoading.value
                   ? Container(
                       height: 0.2.sh,
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: EdgeInsets.all(20.w),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.r),
-                          color: Colors.white24),
+                          color: brandPrimaryColor.withOpacity(0.08)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 8,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.r),
-                                color: Colors.white30),
+                                color: Colors.black12),
                           ),
                           10.ph,
                           Container(
@@ -79,211 +79,211 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 8,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6.r),
-                                color: Colors.white30),
+                                color: Colors.black12),
                           )
                         ],
                       ),
                     )
                       .animate(onPlay: (controller) => controller.repeat())
-                      .slideY(begin: 0.2, end: 0, duration: 500.ms)
+                      .slideY(
+                        begin: 1.2,
+                        end: 0,
+                        delay: 300.ms,
+                        duration: 800.ms,
+                        curve: Curves.ease,
+                      )
                       .shimmer(
+                          curve: Curves.decelerate,
                           delay: 700.ms,
                           duration: 2000.ms,
-                          color: Colors.black38)
-                      .scaleY(duration: 800.ms)
-                  : locationController.retrievedLocations.isEmpty ? 
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          LucideIcons.imageOff,
-                          size: 120.w,
-                        ),
-                        15.ph,
-                        paragraph (text: 'No Locations found\nCheck your internet or Refresh', textAlign: TextAlign.center),
-                        
-                      ].animate(onPlay: (controller) => controller.repeat(),)
-                    .then(delay: 440.ms)
-                   .slideY(begin: 0.1, end: 0, delay: 600.ms, duration: 3800.ms, curve: Curves.elasticInOut),
-                    ),
-                  ):
-                  
-                  PageView.builder(
-                      controller: _pageController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: locationController.retrievedLocations.length,
-                      onPageChanged: (selectedPage) {
-                        setState(() {
-                          locationController.currentVideoFrameIndex =
-                              selectedPage;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            HapticFeedback.selectionClick();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExploreDetails(
-                                        locationDetails: locationController
-                                            .retrievedLocations[index])));
+                          color: Colors.white70)
+                  : locationController.retrievedLocations.isEmpty
+                      ? const NoContentWidget(
+                          label:
+                              'No Locations found\nCheck your internet or Refresh',
+                        )
+                      : PageView.builder(
+                          controller: _pageController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount:
+                              locationController.retrievedLocations.length,
+                          onPageChanged: (selectedPage) {
+                            setState(() {
+                              locationController.currentVideoFrameIndex =
+                                  selectedPage;
+                            });
                           },
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                  bottom: 40.h,
-                                  left: 0.0,
-                                  right: 0.0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(15.r),
-                                        border: Border.all(
-                                          color: Colors.white24,
-                                        )),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      child: SizedBox(
-                                        height: .68.sh,
-                                        width: double.infinity,
-                                        child: Stack(
-                                          children: [
-                                            locationController
-                                                    .videoPlayerControllers
-                                                    .isNotEmpty
-                                                ? VisibilityDetector(
-                                                    key: Key(locationController
-                                                        .retrievedLocations[
-                                                            index]
-                                                        .locationName),
-                                                    onVisibilityChanged:
-                                                        (visibilityInfo) {
-                                                      var visiblePercentage =
-                                                          visibilityInfo
-                                                                  .visibleFraction *
-                                                              100;
-                                                      print(visiblePercentage);
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                HapticFeedback.selectionClick();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ExploreDetails(
+                                      locationDetails: locationController
+                                          .retrievedLocations[index],
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Positioned(
+                                      bottom: 40.h,
+                                      left: 0.0,
+                                      right: 0.0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15.r),
+                                            border: Border.all(
+                                              color: Colors.white24,
+                                            )),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          child: SizedBox(
+                                            height: .68.sh,
+                                            width: double.infinity,
+                                            child: Stack(
+                                              children: [
+                                                locationController
+                                                        .videoPlayerControllers
+                                                        .isNotEmpty
+                                                    ? VisibilityDetector(
+                                                        key: Key(locationController
+                                                            .retrievedLocations[
+                                                                index]
+                                                            .locationName),
+                                                        onVisibilityChanged:
+                                                            (visibilityInfo) {
+                                                          var visiblePercentage =
+                                                              visibilityInfo
+                                                                      .visibleFraction *
+                                                                  100;
 
-                                                      if (visiblePercentage >
-                                                              50 &&
-                                                          locationController
-                                                                  .currentPageIndex
-                                                                  .value ==
-                                                              0) {
-                                                        locationController
-                                                            .videoPlayerControllers[
-                                                                index]
-                                                            .play();
-                                                        locationController
-                                                            .videoPlayerControllers[
-                                                                index]
-                                                            .setLooping(true);
-                                                      } else {
-                                                        locationController
-                                                            .videoPlayerControllers[
-                                                                index]
-                                                            .pause();
-                                                      }
-                                                    },
-                                                    child: VideoPlayer(
-                                                        locationController
+                                                          if (visiblePercentage >
+                                                                  50 &&
+                                                              locationController
+                                                                      .currentPageIndex
+                                                                      .value ==
+                                                                  0) {
+                                                            locationController
                                                                 .videoPlayerControllers[
-                                                            index]))
-                                                : const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                            Container(
-                                              decoration: const BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                      begin:
-                                                          Alignment.topCenter,
-                                                      end: Alignment
-                                                          .bottomCenter,
-                                                      colors: [
-                                                    Colors.transparent,
-                                                    Colors.black87
-                                                  ])),
-                                            ),
-                                            Positioned(
-                                              bottom: 65.h,
-                                              left: 15.w,
-                                              right: 15.w,
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                                    index]
+                                                                .play();
+                                                            locationController
+                                                                .videoPlayerControllers[
+                                                                    index]
+                                                                .setLooping(
+                                                                    true);
+                                                          } else {
+                                                            locationController
+                                                                .videoPlayerControllers[
+                                                                    index]
+                                                                .pause();
+                                                          }
+                                                        },
+                                                        child: VideoPlayer(
+                                                            locationController
+                                                                    .videoPlayerControllers[
+                                                                index]))
+                                                    : const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                Container(
+                                                  decoration: const BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                          begin: Alignment
+                                                              .topCenter,
+                                                          end: Alignment
+                                                              .bottomCenter,
+                                                          colors: [
+                                                        Colors.transparent,
+                                                        Colors.black87
+                                                      ])),
+                                                ),
+                                                Positioned(
+                                                  bottom: 65.h,
+                                                  left: 15.w,
+                                                  right: 15.w,
+                                                  child: Column(
                                                     children: [
-                                                      heading(
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Expanded(
+                                                            child: heading(
+                                                                text: locationController
+                                                                    .retrievedLocations[
+                                                                        index]
+                                                                    .locationName,
+                                                                fontSize: 52.sp,
+                                                                fontFamily:
+                                                                    'Rangile',
+                                                                color: Colors
+                                                                    .white,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      10.ph,
+                                                      paragraph(
                                                           text: locationController
                                                               .retrievedLocations[
                                                                   index]
-                                                              .locationName,
-                                                          fontSize: 50.sp,
-                                                          fontFamily: 'Rangile',
-                                                          color: Colors.white),
-                                                      5.pw,
-                                                      Icon(
-                                                        LucideIcons.badgeCheck,
-                                                        color: Colors.white,
-                                                        size: 20.w,
-                                                      )
+                                                              .locationDescription,
+                                                          fontSize: 22.sp,
+                                                          color: Colors.white,
+                                                          textAlign:
+                                                              TextAlign.center),
                                                     ],
                                                   ),
-                                                  10.ph,
-                                                  paragraph(
-                                                      text: locationController
-                                                          .retrievedLocations[
-                                                              index]
-                                                          .locationDescription,
-                                                      fontSize: 22.sp,
-                                                      color: Colors.white,
-                                                      textAlign:
-                                                          TextAlign.center),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 13.h,
+                                      right: 120.w,
+                                      left: 120.w,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 17.h),
+                                        decoration: BoxDecoration(
+                                          color: brandPrimaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(45.r),
+                                        ),
+                                        child: Center(
+                                            child: heading(
+                                                text: 'Explore',
+                                                color: Colors.white,
+                                                fontSize: 24.sp)),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                Positioned(
-                                  bottom: 13.h,
-                                  right: 120.w,
-                                  left: 120.w,
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 17.h),
-                                    decoration: BoxDecoration(
-                                      color: brandPrimaryColor,
-                                      borderRadius: BorderRadius.circular(15.r),
-                                    ),
-                                    child: Center(
-                                        child: heading(
-                                            text: 'Explore',
-                                            color: Colors.white,
-                                            fontSize: 24.sp)),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
+                              ),
+                            );
+                          }),
             ),
             Positioned(
-              top: Platform.isAndroid ? 40.h: 60.h,
+              top: Platform.isAndroid ? 40.h : 60.h,
               left: 20.w,
               right: 20.w,
               child: Row(
@@ -313,6 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       size: 40.w,
                     ),
                     onPressed: () {
+                      HapticFeedback.selectionClick();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -326,6 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       size: 40.w,
                     ),
                     onPressed: () {
+                      HapticFeedback.selectionClick();
                       ScreenOverlay.showAppSheet(context,
                           sheet: const NotificationCenter());
 
@@ -341,3 +343,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
