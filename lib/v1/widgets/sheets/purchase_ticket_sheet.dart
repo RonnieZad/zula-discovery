@@ -26,7 +26,7 @@ class PurchaseTicketSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TickerController ticketController = Get.find();
-    // ticketController.ticketsToBuy.value = [];
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
@@ -39,9 +39,7 @@ class PurchaseTicketSheet extends StatelessWidget {
               fontFamily: 'Broncks',
               textAlign: TextAlign.center),
           20.ph,
-          paragraph(
-              text: 'Select ticket type you wish to purchase below.',
-              ),
+          paragraph(text: 'Select ticket type you wish to purchase below.'),
           30.ph,
           ListView.builder(
             shrinkWrap: true,
@@ -55,7 +53,8 @@ class PurchaseTicketSheet extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      border: Border.all(color: brandPrimaryColor.withOpacity(0.3)),
+                      border:
+                          Border.all(color: brandPrimaryColor.withOpacity(0.3)),
                       color: Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(10.r)),
                   child: Column(
@@ -70,15 +69,17 @@ class PurchaseTicketSheet extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               heading(
-                                  text:
-                                      '${ticketData.ticketCategory[index].ticketName} - Ugx ${Helper.getTextDigit((ticketData.ticketCategory[index].ticketPrice.toString()))}',
-                                  ),
+                                text:
+                                    '${ticketData.ticketCategory[index].ticketName} - Ugx ${Helper.getTextDigit((ticketData.ticketCategory[index].ticketPrice.toString()))}',
+                              ),
                               5.ph,
                               Obx(() {
-                                return paragraph(
-                                    text:
-                                        'Ugx ${Helper.getTextDigit((ticketData.ticketCategory[index].ticketPrice * ticketController.ticketsToBuy[index]).toString())} + Ugx ${Helper.getTextDigit((1000 * ticketController.ticketsToBuy[index]).toString())}',
-                                    );
+                                return ticketController.ticketsToBuy[index] == 0
+                                    ? const SizedBox.shrink()
+                                    : paragraph(
+                                        text:
+                                            'Ugx ${Helper.getTextDigit((ticketData.ticketCategory[index].ticketPrice * ticketController.ticketsToBuy[index]).toString())} + Ugx ${Helper.getTextDigit((1000 * ticketController.ticketsToBuy[index]).toString())}',
+                                      );
                               })
                             ],
                           ),
@@ -86,9 +87,9 @@ class PurchaseTicketSheet extends StatelessWidget {
                             children: [
                               Obx(() {
                                 return heading(
-                                    text:
-                                        '${ticketController.ticketsToBuy[index]}',
-                                    );
+                                  text:
+                                      '${ticketController.ticketsToBuy[index]}',
+                                );
                               }),
                               15.pw,
                               Column(
@@ -96,14 +97,15 @@ class PurchaseTicketSheet extends StatelessWidget {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      HapticFeedback.selectionClick();
+                                      HapticFeedback.lightImpact();
                                       ticketController.incrementTickets(
                                           index, ticketData.ticketCategory);
                                     },
                                     child: Container(
                                       width: 59.w,
                                       decoration: BoxDecoration(
-                                          color: brandPrimaryColor.withOpacity(0.4),
+                                          color: brandPrimaryColor
+                                              .withOpacity(0.4),
                                           borderRadius:
                                               BorderRadius.circular(4.r)),
                                       child: const Icon(LucideIcons.chevronUp,
@@ -113,14 +115,15 @@ class PurchaseTicketSheet extends StatelessWidget {
                                   5.ph,
                                   GestureDetector(
                                     onTap: () {
-                                      HapticFeedback.selectionClick();
+                                      HapticFeedback.lightImpact();
                                       ticketController.decrementTickets(
                                           index, ticketData.ticketCategory);
                                     },
                                     child: Container(
                                       width: 59.w,
                                       decoration: BoxDecoration(
-                                          color: brandPrimaryColor.withOpacity(0.4),
+                                          color: brandPrimaryColor
+                                              .withOpacity(0.4),
                                           borderRadius:
                                               BorderRadius.circular(4.r)),
                                       child: const Icon(LucideIcons.chevronDown,
@@ -135,8 +138,8 @@ class PurchaseTicketSheet extends StatelessWidget {
                       ),
                       15.ph,
                       paragraphSmallItalic(
-                        text: 'Sales Close 29 February 2024',
-                        
+                        text:
+                            'Sales Close ${Helper.getDate(DateTime.parse(ticketData.eventDate))}',
                       )
                     ],
                   ));
@@ -145,7 +148,6 @@ class PurchaseTicketSheet extends StatelessWidget {
           20.ph,
           Obx(() {
             return title(
-               
                 fontSize: 34.sp,
                 text:
                     'Total: Ugx ${Helper.getTextDigit(ticketController.totalAmount.value.toString())}');
@@ -159,6 +161,7 @@ class PurchaseTicketSheet extends StatelessWidget {
                     color: brandPrimaryColor.withOpacity(0.7),
                     child: label(text: 'Continue'),
                     onPressed: () {
+                      HapticFeedback.lightImpact();
                       if (ticketController.totalAmount.value != 0) {
                         ScreenOverlay.showConfirmationDialog(context,
                             titleText: 'Confirm Payment',
@@ -173,7 +176,17 @@ class PurchaseTicketSheet extends StatelessWidget {
                             ticketController.showPaymentProcessing(true);
                           }
                         });
-                      } else {}
+                      } else {
+                        final snackBar = SnackBar(
+                          content: paragraph(
+                              text: 'Select number of tickets to continue',
+                              color: Colors.white),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          margin: EdgeInsets.all(5.w),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     })
                 .animate()
                 .then(delay: 940.ms)
