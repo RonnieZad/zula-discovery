@@ -1,19 +1,12 @@
 import 'dart:ui';
-
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:ticket_widget/ticket_widget.dart';
-import 'package:zula/v1/constants/colors.dart';
-import 'package:zula/v1/controllers/ticket_controller.dart';
 import 'package:zula/v1/models/ticket_model.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/helper.dart';
@@ -37,10 +30,8 @@ class EventTicketWidget extends StatefulWidget {
 }
 
 class _EventTicketWidgetState extends State<EventTicketWidget> {
-  
   @override
   Widget build(BuildContext context) {
-    TickerController tickerController = Get.find();
     return Padding(
       padding: EdgeInsets.only(bottom: 15.h),
       child: Material(
@@ -140,10 +131,10 @@ class _EventTicketWidgetState extends State<EventTicketWidget> {
                     right: 15.w,
                     child: GestureDetector(
                       onTap: () {
+                        HapticFeedback.lightImpact();
                         ScreenOverlay.showAppSheet(context,
-                            sheet: PurchaseTicketSheet(ticketData: widget.ticketData)
-                            
-                         );
+                            sheet: PurchaseTicketSheet(
+                                ticketData: widget.ticketData));
                       },
                       child: Container(
                         decoration: const BoxDecoration(
