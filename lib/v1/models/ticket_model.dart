@@ -1,6 +1,7 @@
 
 
 class Ticket {
+  String id;
   String artworkPictureUrl;
   String eventTitle;
   String eventDescription;
@@ -20,6 +21,7 @@ class Ticket {
   List<WhatIsProvided> whatIsProvided;
 
   Ticket({
+    required this.id,
     required this.artworkPictureUrl,
     required this.eventTitle,
     required this.eventDescription,
@@ -41,6 +43,7 @@ class Ticket {
 
   factory Ticket.fromJson(Map<String, dynamic> json) {
     return Ticket(
+      id: json["id"],
       artworkPictureUrl: json["artwork_picture_url"],
       eventTitle: json["event_title"],
       eventDescription: json["event_description"],
@@ -48,7 +51,7 @@ class Ticket {
       eventLocation: json["event_location"],
       eventDate: json["event_date"],
       interestedCount: json["interested_count"] ?? 0,
-      organiserName: json["organiser_name"],
+      organiserName: json["organiser_name"] ?? '' ,
       meetUpInstructions: json["meet_up_instructions"],
       locationLatCoordinate: json["location_lat_coordinate"].toDouble(),
       locationLongCoordinate: json["location_long_coordinate"].toDouble(),
