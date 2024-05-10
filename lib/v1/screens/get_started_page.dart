@@ -103,7 +103,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      stops: [0.5, 0.75],
+                      stops: [0.5, 0.7],
                       colors: [Colors.white10, Colors.white])),
             ),
             Positioned(
@@ -116,8 +116,8 @@ class _GetStartedPageState extends State<GetStartedPage>
                 children: [
                   const Spacer(),
                   SvgPicture.asset(
-                    'assets/images/zula_logo.svg',
-                    width: 260.w,
+                    'assets/images/app_logo.svg',
+                    width: 380.w,
                     color: brandPrimaryColor,
                   ),
                   10.ph,
@@ -126,7 +126,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                           'Discover endless adventures. Your journey begins here',
                       color: brandPrimaryColor.withOpacity(0.8),
                       textAlign: TextAlign.center,
-                      fontSize: 22.5.sp),
+                      fontSize: 22.sp),
                   30.ph,
                   AppButton(
                           hasPadding: false,
@@ -146,7 +146,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                           delay: 600.ms,
                           duration: 7800.ms,
                           curve: Curves.elasticInOut),
-                  20.ph,
+                  15.ph,
                   TextButton(
                     onPressed: () {
                       Navigator.push(
