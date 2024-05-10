@@ -42,7 +42,7 @@ class AppAboutSection extends StatelessWidget {
                   10.pw,
                   paragraph(text: 'App Name'),
                   const Spacer(),
-                  paragraph(text: 'Zula Vibe'),
+                  paragraph(text: 'ZulaVibe'),
                 ],
               ),
               20.ph,
@@ -52,7 +52,7 @@ class AppAboutSection extends StatelessWidget {
                   10.pw,
                   paragraph(text: 'App Version'),
                   const Spacer(),
-                  paragraph(text: 'v1.0.11+33 Beta'),
+                  paragraph(text: 'v1.0.12+34 Beta'),
                 ],
               ),
               20.ph,
@@ -62,7 +62,7 @@ class AppAboutSection extends StatelessWidget {
                   10.pw,
                   paragraph(text: 'Last Updated'),
                   const Spacer(),
-                  paragraph(text: '04/05/2024'),
+                  paragraph(text: '10/05/2024'),
                 ],
               ),
             ],
@@ -73,8 +73,11 @@ class AppAboutSection extends StatelessWidget {
             labelText: 'Share app',
             action: () {
               HapticFeedback.lightImpact();
-              ScreenOverlay.showAppSheet(context,
-                  playHomeVideoFrame: false, sheet: const ShareSheet());
+              ScreenOverlay.showAppSheet(
+                context,
+                playHomeVideoFrame: false,
+                sheet: const ShareSheet(),
+              );
             }),
         30.ph,
         paragraph(
