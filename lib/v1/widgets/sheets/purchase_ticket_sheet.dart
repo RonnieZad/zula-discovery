@@ -83,6 +83,8 @@ class PurchaseTicketSheet extends StatelessWidget {
                               })
                             ],
                           ),
+                       
+                       
                           Row(
                             children: [
                               Obx(() {
@@ -134,6 +136,8 @@ class PurchaseTicketSheet extends StatelessWidget {
                               ),
                             ],
                           )
+                       
+                       
                         ],
                       ),
                       15.ph,

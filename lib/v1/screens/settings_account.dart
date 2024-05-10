@@ -142,6 +142,7 @@ class AppAccountSection extends StatelessWidget {
                         'Confirm if you would like to log out of the app.',
                     action: () {
                   authController.guestLogout();
+                  Navigator.pop(context);
                 });
               }),
           30.ph,
