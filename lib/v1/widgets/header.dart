@@ -41,7 +41,7 @@ class Header extends StatelessWidget {
           padding: EdgeInsets.only(
               bottom: 10.h,
               top: Platform.isAndroid ? 35.h : 60.h,
-              right: 20.w,
+              right: 5.w,
               left: hasBackButton! ? 20.w : 20.w),
           width: double.infinity,
           child: Column(
