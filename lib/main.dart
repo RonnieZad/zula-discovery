@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     AuthController authController = Get.put(AuthController());
     return MaterialApp(
-      title: 'Zula Vibe App',
+      title: 'ZulaVibe',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: brandPrimaryColor),
