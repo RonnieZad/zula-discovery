@@ -1,12 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:video_player/video_player.dart';
 import 'package:zula/v1/models/location_category.dart';
 import 'package:zula/v1/models/location_model.dart';
 import 'package:zula/v1/services/api_service.dart';
-import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class LocationController extends GetxController {
   var currentPageIndex = 0.obs;
@@ -16,6 +17,10 @@ class LocationController extends GetxController {
   final _locationCategories = <LocationCategory>[].obs;
   final _locations = <Location>[].obs;
   final _savedLocations = <Location>[].obs;
+  var numberOfGuests = 1.obs;
+  var availabilityDateToCheck = '';
+
+  TextEditingController locationCheckAvailabiltyTextController = TextEditingController();
 
   final _locationSearches = <Location>[].obs;
   List<Location> get retrievedLocations => _locations;
@@ -183,5 +188,21 @@ class LocationController extends GetxController {
       controller.dispose();
     }
     super.onClose();
+  }
+
+  void incrementNumberOfTravellers() {
+    if (numberOfGuests < 15) {
+      numberOfGuests++;
+
+      HapticFeedback.selectionClick();
+    }
+  }
+
+// Define a function to handle decrementing the number of tickets for a category
+  void decrementNumberOfTravellers() {
+    if (numberOfGuests > 1) {
+      numberOfGuests--; // Decrement the ticket count at the specified index
+    }
+    HapticFeedback.selectionClick();
   }
 }
