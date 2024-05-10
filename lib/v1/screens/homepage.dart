@@ -149,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           borderRadius:
                                               BorderRadius.circular(15.r),
                                           child: SizedBox(
-                                            height: .68.sh,
+                                            height: .715.sh,
                                             width: double.infinity,
                                             child: Stack(
                                               children: [
@@ -285,25 +285,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               top: Platform.isAndroid ? 40.h : 60.h,
               left: 20.w,
-              right: 20.w,
+              right: 5.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/zula_logo.svg',
-                        width: 100.w,
-                        color: brandPrimaryColor,
-                      ),
-                      2.ph,
-                      paragraph(
-                          text: 'Experience Everywhere!',
-                          color: brandPrimaryColor,
-                          fontSize: 20.sp)
-                    ],
+                  SvgPicture.asset(
+                    'assets/images/app_logo.svg',
+                    width: 220.w,
+                    color: brandPrimaryColor,
                   ),
                   const Spacer(),
                   IconButton(
