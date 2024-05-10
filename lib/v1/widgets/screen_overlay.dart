@@ -141,53 +141,50 @@ class ScreenOverlay {
         builder: (context) {
           return PopScope(
             canPop: !showDismissButton,
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: SizedBox(
-                    width: double.infinity,
-                    child: Material(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.r),
-                          topRight: Radius.circular(10.r),
-                        ),
-                        color: Colors.white24,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                                left: 0.0,
-                                right: 0.0,
-                                bottom: 95.h,
-                                child: sheet),
-                            Positioned(
-                              bottom: 25.h,
-                              left: 120.0,
-                              right: 120.0,
-                              child: FilledButton.icon(
-                                style: ButtonStyle(
-                                    padding: const MaterialStatePropertyAll(
-                                        EdgeInsets.symmetric(vertical: 15)),
-                                    backgroundColor: MaterialStatePropertyAll(
-                                        brandPrimaryColor.withOpacity(0.1))),
-                                label: paragraph(
-                                    text: 'Close', color: brandPrimaryColor),
-                                icon: Icon(
-                                  CupertinoIcons.multiply,
-                                  color: brandPrimaryColor,
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  if (playHomeVideoFrame) {
-                                    locationController.resumeFramePlay();
-                                  }
-                                },
+            child: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SizedBox(
+                  width: double.infinity,
+                  child: Material(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.r),
+                        topRight: Radius.circular(10.r),
+                      ),
+                      color: Colors.white24,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              left: 0.0,
+                              right: 0.0,
+                              bottom: 95.h,
+                              child: sheet),
+                          Positioned(
+                            bottom: 25.h,
+                            left: 120.0,
+                            right: 120.0,
+                            child: FilledButton.icon(
+                              style: ButtonStyle(
+                                  padding: const MaterialStatePropertyAll(
+                                      EdgeInsets.symmetric(vertical: 15)),
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      brandPrimaryColor.withOpacity(0.1))),
+                              label: paragraph(
+                                  text: 'Close', color: brandPrimaryColor),
+                              icon: Icon(
+                                CupertinoIcons.multiply,
+                                color: brandPrimaryColor,
                               ),
-                            )
-                          ],
-                        ))),
-              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                if (playHomeVideoFrame) {
+                                  locationController.resumeFramePlay();
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      ))),
             ),
           );
         });
@@ -195,9 +192,17 @@ class ScreenOverlay {
 }
 
 class AppTextBox extends StatefulWidget {
-  const AppTextBox({super.key, required this.textEditingController});
+  const AppTextBox(
+      {super.key,
+      this.isPhone,
+      this.maxLines,
+      this.hintText,
+      required this.textEditingController});
 
   final TextEditingController textEditingController;
+  final bool? isPhone;
+  final int? maxLines;
+  final String? hintText;
 
   @override
   State<AppTextBox> createState() => _AppTextBoxState();
@@ -219,29 +224,31 @@ class _AppTextBoxState extends State<AppTextBox> {
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             color: brandPrimaryColor),
-        maxLength: 9,
+        maxLength: widget.isPhone == true ? 9 : null,
         keyboardType: TextInputType.phone,
+        maxLines: widget.maxLines,
         decoration: InputDecoration(
             counterText: '',
-            suffixText: '$textLengthCount/9',
+            suffixText: widget.isPhone == true ? '$textLengthCount/9' : null,
             suffixStyle: TextStyle(
                 fontSize: 19.sp,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 color: brandPrimaryColor),
-            prefixText: '+256 ',
+            prefixText: widget.isPhone == true ? '+256 ' : null,
             prefixStyle: TextStyle(
                 fontSize: 19.sp,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 color: brandPrimaryColor),
-            contentPadding: EdgeInsets.symmetric(horizontal: 15.w),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
             border: InputBorder.none,
-            hintText: 'Enter mobile phone',
+            hintText: widget.hintText,
             hintStyle: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
-                color: brandPrimaryColor)),
+                color: brandPrimaryColor.withOpacity(0.6))),
         onChanged: (value) {
           setState(() {
             textLengthCount = value.length;
