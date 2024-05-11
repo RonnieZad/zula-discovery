@@ -13,6 +13,7 @@ import 'package:zula/v1/screens/explore_page.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
+import 'package:zula/v1/widgets/screen_helpers.dart';
 
 import '../controllers/location_controller.dart';
 
@@ -63,7 +64,12 @@ class _SearchResultPageState extends State<SearchResultPage> {
                           paragraph(text: 'Loading, please wait')
                         ],
                       )
-                    : GridView.builder(
+                    :
+                    locationController
+                                .retrievedLocationSearches.isEmpty ? const NoContentWidget(label: 'No results found') :
+                    
+                    
+                    GridView.builder(
                             padding: EdgeInsets.only(
                                 left: 20.w, right: 20.w, bottom: 120.h),
                             gridDelegate:
