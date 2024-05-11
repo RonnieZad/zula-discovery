@@ -65,7 +65,6 @@ class CustomSearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     // Implement your suggestion list here.
-    
 
     final filteredSuggestions = query.isEmpty
         ? searchSuggestions
@@ -82,9 +81,12 @@ class CustomSearchDelegate extends SearchDelegate<String> {
             // You can handle the tap on a suggestion item.
             HapticFeedback.lightImpact();
             close(context, filteredSuggestions[index]);
-            
+
             locationController.locationSearchByQuery(
-                query: filteredSuggestions[index].replaceRange(filteredSuggestions[index].length-1, filteredSuggestions[index].length, ''));
+                query: filteredSuggestions[index].replaceRange(
+                    filteredSuggestions[index].length - 1,
+                    filteredSuggestions[index].length,
+                    ''));
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -92,6 +94,23 @@ class CustomSearchDelegate extends SearchDelegate<String> {
           },
         );
       },
+    );
+  }
+
+  @override
+  void showResults(BuildContext context) {
+    // This method is called when the user submits the search query from the keyboard.
+    // You can perform actions here such as closing the keyboard and showing the search results.
+    close(context, query);
+    print(query);
+    HapticFeedback.lightImpact();
+    // You might want to navigate to the search results page here as well.
+    locationController.locationSearchByQuery(
+      query: query.capitalizeFirst!,
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SearchResultPage()),
     );
   }
 }
@@ -115,7 +134,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           clipBehavior: Clip.none,
           children: [
             Positioned(
-                top:Platform.isAndroid ? 40.h: 60.h,
+                top: Platform.isAndroid ? 40.h : 60.h,
                 left: 20.w,
                 right: 20.w,
                 child: Row(
@@ -138,7 +157,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                               context: context,
                               useRootNavigator: true,
                               delegate: CustomSearchDelegate());
-                              
                         },
                       ),
                       IconButton(
@@ -154,8 +172,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         },
                       ),
                     ])),
-          
-          
             Positioned(
               top: 130.h,
               left: 20.w,
@@ -235,7 +251,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-
                                 locationController.locationSearchByCategory(
                                     category: locationController
                                         .retrievedLocationCategories[index]
@@ -315,8 +330,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             );
                           }),
             ),
-          
-          
             Positioned(
               bottom: 30.h,
               left: 120.0,
