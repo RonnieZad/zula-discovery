@@ -52,7 +52,7 @@ class AppAboutSection extends StatelessWidget {
                   10.pw,
                   paragraph(text: 'App Version'),
                   const Spacer(),
-                  paragraph(text: 'v1.0.12+34 Beta'),
+                  paragraph(text: 'v1.0.12+35'),
                 ],
               ),
               20.ph,
