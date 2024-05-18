@@ -291,8 +291,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SvgPicture.asset(
-                    'assets/images/app_logo.svg',
-                    width: 220.w,
+                    'assets/images/zula_logo.svg',
+                    width: 100.w,
                     color: brandPrimaryColor,
                   ),
                   const Spacer(),
