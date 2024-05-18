@@ -301,14 +301,12 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                 children: [
                                   paragraph(
                                       text:
-                                          '${widget.locationDetails.likeCount}',
+                                          '${widget.locationDetails.locationRating}',
                                       fontSize: 20.sp,
                                       color: brandPrimaryColor),
                                   5.pw,
-                                  paragraph(
-                                      text: 'Likes',
-                                      fontSize: 20.sp,
-                                      color: brandPrimaryColor),
+                                   Icon(Icons.star, size: 25.w,),
+                                 
                                 ],
                               ),
                             ],
@@ -495,6 +493,11 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                 },
                               )
                               .scaleXY(begin: 1.0, end: 0.6),
+                                  paragraph(
+                                      text:
+                                          '${widget.locationDetails.likeCount}',
+                                      fontSize: 24.sp,
+                                      color: brandPrimaryColor),
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
@@ -700,142 +703,142 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                 ),
                         ),
                       ),
-                      // 30.ph,
-                      // AppButton(
-                      //         hasPadding: false,
-                      //         labelText: 'Check Availability',
-                      //         action: () {
-                      //           ScreenOverlay.showAppSheet(context,
-                      //               playHomeVideoFrame: false,
-                      //               sheet: Padding(
-                      //                 padding: EdgeInsets.symmetric(
-                      //                     horizontal: 25.w),
-                      //                 child: Column(
-                      //                   mainAxisSize: MainAxisSize.min,
-                      //                   children: [
-                      //                     Center(
-                      //                       child: title(
-                      //                           text: 'Check Availabilty',
-                      //                           fontSize: 46.sp,
-                      //                           color: brandPrimaryColor,
-                      //                           fontFamily: 'Broncks',
-                      //                           textAlign: TextAlign.center),
-                      //                     ),
-                      //                     30.ph,
-                      //                     paragraph(
-                      //                         text:
-                      //                             'What date spot would you like to check'),
-                      //                     SizedBox(
-                      //                         height: 200.h,
-                      //                         child: CupertinoDatePicker(
-                      //                             initialDateTime: DateTime(
-                      //                                 DateTime.now().year,
-                      //                                 DateTime.now().month,
-                      //                                 DateTime.now().day,
-                      //                                 DateTime.now().hour,
-                      //                                 (DateTime.now().minute %
-                      //                                         60 *
-                      //                                         60)
-                      //                                     .toInt()),
-                      //                             minuteInterval: 60,
-                      //                             onDateTimeChanged: (newDate) {
-                      //                               locationController
-                      //                                       .availabilityDateToCheck =
-                      //                                   newDate.toString();
-                      //                             })),
-                      //                             15.ph,
-                      //                     Row(
-                      //                       children: [
-                      //                         heading(
-                      //                             text: 'Number of Travellers'),
-                      //                         const Spacer(),
-                      //                         Obx(() {
-                      //                           return heading(
-                      //                             text:
-                      //                                 '${locationController.numberOfGuests}',
-                      //                           );
-                      //                         }),
-                      //                         15.pw,
-                      //                         Column(
-                      //                           crossAxisAlignment:
-                      //                               CrossAxisAlignment.start,
-                      //                           children: [
-                      //                             GestureDetector(
-                      //                               onTap: () {
-                      //                                 locationController
-                      //                                     .incrementNumberOfTravellers();
-                      //                               },
-                      //                               child: Container(
-                      //                                 width: 59.w,
-                      //                                 decoration: BoxDecoration(
-                      //                                     color:
-                      //                                         brandPrimaryColor
-                      //                                             .withOpacity(
-                      //                                                 0.4),
-                      //                                     borderRadius:
-                      //                                         BorderRadius
-                      //                                             .circular(
-                      //                                                 4.r)),
-                      //                                 child: const Icon(
-                      //                                     LucideIcons.chevronUp,
-                      //                                     color: Colors.white),
-                      //                               ),
-                      //                             ),
-                      //                             5.ph,
-                      //                             GestureDetector(
-                      //                               onTap: () {
-                      //                                 locationController
-                      //                                     .decrementNumberOfTravellers();
-                      //                               },
-                      //                               child: Container(
-                      //                                 width: 59.w,
-                      //                                 decoration: BoxDecoration(
-                      //                                     color:
-                      //                                         brandPrimaryColor
-                      //                                             .withOpacity(
-                      //                                                 0.4),
-                      //                                     borderRadius:
-                      //                                         BorderRadius
-                      //                                             .circular(
-                      //                                                 4.r)),
-                      //                                 child: const Icon(
-                      //                                     LucideIcons
-                      //                                         .chevronDown,
-                      //                                     color: Colors.white),
-                      //                               ),
-                      //                             ),
-                      //                           ],
-                      //                         ),
-                      //                       ],
-                      //                     ),
-                      //                     30.ph,
-                      //                     AppTextBox(
-                      //                         maxLines: 2,
-                      //                         hintText:
-                      //                             'Enter optional message or inquiry',
-                      //                         textEditingController:
-                      //                             locationController
-                      //                                 .locationCheckAvailabiltyTextController),
-                      //                     30.ph,
-                      //                     AppButton(
-                      //                         hasPadding: false,
-                      //                         labelText: 'Submit Now',
-                      //                         action: () {}),
-                      //                     30.ph
-                      //                   ],
-                      //                 ),
-                      //               ));
-                      //           FirebaseAnalytics.instance.logSignUp(
-                      //               signUpMethod: 'LocationCheckAvailabilty');
-                      //         })
-                      //     .animate()
-                      //     .then(delay: 940.ms)
-                      //     .slideY(
-                      //         begin: 0.25,
-                      //         end: 0,
-                      //         delay: 600.ms,
-                      //         duration: 7800.ms,
-                      //         curve: Curves.elasticInOut),
+                      30.ph,
+                      AppButton(
+                              hasPadding: false,
+                              labelText: 'Check Availability',
+                              action: () {
+                                ScreenOverlay.showAppSheet(context,
+                                    playHomeVideoFrame: false,
+                                    sheet: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25.w),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Center(
+                                            child: title(
+                                                text: 'Check Availabilty',
+                                                fontSize: 46.sp,
+                                                color: brandPrimaryColor,
+                                                fontFamily: 'Broncks',
+                                                textAlign: TextAlign.center),
+                                          ),
+                                          30.ph,
+                                          paragraph(
+                                              text:
+                                                  'What date spot would you like to check'),
+                                          SizedBox(
+                                              height: 200.h,
+                                              child: CupertinoDatePicker(
+                                                  initialDateTime: DateTime(
+                                                      DateTime.now().year,
+                                                      DateTime.now().month,
+                                                      DateTime.now().day,
+                                                      DateTime.now().hour,
+                                                      (DateTime.now().minute %
+                                                              60 *
+                                                              60)
+                                                          .toInt()),
+                                                  minuteInterval: 60,
+                                                  onDateTimeChanged: (newDate) {
+                                                    locationController
+                                                            .availabilityDateToCheck =
+                                                        newDate.toString();
+                                                  })),
+                                                  15.ph,
+                                          Row(
+                                            children: [
+                                              heading(
+                                                  text: 'Number of Travellers'),
+                                              const Spacer(),
+                                              Obx(() {
+                                                return heading(
+                                                  text:
+                                                      '${locationController.numberOfGuests}',
+                                                );
+                                              }),
+                                              15.pw,
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      locationController
+                                                          .incrementNumberOfTravellers();
+                                                    },
+                                                    child: Container(
+                                                      width: 59.w,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              brandPrimaryColor
+                                                                  .withOpacity(
+                                                                      0.4),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      4.r)),
+                                                      child: const Icon(
+                                                          LucideIcons.chevronUp,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  5.ph,
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      locationController
+                                                          .decrementNumberOfTravellers();
+                                                    },
+                                                    child: Container(
+                                                      width: 59.w,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              brandPrimaryColor
+                                                                  .withOpacity(
+                                                                      0.4),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      4.r)),
+                                                      child: const Icon(
+                                                          LucideIcons
+                                                              .chevronDown,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          30.ph,
+                                          AppTextBox(
+                                              maxLines: 2,
+                                              hintText:
+                                                  'Enter optional message or inquiry',
+                                              textEditingController:
+                                                  locationController
+                                                      .locationCheckAvailabiltyTextController),
+                                          30.ph,
+                                          AppButton(
+                                              hasPadding: false,
+                                              labelText: 'Submit Now',
+                                              action: () {}),
+                                          30.ph
+                                        ],
+                                      ),
+                                    ));
+                                FirebaseAnalytics.instance.logSignUp(
+                                    signUpMethod: 'LocationCheckAvailabilty');
+                              })
+                          .animate()
+                          .then(delay: 940.ms)
+                          .slideY(
+                              begin: 0.25,
+                              end: 0,
+                              delay: 600.ms,
+                              duration: 7800.ms,
+                              curve: Curves.elasticInOut),
                       120.ph,
                     ],
                   ),
