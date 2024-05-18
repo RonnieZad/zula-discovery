@@ -2,17 +2,91 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zula/v1/constants/colors.dart';
+import 'package:zula/v1/controllers/controllers.dart';
 import 'package:zula/v1/controllers/location_controller.dart';
 import 'package:zula/v1/controllers/ticket_controller.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ScreenOverlay {
   ScreenOverlay._();
+
+  static signInDialog(
+    BuildContext context, {
+    required String titleText,
+    required String description,
+    required Function action,
+    
+    bool showTextBox = false,
+  }) {
+    AuthController authController = Get.find();
+    return showDialog(
+        context: context,
+        barrierColor: Colors.black87,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    title(
+                      text: 'Sign in',
+                      fontSize: 46.sp,
+                      color: brandPrimaryColor,
+                      fontFamily: 'Poppins',
+                    ),
+                    10.ph,
+                    paragraph(
+                        text:
+                            'Get started to access world-class and personalised travel experiences for you',
+                        color: brandPrimaryColor,
+                        fontSize: 21.sp),
+                    55.ph,
+                    SignInButton(
+                      label: 'Continue with Google',
+                      icon: 'android_dark_rd_ctn',
+                      action: () {
+                            authController.signInWithGoogle();
+                            Navigator.pop(context);
+
+                      },
+                    ),
+
+                    10.ph,
+                    SignInButton(
+                      color: Colors.black,
+                      label: 'Continue with Apple',
+                      icon: 'apple-sign-in',
+                      action: () {},
+                    ),
+                 
+                    Center(
+                        child: TextButton(
+                      child: paragraph(text: 'Sign in later'),
+                      onPressed: () {},
+                    )),
+                    20.ph,
+                    paragraph(
+                        text:
+                            'By continuing you agree to our Terms and Conditions and Privacy Policy',
+                        fontSize: 18.sp,
+                        color: Colors.black54)
+                  ]),
+            ),
+          );
+        });
+  }
 
   static showConfirmationDialog(
     BuildContext context, {
@@ -51,7 +125,7 @@ class ScreenOverlay {
                                       text: 'Processing Payment',
                                       fontSize: 46.sp,
                                       color: brandPrimaryColor,
-                                      fontFamily: 'Broncks',
+                                      fontFamily: 'Poppins',
                                       textAlign: TextAlign.center),
                                   40.ph,
                                   Lottie.asset(
@@ -76,7 +150,7 @@ class ScreenOverlay {
                                       text: titleText,
                                       fontSize: 46.sp,
                                       color: brandPrimaryColor,
-                                      fontFamily: 'Broncks',
+                                      fontFamily: 'Poppins',
                                     ),
                                     10.ph,
                                     paragraph(
@@ -188,6 +262,47 @@ class ScreenOverlay {
             ),
           );
         });
+  }
+}
+
+class SignInButton extends StatelessWidget {
+  const SignInButton({
+    super.key,
+    this.color,
+    required this.label,
+    required this.icon,
+    required this.action,
+  });
+
+  final String label;
+  final String icon;
+  final VoidCallback action;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+        decoration: BoxDecoration(
+            color: color?? Colors.white,
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(color: Colors.black26)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              icon.toSvg,
+              width: 20.w,
+              color: color != null ? Colors.white : null,
+            ),
+            10.pw,
+            paragraph(text: label,color: color != null ? Colors.white : null,)
+          ],
+        ),
+      ),
+    );
   }
 }
 
