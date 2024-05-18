@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 extension ImagePath on String {
-  String get toSvg => 'assets/files/$this.svg';
+  String get toSvg => 'assets/images/$this.svg';
   String get toPng => 'assets/images/$this.png';
   String get toGif => 'assets/images/$this.gif';
   String get toJpeg => 'assets/images/$this.jpeg';
