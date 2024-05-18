@@ -19,6 +19,7 @@ import 'package:zula/v1/widgets/app_background.dart';
 import 'package:zula/v1/widgets/app_button.dart';
 import 'package:zula/v1/widgets/content_loading_widget.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
+import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
@@ -116,8 +117,8 @@ class _GetStartedPageState extends State<GetStartedPage>
                 children: [
                   const Spacer(),
                   SvgPicture.asset(
-                    'assets/images/app_logo.svg',
-                    width: 380.w,
+                    'assets/images/zula_logo.svg',
+                    width: 280.w,
                     color: brandPrimaryColor,
                   ),
                   10.ph,
@@ -132,7 +133,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                           hasPadding: false,
                           labelText: 'Get Started Already!',
                           action: () {
-                            authController.signInWithGoogle();
+                            ScreenOverlay.signInDialog(context, titleText: 'Get Started', description: 'Choose the most conveneint wsy to start', action: (){});
                             // authController.guestLogin(context);
 
                             FirebaseAnalytics.instance
