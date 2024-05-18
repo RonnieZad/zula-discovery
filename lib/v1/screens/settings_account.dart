@@ -122,7 +122,7 @@ class AppAccountSection extends StatelessWidget {
                       children: [
                         const Icon(LineIcons.heart),
                         10.pw,
-                        paragraph(text: 'Liked Items'),
+                        paragraph(text: 'Saved Items'),
                         const Spacer(),
                         paragraph(text: 'View'),
                       ],
