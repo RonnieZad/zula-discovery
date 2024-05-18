@@ -137,8 +137,10 @@ class _EventTicketWidgetState extends State<EventTicketWidget> {
                                 ticketData: widget.ticketData));
                       },
                       child: Container(
-                        decoration: const BoxDecoration(
-                          boxShadow: [
+                        decoration:  BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.r),
+                          border: Border.all(color: Colors.white, width: 2.w),
+                          boxShadow: const [
                             BoxShadow(
                                 color: Colors.white38,
                                 blurRadius: 20.0,

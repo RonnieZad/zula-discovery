@@ -18,7 +18,7 @@ Widget title(
         style: TextStyle(
             fontSize: fontSize.sp,
             color: color,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w600,
             fontFamily: fontFamily),
         textAlign: textAlign);
 Widget subtitle(
