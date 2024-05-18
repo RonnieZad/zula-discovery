@@ -42,7 +42,7 @@ class AppAboutSection extends StatelessWidget {
                   10.pw,
                   paragraph(text: 'App Name'),
                   const Spacer(),
-                  paragraph(text: 'ZulaVibe'),
+                  paragraph(text: 'Zula'),
                 ],
               ),
               20.ph,
