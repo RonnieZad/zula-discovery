@@ -22,7 +22,6 @@ class ScreenOverlay {
     required String titleText,
     required String description,
     required Function action,
-    
     bool showTextBox = false,
   }) {
     AuthController authController = Get.find();
@@ -57,12 +56,10 @@ class ScreenOverlay {
                       label: 'Continue with Google',
                       icon: 'android_dark_rd_ctn',
                       action: () {
-                            authController.signInWithGoogle();
-                            Navigator.pop(context);
-
+                        authController.signInWithGoogle();
+                        Navigator.pop(context);
                       },
                     ),
-
                     10.ph,
                     SignInButton(
                       color: Colors.black,
@@ -70,7 +67,6 @@ class ScreenOverlay {
                       icon: 'apple-sign-in',
                       action: () {},
                     ),
-                 
                     Center(
                         child: TextButton(
                       child: paragraph(text: 'Sign in later'),
@@ -100,102 +96,67 @@ class ScreenOverlay {
         context: context,
         barrierColor: Colors.black87,
         builder: (context) {
-          TickerController tickerController = Get.find();
           return Dialog(
             backgroundColor: Colors.white,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.r),
-              child: Obx(() {
-                return SizedBox(
-                  // height: showTextBox ? 460.h : null,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // const AppBackground(),
-                      tickerController.showPaymentProcessing.value
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w, vertical: 15.h),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  title(
-                                      text: 'Processing Payment',
-                                      fontSize: 46.sp,
-                                      color: brandPrimaryColor,
-                                      fontFamily: 'Poppins',
-                                      textAlign: TextAlign.center),
-                                  40.ph,
-                                  Lottie.asset(
-                                    'assets/images/loading_anim.json',
-                                  ),
-                                  60.ph,
-                                  paragraph(
-                                      text:
-                                          'We are processing your payment please wait. Hold on a second!',
-                                      textAlign: TextAlign.center),
-                                ],
+              child: SizedBox(
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        title(
+                          text: titleText,
+                          fontSize: 46.sp,
+                          color: brandPrimaryColor,
+                          fontFamily: 'Poppins',
+                        ),
+                        10.ph,
+                        paragraph(
+                          text: description,
+                          color: brandPrimaryColor,
+                        ),
+                        if (showTextBox == true) ...[
+                          25.ph,
+                          AppTextBox(
+                            isPhone: true,
+                            textEditingController: textEditingController!,
+                          ),
+                        ],
+                        10.ph,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 65.h,
+                                child: CupertinoButton(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  color: brandPrimaryColor.withOpacity(0.8),
+                                  child: label(text: 'Continue'),
+                                  onPressed: () {
+                                    action();
+                                  },
+                                ),
                               ),
-                            )
-                          : Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w, vertical: 25.h),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    title(
-                                      text: titleText,
-                                      fontSize: 46.sp,
-                                      color: brandPrimaryColor,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                    10.ph,
-                                    paragraph(
-                                      text: description,
-                                      color: brandPrimaryColor,
-                                    ),
-                                    if (showTextBox == true) ...[
-                                      25.ph,
-                                      AppTextBox(
-                                        textEditingController:
-                                            textEditingController!,
-                                      ),
-                                    ],
-                                    30.ph,
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: CupertinoButton(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            color: brandPrimaryColor
-                                                .withOpacity(0.8),
-                                            child: label(text: 'Continue'),
-                                            onPressed: () {
-                                              action();
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    10.ph,
-                                    Center(
-                                        child: TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: label(
-                                                text: 'Cancel',
-                                                color: brandPrimaryColor)))
-                                  ]),
                             ),
-                    ],
-                  ),
-                );
-              }),
+                          ],
+                        ),
+                        10.ph,
+                        Center(
+                            child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: label(
+                                    text: 'Cancel', color: brandPrimaryColor)))
+                      ]),
+                ),
+              ),
             ),
           );
         });
@@ -286,7 +247,7 @@ class SignInButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
         decoration: BoxDecoration(
-            color: color?? Colors.white,
+            color: color ?? Colors.white,
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(color: Colors.black26)),
         child: Row(
@@ -298,7 +259,10 @@ class SignInButton extends StatelessWidget {
               color: color != null ? Colors.white : null,
             ),
             10.pw,
-            paragraph(text: label,color: color != null ? Colors.white : null,)
+            paragraph(
+              text: label,
+              color: color != null ? Colors.white : null,
+            )
           ],
         ),
       ),
@@ -331,7 +295,7 @@ class _AppTextBoxState extends State<AppTextBox> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: brandPrimaryColor.withOpacity(0.4)),
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(8.r),
       ),
       child: TextFormField(
         controller: widget.textEditingController,
@@ -357,7 +321,7 @@ class _AppTextBoxState extends State<AppTextBox> {
                 fontWeight: FontWeight.w500,
                 color: brandPrimaryColor),
             contentPadding:
-                EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
             border: InputBorder.none,
             hintText: widget.hintText,
             hintStyle: TextStyle(

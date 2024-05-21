@@ -14,6 +14,7 @@ class TickerController extends GetxController {
   var totalAmount = 0.0.obs;
 
   var savedEventTicketsLoading = true.obs;
+  var paymentLoading = false.obs;
 
   TextEditingController phoneNumberTextEditingController =
       TextEditingController();
@@ -33,6 +34,36 @@ class TickerController extends GetxController {
   onInit() {
     getEventTickets();
     super.onInit();
+  }
+
+  Future<String?> purchaseTicket({
+    required String paymentReason,
+    required String phoneNumber,
+    required String amountToPay,
+  }) {
+    paymentLoading(true);
+    return ApiService.postRequest(
+        endPoint: '/make_collection',
+        service: Services.payment,
+        body: {
+          "phone_number": "256$phoneNumber",
+          "amount_to_pay": amountToPay,
+          "currency": "UGX",
+          "metadata": {
+            "user_id": GetStorage().read('user_id'),
+            "user_name": GetStorage().read('name'),
+            "user_email": GetStorage().read('emailAddress'),
+            "payment_reason": paymentReason
+          }
+        }).then((response) {
+      paymentLoading(false);
+      print(response);
+      if (response['payload']['status'] >= 200 &&
+          response['payload']['status'] < 300) {
+        return response['payload']['payment_link'];
+      }
+      return null;
+    });
   }
 
   Future<int?> favoriteEventTicket({required String eventId}) {
