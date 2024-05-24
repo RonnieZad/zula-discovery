@@ -20,7 +20,7 @@ class AppPrivacySection extends StatelessWidget {
             text: 'Privacy',
             fontSize: 46.sp,
             color: brandPrimaryColor,
-            fontFamily: 'Broncks',
+            
             textAlign: TextAlign.center),
         30.ph,
         Container(

@@ -18,7 +18,7 @@ class AppPreferencesSection extends StatelessWidget {
             text: 'Preferences',
             fontSize: 46.sp,
             color: brandPrimaryColor,
-            fontFamily: 'Broncks',
+            
             textAlign: TextAlign.center),
         30.ph,
         Container(

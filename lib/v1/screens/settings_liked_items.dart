@@ -52,7 +52,7 @@ class _SavedItemsState extends State<SavedItems> {
                 text: 'Saved Items',
                 fontSize: 46.sp,
                 color: brandPrimaryColor,
-                fontFamily: 'Broncks',
+                
                 textAlign: TextAlign.center),
             30.ph,
             Row(

@@ -22,7 +22,7 @@ class AppAboutSection extends StatelessWidget {
             text: 'About App',
             fontSize: 46.sp,
             color: brandPrimaryColor,
-            fontFamily: 'Broncks',
+            
             textAlign: TextAlign.center),
         30.ph,
         Container(
@@ -76,7 +76,7 @@ class AppAboutSection extends StatelessWidget {
               ScreenOverlay.showAppSheet(
                 context,
                 playHomeVideoFrame: false,
-                sheet: const ShareSheet(),
+                sheet:  ShareSheet(),
               );
             }),
         30.ph,
