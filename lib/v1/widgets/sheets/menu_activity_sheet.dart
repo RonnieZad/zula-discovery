@@ -22,12 +22,13 @@ class MenuActivitySheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: title(
               text: 'Menu / Activities',
               fontSize: 46.sp,
               color: brandPrimaryColor,
-              fontFamily: 'Broncks',
+              
               textAlign: TextAlign.center),
         ),
         20.ph,
