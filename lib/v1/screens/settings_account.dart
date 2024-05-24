@@ -30,7 +30,7 @@ class AppAccountSection extends StatelessWidget {
               text: 'Account',
               fontSize: 46.sp,
               color: brandPrimaryColor,
-              fontFamily: 'Broncks',
+              
               textAlign: TextAlign.center),
           30.ph,
           authController.profilePic.value.isNotEmpty
@@ -80,16 +80,7 @@ class AppAccountSection extends StatelessWidget {
                   ],
                 ),
                 20.ph,
-                Row(
-                  children: [
-                    const Icon(LineIcons.phone),
-                    10.pw,
-                    paragraph(text: 'Phone Number'),
-                    const Spacer(),
-                    paragraph(text: authController.phoneNumber.value),
-                  ],
-                ),
-                20.ph,
+              
                 Row(
                   children: [
                     const Icon(LineIcons.at),
