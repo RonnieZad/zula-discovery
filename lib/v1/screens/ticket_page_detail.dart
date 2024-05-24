@@ -158,16 +158,14 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                   children: [
                     Icon(LucideIcons.building, size: 28.w),
                     10.pw,
-                    label(text: 'Preferred Tours & Travel'),
+                    label(text: widget.ticketData.organiserName),
                   ],
                 ),
                 20.ph,
                 paragraph(text: widget.ticketData.eventDescription),
                 20.ph,
                 heading(
-                    text: 'Pictorial',
-                    fontSize: 27.sp,
-                    color: brandPrimaryColor),
+                    text: 'Gallery', fontSize: 27.sp, color: brandPrimaryColor),
                 15.ph,
                 SizedBox(
                   height: 410.h,
@@ -509,11 +507,107 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                 15.ph,
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15.r),
-                  child: SizedBox(
+                  child:  SizedBox(
                     width: double.infinity,
                     height: 360.h,
                     child: FlutterMap(
+                      
                       options: MapOptions(
+                        onTap: (j,k){
+                           HapticFeedback.selectionClick();
+                    print('ddd');
+                    ScreenOverlay.showAppSheet(
+                      context,
+                      playHomeVideoFrame: false,
+                      sheet: Padding(
+                        padding: EdgeInsets.only(
+                            bottom: 30.h, left: 10.w, right: 10.w),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: SizedBox(
+                            width: 400.w,
+                            height: 710.h,
+                            child: FlutterMap(
+                              options: MapOptions(
+                                  minZoom: 5,
+                                  maxZoom: 20,
+                                  zoom: 17,
+                                  center: LatLng(
+                                      widget.ticketData.locationLatCoordinate,
+                                      widget
+                                          .ticketData.locationLongCoordinate)),
+                              children: [
+                                TileLayer(
+                                  maxNativeZoom: 30,
+                                  retinaMode: true,
+                                  maxZoom: 30,
+                                  tileProvider: NetworkTileProvider(),
+                                  urlTemplate:
+                                      'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
+                                ),
+                                MarkerLayer(
+                                  markers: [
+                                    Marker(
+                                      width: 180.0,
+                                      height: 50.0,
+                                      point: LatLng(
+                                          widget
+                                              .ticketData.locationLatCoordinate,
+                                          widget.ticketData
+                                              .locationLongCoordinate), // Set the marker position
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          ScreenOverlay.showConfirmationDialog(
+                                              context,
+                                              titleText: 'Open Maps',
+                                              description:
+                                                  'This will open another applicaiton to navigate to this location',
+                                              action: () {
+                                            LinkParser
+                                                .launchGoolgeMapsNavigation(
+                                                    widget.ticketData
+                                                        .locationLatCoordinate,
+                                                    widget.ticketData
+                                                        .locationLongCoordinate);
+                                          });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: brandPrimaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r)),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              label(
+                                                  text: 'Go to Location',
+                                                  color: Colors.white),
+                                              10.pw,
+                                              Icon(
+                                                LucideIcons.locateFixed,
+                                                color: Colors
+                                                    .white, // Customize the marker color
+                                                size: 30.w,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                                       
+                                       
+                        },
+                        interactionOptions: const InteractionOptions(
+                            flags: InteractiveFlag.doubleTapZoom),
                         minZoom: 5,
                         maxZoom: 20,
                         initialZoom: 17,
@@ -542,15 +636,17 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                                       .locationLongCoordinate), // Set the marker position
                               child: GestureDetector(
                                 onTap: () {
-                                  ScreenOverlay.showConfirmationDialog(context,
+                                  ScreenOverlay.showConfirmationDialog(
+                                      context,
                                       titleText: 'Open Maps',
                                       description:
                                           'This will open another applicaiton to navigate to this location',
                                       action: () {
                                     LinkParser.launchGoolgeMapsNavigation(
-                                        widget.ticketData.locationLatCoordinate,
                                         widget
-                                            .ticketData.locationLongCoordinate);
+                                            .ticketData.locationLatCoordinate,
+                                        widget.ticketData
+                                            .locationLongCoordinate);
                                   });
                                 },
                                 child: Container(
@@ -559,7 +655,8 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                                       borderRadius:
                                           BorderRadius.circular(10.r)),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
                                     children: [
                                       label(
                                           text: 'Go to Location',
