@@ -68,7 +68,7 @@ class Header extends StatelessWidget {
                           text: titleText,
                           fontSize: 46.sp,
                           color: brandPrimaryColor,
-                          fontFamily: 'Broncks',
+                          fontFamily: 'TypoGraphica',
                           textAlign: TextAlign.center),
                   if (hasBackButton == false) ...[
                     const Spacer(),
