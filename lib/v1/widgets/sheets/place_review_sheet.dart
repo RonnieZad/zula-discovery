@@ -28,7 +28,7 @@ class PlaceReviewSheet extends StatelessWidget {
               text: 'Reviews and Ratings',
               fontSize: 46.sp,
               color: brandPrimaryColor,
-              fontFamily: 'Broncks',
+              
               textAlign: TextAlign.center),
           30.ph,
           ListView.builder(
