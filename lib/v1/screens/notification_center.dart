@@ -42,16 +42,16 @@ class _NotificationCenterState extends State<NotificationCenter> {
         height: 0.8.sh,
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             title(
                 text: 'Notification Center',
                 fontSize: 46.sp,
                 color: brandPrimaryColor,
-                fontFamily: 'Broncks',
                 textAlign: TextAlign.center),
             20.ph,
             notificationController.notficationPageIsLoading.value
-                ? const ContentLoadingWidget()
+                ? const Center(child: ContentLoadingWidget())
                 : notificationController.retrievedNotifications.isEmpty
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +77,7 @@ class _NotificationCenterState extends State<NotificationCenter> {
                       )
                     : Expanded(
                         child: ListView.builder(
-                          padding: EdgeInsets.only(top: 15.h),
+                            padding: EdgeInsets.only(top: 15.h),
                             shrinkWrap: true,
                             itemCount: notificationController
                                 .retrievedNotifications.length,
@@ -93,14 +93,11 @@ class _NotificationCenterState extends State<NotificationCenter> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Center(
-                                              child: title(
-                                                  text: 'Notification Details',
-                                                  fontSize: 46.sp,
-                                                  color: brandPrimaryColor,
-                                                  fontFamily: 'Broncks',
-                                                  textAlign: TextAlign.center),
-                                            ),
+                                            title(
+                                                text: 'Notification Details',
+                                                fontSize: 46.sp,
+                                                color: brandPrimaryColor,
+                                                textAlign: TextAlign.center),
                                             20.ph,
                                             heading(
                                                 text: notificationController
@@ -215,5 +212,3 @@ class _NotificationCenterState extends State<NotificationCenter> {
     });
   }
 }
-
-
