@@ -91,11 +91,11 @@ class _MyAppState extends State<MyApp> {
       title: 'ZulaVibe',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: brandPrimaryColor),
+            primary: brandPrimaryColor, seedColor: brandPrimaryColor),
         useMaterial3: true,
       ),
       home: ScreenUtilInit(
-        designSize: const Size(475, 910),
+        designSize: const Size(470, 910),
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (c, w) => GestureDetector(
