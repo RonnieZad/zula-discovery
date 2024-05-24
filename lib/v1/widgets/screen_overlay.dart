@@ -226,6 +226,8 @@ class ScreenOverlay {
   }
 }
 
+
+
 class SignInButton extends StatelessWidget {
   const SignInButton({
     super.key,
@@ -245,7 +247,7 @@ class SignInButton extends StatelessWidget {
     return GestureDetector(
       onTap: action,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+        padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 12.w),
         decoration: BoxDecoration(
             color: color ?? Colors.white,
             borderRadius: BorderRadius.circular(10.r),
@@ -269,6 +271,8 @@ class SignInButton extends StatelessWidget {
     );
   }
 }
+
+
 
 class AppTextBox extends StatefulWidget {
   const AppTextBox(
