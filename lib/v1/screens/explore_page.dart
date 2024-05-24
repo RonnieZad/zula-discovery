@@ -305,8 +305,10 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                       fontSize: 20.sp,
                                       color: brandPrimaryColor),
                                   5.pw,
-                                   Icon(Icons.star, size: 25.w,),
-                                 
+                                  Icon(
+                                    Icons.star,
+                                    size: 25.w,
+                                  ),
                                 ],
                               ),
                             ],
@@ -349,6 +351,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
+
                                 ScreenOverlay.showAppSheet(
                                   context,
                                   playHomeVideoFrame: false,
@@ -493,17 +496,20 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                 },
                               )
                               .scaleXY(begin: 1.0, end: 0.6),
-                                  paragraph(
-                                      text:
-                                          '${widget.locationDetails.likeCount}',
-                                      fontSize: 24.sp,
-                                      color: brandPrimaryColor),
+                          paragraph(
+                              text: '${widget.locationDetails.likeCount}',
+                              fontSize: 24.sp,
+                              color: brandPrimaryColor),
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
-                                    sheet: const ShareSheet());
+                                    sheet: ShareSheet(
+                                      imagePath: widget.locationDetails.locationPicture.first.locationPictureUrl,
+                                      postTitle: widget.locationDetails.locationName,
+                                      postDescription: widget.locationDetails.locationDescription,
+                                    ));
                               },
                               icon: Icon(LineIcons.share,
                                   color: brandPrimaryColor, size: 30.w)),
@@ -715,19 +721,18 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                           horizontal: 25.w),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Center(
-                                            child: title(
-                                                text: 'Check Availabilty',
-                                                fontSize: 46.sp,
-                                                color: brandPrimaryColor,
-                                                fontFamily: 'Broncks',
-                                                textAlign: TextAlign.center),
-                                          ),
+                                          title(
+                                              text: 'Check Availabilty',
+                                              fontSize: 46.sp,
+                                              color: brandPrimaryColor,
+                                              textAlign: TextAlign.center),
                                           30.ph,
                                           paragraph(
                                               text:
                                                   'What date spot would you like to check'),
+                                                  20.ph,
                                           SizedBox(
                                               height: 200.h,
                                               child: CupertinoDatePicker(
@@ -746,7 +751,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                                             .availabilityDateToCheck =
                                                         newDate.toString();
                                                   })),
-                                                  15.ph,
+                                          15.ph,
                                           Row(
                                             children: [
                                               heading(
