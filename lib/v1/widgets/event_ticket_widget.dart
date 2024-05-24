@@ -13,6 +13,7 @@ import 'package:zula/v1/utils/helper.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
+import 'package:zula/v1/widgets/sheets/payment_sheet.dart';
 import 'package:zula/v1/widgets/sheets/purchase_ticket_sheet.dart';
 
 class EventTicketWidget extends StatefulWidget {
@@ -137,7 +138,7 @@ class _EventTicketWidgetState extends State<EventTicketWidget> {
                                 ticketData: widget.ticketData));
                       },
                       child: Container(
-                        decoration:  BoxDecoration(
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50.r),
                           border: Border.all(color: Colors.white, width: 2.w),
                           boxShadow: const [
