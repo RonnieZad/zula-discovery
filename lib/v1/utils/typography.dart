@@ -12,13 +12,13 @@ Widget title(
         Color? color,
         TextAlign textAlign = TextAlign.start,
         int delay = 0,
-        fontFamily = 'Poppins',
+        fontFamily = 'TypoGraphica',
         double fontSize = 40}) =>
     Text(text,
         style: TextStyle(
             fontSize: fontSize.sp,
             color: color,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
             fontFamily: fontFamily),
         textAlign: textAlign);
 Widget subtitle(
@@ -31,7 +31,7 @@ Widget subtitle(
             fontSize: 28.sp,
             color: color,
             fontWeight: FontWeight.w500,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
 Widget subtitleBold(
         {String text = '',
@@ -43,7 +43,7 @@ Widget subtitleBold(
             fontSize: 30.sp,
             // color: color,
             fontWeight: FontWeight.w800,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
 Widget headingBig(
         {String text = '',
@@ -55,7 +55,7 @@ Widget headingBig(
             fontSize: 22.sp,
             color: color,
             fontWeight: FontWeight.w500,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
 Widget heading({
   String text = '',
@@ -63,7 +63,7 @@ Widget heading({
   textAlign = TextAlign.start,
   int delay = 0,
   double fontSize = 20,
-  String? fontFamily = 'Poppins',
+  String? fontFamily = 'Cereal',
 }) =>
     Text(text,
         style: TextStyle(
@@ -82,7 +82,7 @@ Widget subHeading(
             fontSize: fontSize.sp,
             color: color,
             fontWeight: FontWeight.w400,
-            fontFamily: 'Poppins'));
+            fontFamily: 'Cereal'));
 Widget paragraph(
         {String text = '',
         Color? color,
@@ -97,7 +97,7 @@ Widget paragraph(
             fontSize: fontSize.sp,
             color: color,
             fontWeight: FontWeight.w400,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         overflow: overflow,
         textAlign: textAlign);
 Widget paragraphSmall(
@@ -110,7 +110,7 @@ Widget paragraphSmall(
             fontSize: 16.sp,
             color: color,
             fontWeight: FontWeight.w400,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
 Widget paragraphSmallItalic(
         {String text = '',
@@ -123,7 +123,7 @@ Widget paragraphSmallItalic(
             fontSize: 15.5.sp,
             color: color,
             fontWeight: FontWeight.w400,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
 Widget paragraphBold(
         {String text = '',
@@ -136,14 +136,14 @@ Widget paragraphBold(
             fontSize: fontSize.sp,
             color: color,
             fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
 Widget label({String text = '', Color? color, int delay = 0}) => Text(text,
     style: TextStyle(
         fontSize: 18.sp,
         color: color,
         fontWeight: FontWeight.w500,
-        fontFamily: 'Poppins'));
+        fontFamily: 'Cereal'));
 Widget buttonLabel(
         {String text = '',
         // Color color = primaryColorWhite,
@@ -154,7 +154,7 @@ Widget buttonLabel(
             fontSize: fontSize.sp,
             // color: color,
             fontWeight: FontWeight.w500,
-            fontFamily: 'Poppins'));
+            fontFamily: 'Cereal'));
 Widget buttonLabelSmallBold(
         {String text = '',
         Color? color,
@@ -165,7 +165,7 @@ Widget buttonLabelSmallBold(
             fontSize: fontSize.sp,
             color: color,
             fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins'));
+            fontFamily: 'Cereal'));
 Widget buttonLabelBold(
         {String text = '', Color? color = Colors.white, int delay = 0}) =>
     Text(text,
@@ -173,7 +173,7 @@ Widget buttonLabelBold(
             fontSize: 20.sp,
             color: color,
             fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins'));
+            fontFamily: 'Cereal'));
 Widget caption(
         {String text = '',
         double fontSize = 18,
@@ -185,7 +185,7 @@ Widget caption(
             fontSize: fontSize.sp,
             color: color,
             fontWeight: FontWeight.w500,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
 Widget captionBold(
         {String text = '',
@@ -198,5 +198,5 @@ Widget captionBold(
             fontSize: fontSize.sp,
             color: color,
             fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins'),
+            fontFamily: 'Cereal'),
         textAlign: textAlign);
