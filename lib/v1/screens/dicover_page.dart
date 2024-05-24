@@ -98,6 +98,21 @@ class CustomSearchDelegate extends SearchDelegate<String> {
   }
 
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    return ThemeData(
+      appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            systemNavigationBarColor: Colors.white,
+            systemNavigationBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.dark,
+          )),
+    );
+  }
+
+  @override
   void showResults(BuildContext context) {
     // This method is called when the user submits the search query from the keyboard.
     // You can perform actions here such as closing the keyboard and showing the search results.
@@ -144,7 +159,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           text: 'Discover',
                           fontSize: 46.sp,
                           color: brandPrimaryColor,
-                          fontFamily: 'Broncks',
                           textAlign: TextAlign.center),
                       const Spacer(),
                       IconButton(
@@ -336,9 +350,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
               right: 120.0,
               child: FilledButton.icon(
                 style: ButtonStyle(
-                    padding: const MaterialStatePropertyAll(
+                    padding: const WidgetStatePropertyAll(
                         EdgeInsets.symmetric(vertical: 15)),
-                    backgroundColor: MaterialStatePropertyAll(
+                    backgroundColor: WidgetStatePropertyAll(
                         brandPrimaryColor.withOpacity(0.2))),
                 label: paragraph(text: 'Close', color: brandPrimaryColor),
                 icon: Icon(
