@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -8,6 +11,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/utils/extensions.dart';
+import 'package:zula/v1/utils/typography.dart';
 
 class ChatWidget extends StatefulWidget {
   const ChatWidget({super.key});
@@ -24,28 +28,20 @@ class _ChatWidgetState extends State<ChatWidget> {
   final FocusNode _textFieldFocus = FocusNode();
   bool _loading = false;
   static const _apiKey = 'AIzaSyAp_apGSktLxlEoMFTGSA95y1v3G22QJ3Y';
+  final List<({Image? image, String? text, bool fromUser})> _generatedContent =
+      <({Image? image, String? text, bool fromUser})>[];
 
   @override
   void initState() {
     super.initState();
 
-    const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark);
-
     _model = GenerativeModel(
-      model: 'gemini-pro',
-      apiKey: _apiKey,
-    );
-    _chat = _model.startChat(history: [
-      Content.text('I need help with some plans with resutarants'),
-      Content.model([
-        TextPart(
-            'Hello, I\'m Zula AI, your virtual tour guide in Uganda. How can I assist you today?')
-      ])
-    ]);
+        model: 'gemini-1.5-pro-latest',
+        apiKey: _apiKey,
+        systemInstruction: Content.system(
+            'Your name is Zulando, a virtual travel guide in Uganda. You will respond as a charismatic happy travel expert  to anything that is related to tourism, sport, wildlife, trips, entertainment and accomodation. If a question is not related to those topics, the response should be, "That is beyond my knowledge."'));
+
+    _chat = _model.startChat();
   }
 
   void _scrollDown() {
@@ -70,12 +66,11 @@ class _ChatWidgetState extends State<ChatWidget> {
   @override
   Widget build(BuildContext context) {
     var textFieldDecoration = InputDecoration(
-      contentPadding: const EdgeInsets.all(15),
       hintText: 'Ask me anything...',
-      hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 18.sp),
+      hintStyle: TextStyle(fontFamily: 'Cereal', fontSize: 18.sp),
       border: OutlineInputBorder(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(14),
+        borderRadius: BorderRadius.all(
+          Radius.circular(18.r),
         ),
         borderSide: BorderSide(
           color: brandPrimaryColor,
@@ -83,7 +78,7 @@ class _ChatWidgetState extends State<ChatWidget> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
-          Radius.circular(16.r),
+          Radius.circular(18.r),
         ),
         borderSide: BorderSide(
           color: brandPrimaryColor,
@@ -96,48 +91,60 @@ class _ChatWidgetState extends State<ChatWidget> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: EdgeInsets.only(top: 80.h, left: 20.w, right: 20.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 20.ph,
                 Expanded(
-                  child: _apiKey.isNotEmpty
-                      ? ListView.builder(
-                          controller: _scrollController,
-                          itemBuilder: (context, idx) {
-                            var content = _chat.history.toList()[idx];
-                            var text = content.parts
-                                .whereType<TextPart>()
-                                .map<String>((e) => e.text)
-                                .join('');
-                            return MessageWidget(
-                              text: text,
-                              isFromUser: content.role == 'user',
-                            );
-                          },
-                          itemCount: _chat.history.length,
-                        )
-                      : ListView(
+                  child: _apiKey.isEmpty
+                      ? ListView(
                           children: const [
                             Text(
                                 'No API key found. Please provide an API Key.'),
                           ],
-                        ),
+                        )
+                      : _generatedContent.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  heading(text: 'Hi there😊, I\'m Zulando'),
+                                  10.ph,
+                                  paragraph(
+                                      text:
+                                          'Unleash your Ugandan escape! Ask me anything about adventures, resturants, night life, wildlife, or places to stay. 🇺🇬',
+                                      textAlign: TextAlign.center)
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              controller: _scrollController,
+                              itemBuilder: (context, idx) {
+                                final content = _generatedContent[idx];
+                                print(content);
+
+                                return MessageWidget(
+                                  text: content.text!,
+                                  image: content.image,
+                                  isFromUser: content.fromUser,
+                                );
+                              },
+                              itemCount: _generatedContent.length,
+                            ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 25,
-                    horizontal: 15,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 15.h,
                   ),
                   child: Row(
                     children: [
                       Expanded(
                         child: TextField(
                           style:
-                              TextStyle(fontFamily: 'Poppins', fontSize: 18.sp),
-                          autofocus: true,
+                              TextStyle(fontFamily: 'Cereal', fontSize: 18.sp),
                           focusNode: _textFieldFocus,
                           decoration: textFieldDecoration,
                           controller: _textController,
@@ -147,7 +154,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                         ),
                       ),
                       const SizedBox.square(
-                        dimension: 15,
+                        dimension: 10,
                       ),
                       if (!_loading)
                         IconButton(
@@ -169,6 +176,34 @@ class _ChatWidgetState extends State<ChatWidget> {
               ],
             ),
           ),
+          Positioned(
+              top: Platform.isAndroid ? 40.h : 60.h,
+              left: 20.w,
+              right: 20.w,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Row(
+                          children: [
+                            Icon(CupertinoIcons.arrow_left,
+                                color: brandPrimaryColor, size: 30.w),
+                            20.pw,
+                            title(
+                                text: 'Zulando',
+                                fontSize: 46.sp,
+                                color: brandPrimaryColor,
+                                textAlign: TextAlign.center),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ])),
         ],
       ),
     );
@@ -180,10 +215,13 @@ class _ChatWidgetState extends State<ChatWidget> {
     });
 
     try {
+      _generatedContent.add((image: null, text: message, fromUser: true));
+
       var response = await _chat.sendMessage(
         Content.text(message),
       );
       var text = response.text;
+      _generatedContent.add((image: null, text: text, fromUser: false));
 
       if (text == null) {
         _showError('No response from API.');
@@ -239,9 +277,11 @@ class _ChatWidgetState extends State<ChatWidget> {
 class MessageWidget extends StatelessWidget {
   final String text;
   final bool isFromUser;
+  final Image? image;
 
   const MessageWidget({
     super.key,
+    this.image,
     required this.text,
     required this.isFromUser,
   });
@@ -254,26 +294,55 @@ class MessageWidget extends StatelessWidget {
       children: [
         Flexible(
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 600),
-            decoration: BoxDecoration(
-              color: isFromUser
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : Theme.of(context).colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            padding: const EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 20,
-            ),
-            margin: const EdgeInsets.only(bottom: 8),
-            child: MarkdownBody(
-              styleSheet: MarkdownStyleSheet(
-                  a: TextStyle(fontFamily: 'Poppins', fontSize: 18.sp),
-                  p: TextStyle(fontFamily: 'Poppins', fontSize: 18.sp)),
-              selectable: true,
-              data: text,
-            ),
-          ),
+              constraints: const BoxConstraints(maxWidth: 600),
+              decoration: BoxDecoration(
+                color: isFromUser
+                    ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
+                    : Theme.of(context).colorScheme.onTertiaryContainer,
+                borderRadius: BorderRadius.circular(18.r),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: 15.h,
+                horizontal: 20.w,
+              ),
+              margin: const EdgeInsets.only(bottom: 8),
+              child: Column(children: [
+                if (text case final text?)
+                  MarkdownBody(
+                    data: text,
+                    styleSheet: MarkdownStyleSheet(
+                        listBullet: TextStyle(
+                            fontFamily: 'Cereal',
+                            fontSize: 18.sp,
+                            color: Colors.white),
+                        h4: TextStyle(
+                            fontFamily: 'Cereal',
+                            fontSize: 18.sp,
+                            color: Colors.white),
+                        h3: TextStyle(
+                            fontFamily: 'Cereal',
+                            fontSize: 18.sp,
+                            color: Colors.white),
+                        h2: TextStyle(
+                            fontFamily: 'Cereal',
+                            fontSize: 18.sp,
+                            color: Colors.white),
+                        h1: TextStyle(
+                            fontFamily: 'Cereal',
+                            fontSize: 18.sp,
+                            color: Colors.white),
+                        a: TextStyle(
+                            fontFamily: 'Cereal',
+                            fontSize: 18.sp,
+                            color: Colors.white),
+                        p: TextStyle(
+                            fontFamily: 'Cereal',
+                            fontSize: 18.sp,
+                            color: Colors.white)),
+                    selectable: true,
+                  ),
+                if (image case final image?) image,
+              ])),
         ),
       ],
     );
