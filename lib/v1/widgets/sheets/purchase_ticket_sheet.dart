@@ -13,6 +13,7 @@ import 'package:zula/v1/utils/helper.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:zula/v1/widgets/content_loading_widget.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
+import 'package:zula/v1/widgets/sheets/payment_sheet.dart';
 import 'package:zula/v1/widgets/sheets/virtual_tour_sheet.dart';
 
 class PurchaseTicketSheet extends StatelessWidget {
@@ -39,7 +40,7 @@ class PurchaseTicketSheet extends StatelessWidget {
                     text: 'Choose your Tickets',
                     fontSize: 46.sp,
                     color: brandPrimaryColor,
-                    fontFamily: 'Broncks',
+                    
                     textAlign: TextAlign.center),
                 20.ph,
                 paragraph(
@@ -200,11 +201,10 @@ class PurchaseTicketSheet extends StatelessWidget {
                                               .toString())
                                       .then((paymentLink) {
                                     if (paymentLink != null) {
-                                      ScreenOverlay.showAppSheet(context,
-                                          playHomeVideoFrame: false,
-                                          sheet: VirtualTourSheet(
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentSheet(
                                               virtualTourPreviewUrl:
-                                                  paymentLink));
+                                                  paymentLink)));
+                                     
                                     }
                                   });
                                 }
