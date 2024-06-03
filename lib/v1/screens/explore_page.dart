@@ -324,6 +324,9 @@ class _ExploreDetailsState extends State<ExploreDetails>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                       
+                       
+
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
@@ -466,7 +469,38 @@ class _ExploreDetailsState extends State<ExploreDetails>
                               },
                               icon: Icon(Icons.restaurant,
                                   color: brandPrimaryColor, size: 30.w)),
+                        
+                          
                           IconButton(
+                              onPressed: () {
+                                HapticFeedback.selectionClick();
+                                ScreenOverlay.showAppSheet(context,
+                                    playHomeVideoFrame: false,
+                                    sheet: ShareSheet(
+                                      imagePath: widget.locationDetails.locationPicture.first.locationPictureUrl,
+                                      postTitle: widget.locationDetails.locationName,
+                                      postDescription: widget.locationDetails.locationDescription,
+                                    ));
+                              },
+                              icon: Icon(LineIcons.share,
+                                  color: brandPrimaryColor, size: 30.w)),
+                        
+                        
+
+                        Container(
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 0.6, 
+                          ),
+                          borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              
+                              padding: EdgeInsets.zero,
                                   onPressed: () {
                                     HapticFeedback.selectionClick();
                                     likeAnimationController.forward();
@@ -500,19 +534,12 @@ class _ExploreDetailsState extends State<ExploreDetails>
                               text: '${widget.locationDetails.likeCount}',
                               fontSize: 24.sp,
                               color: brandPrimaryColor),
-                          IconButton(
-                              onPressed: () {
-                                HapticFeedback.selectionClick();
-                                ScreenOverlay.showAppSheet(context,
-                                    playHomeVideoFrame: false,
-                                    sheet: ShareSheet(
-                                      imagePath: widget.locationDetails.locationPicture.first.locationPictureUrl,
-                                      postTitle: widget.locationDetails.locationName,
-                                      postDescription: widget.locationDetails.locationDescription,
-                                    ));
-                              },
-                              icon: Icon(LineIcons.share,
-                                  color: brandPrimaryColor, size: 30.w)),
+                        ],),
+                        ),
+                        
+                        
+                        
+                      
                         ],
                       ),
                       20.ph,
