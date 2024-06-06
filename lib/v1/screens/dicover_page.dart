@@ -72,28 +72,31 @@ class CustomSearchDelegate extends SearchDelegate<String> {
             .where((fruit) => fruit.toLowerCase().contains(query.toLowerCase()))
             .toList();
 
-    return ListView.builder(
-      itemCount: filteredSuggestions.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: paragraph(text: filteredSuggestions[index]),
-          onTap: () {
-            // You can handle the tap on a suggestion item.
-            HapticFeedback.lightImpact();
-            close(context, filteredSuggestions[index]);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: ListView.builder(
+        itemCount: filteredSuggestions.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: paragraph(text: filteredSuggestions[index]),
+            onTap: () {
+              // You can handle the tap on a suggestion item.
+              HapticFeedback.lightImpact();
+              close(context, filteredSuggestions[index]);
 
-            locationController.locationSearchByQuery(
-                query: filteredSuggestions[index].replaceRange(
-                    filteredSuggestions[index].length - 1,
-                    filteredSuggestions[index].length,
-                    ''));
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const SearchResultPage()));
-          },
-        );
-      },
+              locationController.locationSearchByQuery(
+                  query: filteredSuggestions[index].replaceRange(
+                      filteredSuggestions[index].length - 1,
+                      filteredSuggestions[index].length,
+                      ''));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SearchResultPage()));
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -117,7 +120,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
     // This method is called when the user submits the search query from the keyboard.
     // You can perform actions here such as closing the keyboard and showing the search results.
     close(context, query);
-    print(query);
+
     HapticFeedback.lightImpact();
     // You might want to navigate to the search results page here as well.
     locationController.locationSearchByQuery(
