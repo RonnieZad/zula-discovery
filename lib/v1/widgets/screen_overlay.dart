@@ -200,9 +200,9 @@ class ScreenOverlay {
                             right: 120.0,
                             child: FilledButton.icon(
                               style: ButtonStyle(
-                                  padding: const MaterialStatePropertyAll(
+                                  padding: const WidgetStatePropertyAll(
                                       EdgeInsets.symmetric(vertical: 15)),
-                                  backgroundColor: MaterialStatePropertyAll(
+                                  backgroundColor: WidgetStatePropertyAll(
                                       brandPrimaryColor.withOpacity(0.1))),
                               label: paragraph(
                                   text: 'Close', color: brandPrimaryColor),
