@@ -47,6 +47,8 @@ class _AppCanvasState extends State<AppCanvas> {
               itemBuilder: (context, index) {
                 return appPages[index];
               }),
+
+              
           Positioned(
               bottom: 0.h,
               left: 0.w,
@@ -111,6 +113,8 @@ class _AppCanvasState extends State<AppCanvas> {
                       .toList(),
                 ),
               ))
+        
+        
         ],
       ),
     );
