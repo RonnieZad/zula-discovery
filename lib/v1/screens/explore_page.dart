@@ -20,6 +20,8 @@ import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/controllers/location_controller.dart';
 import 'package:zula/v1/models/location_model.dart';
+import 'package:zula/v1/screens/ai_chat.dart';
+import 'package:zula/v1/screens/context_ai.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/link_parser.dart';
 import 'package:zula/v1/utils/typography.dart';
@@ -324,9 +326,18 @@ class _ExploreDetailsState extends State<ExploreDetails>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                       
-                       
+                           IconButton(
+                              onPressed: () {
+                                HapticFeedback.selectionClick();
 
+                                ScreenOverlay.showAppSheet(context,
+                                    playHomeVideoFrame: false,
+                                    sheet: const ContextAi(
+                                   
+                                    ));
+                              },
+                              icon: Icon(CupertinoIcons.sparkles,
+                                  color: brandPrimaryColor, size: 30.w)),
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
@@ -469,77 +480,76 @@ class _ExploreDetailsState extends State<ExploreDetails>
                               },
                               icon: Icon(Icons.restaurant,
                                   color: brandPrimaryColor, size: 30.w)),
-                        
-                          
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
                                     sheet: ShareSheet(
-                                      imagePath: widget.locationDetails.locationPicture.first.locationPictureUrl,
-                                      postTitle: widget.locationDetails.locationName,
-                                      postDescription: widget.locationDetails.locationDescription,
+                                      imagePath: widget
+                                          .locationDetails
+                                          .locationPicture
+                                          .first
+                                          .locationPictureUrl,
+                                      postTitle:
+                                          widget.locationDetails.locationName,
+                                      postDescription: widget
+                                          .locationDetails.locationDescription,
                                     ));
                               },
                               icon: Icon(LineIcons.share,
                                   color: brandPrimaryColor, size: 30.w)),
-                        
-                        
+                          GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              likeAnimationController.forward();
 
-                        Container(
-                          padding: EdgeInsets.zero,
-                          decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 0.6, 
+                              locationController
+                                  .favoriteLocation(
+                                      locationId: widget.locationDetails.id)
+                                  .then((updatedCountLike) {
+                                HapticFeedback.selectionClick();
+                                likeAnimationController.reset();
+                                if (updatedCountLike != null) {
+                                  setState(() {
+                                    widget.locationDetails.likeCount =
+                                        updatedCountLike;
+                                  });
+                                }
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 3),
+                              decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                    width: 0.6,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20.r)),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(LineIcons.heart,
+                                          color: brandPrimaryColor, size: 24.w)
+                                      .animate(
+                                        autoPlay: false,
+                                        controller: likeAnimationController,
+                                        onComplete: (animController) {
+                                          animController.repeat();
+                                        },
+                                      )
+                                      .scaleXY(begin: 1.0, end: 0.6),
+                                  paragraph(
+                                      text:
+                                          '${widget.locationDetails.likeCount}',
+                                      fontSize: 22.sp,
+                                      color: brandPrimaryColor),
+                                ],
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(20)
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              
-                              padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    HapticFeedback.selectionClick();
-                                    likeAnimationController.forward();
-
-                                    locationController
-                                        .favoriteLocation(
-                                            locationId:
-                                                widget.locationDetails.id)
-                                        .then((updatedCountLike) {
-                                      HapticFeedback.selectionClick();
-                                      likeAnimationController.reset();
-                                      if (updatedCountLike != null) {
-                                        setState(() {
-                                          widget.locationDetails.likeCount =
-                                              updatedCountLike;
-                                        });
-                                      }
-                                    });
-                                  },
-                                  icon: Icon(LineIcons.heart,
-                                      color: brandPrimaryColor, size: 30.w))
-                              .animate(
-                                autoPlay: false,
-                                controller: likeAnimationController,
-                                onComplete: (animController) {
-                                  animController.repeat();
-                                },
-                              )
-                              .scaleXY(begin: 1.0, end: 0.6),
-                          paragraph(
-                              text: '${widget.locationDetails.likeCount}',
-                              fontSize: 24.sp,
-                              color: brandPrimaryColor),
-                        ],),
-                        ),
-                        
-                        
-                        
-                      
+              
                         ],
                       ),
                       20.ph,
@@ -748,7 +758,8 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                           horizontal: 25.w),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           title(
                                               text: 'Check Availabilty',
@@ -759,7 +770,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                           paragraph(
                                               text:
                                                   'What date spot would you like to check'),
-                                                  20.ph,
+                                          20.ph,
                                           SizedBox(
                                               height: 200.h,
                                               child: CupertinoDatePicker(
