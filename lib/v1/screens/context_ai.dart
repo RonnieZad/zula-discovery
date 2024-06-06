@@ -15,15 +15,15 @@ import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 
-class ChatWidget extends StatefulWidget {
-  const ChatWidget({super.key, this.sheetView = false});
+class ContextAi extends StatefulWidget {
+  const ContextAi({super.key, this.sheetView = false});
   final bool? sheetView;
 
   @override
-  State<ChatWidget> createState() => _ChatWidgetState();
+  State<ContextAi> createState() => _ChatWidgetState();
 }
 
-class _ChatWidgetState extends State<ChatWidget> {
+class _ChatWidgetState extends State<ContextAi> {
   late final GenerativeModel _model;
   late final ChatSession _chat;
   final ScrollController _scrollController = ScrollController();
@@ -33,6 +33,8 @@ class _ChatWidgetState extends State<ChatWidget> {
   static const _apiKey = 'AIzaSyAp_apGSktLxlEoMFTGSA95y1v3G22QJ3Y';
   final List<({Image? image, String? text, bool fromUser})> _generatedContent =
       <({Image? image, String? text, bool fromUser})>[];
+
+
 
   @override
   void initState() {
@@ -48,6 +50,10 @@ class _ChatWidgetState extends State<ChatWidget> {
   }
 
   void _scrollDown() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      currentFocus.focusedChild!.unfocus();
+    }
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -86,7 +92,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                 height: 45.w,
                 padding: const EdgeInsets.all(2),
                 decoration: const BoxDecoration(
-                    color: Colors.black12, shape: BoxShape.circle),
+                  color: Colors.black12,
+                  shape: BoxShape.circle
+                ),
                 child: Icon(
                   LineIcons.arrowUp,
                   color: brandPrimaryColor,
@@ -111,6 +119,7 @@ class _ChatWidgetState extends State<ChatWidget> {
           color: brandPrimaryColor.withOpacity(0.3),
         ),
       ),
+     
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(48.r),
@@ -122,168 +131,148 @@ class _ChatWidgetState extends State<ChatWidget> {
       ),
     );
 
-    return Scaffold(
-      backgroundColor: widget.sheetView! ? Colors.transparent : Colors.white,
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 80.h, left: 20.w, right: 20.w),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: _apiKey.isEmpty
-                      ? ListView(
-                          children: const [
-                            Text(
-                                'No API key found. Please provide an API Key.'),
-                          ],
-                        )
-                      : _generatedContent.isEmpty
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                heading(text: 'Hi there😊, I\'m Zulando'),
-                                10.ph,
-                                paragraph(
-                                    text:
-                                        'Unleash your Ugandan escape! Ask me anything about adventures, resturants, night life, wildlife, or places to stay. 🇺🇬',
-                                    textAlign: TextAlign.center),
-                                60.ph,
-                                SizedBox(
-                                  height: 200.h,
-                                  child: ListView.builder(
-                                    clipBehavior: Clip.none,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: optionsAi.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          HapticFeedback.selectionClick();
-                                          _sendChatMessage(optionsAi[index]);
-                                          _scrollDown();
-                                        },
-                                        child: Container(
-                                          width: 180.w,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.w, vertical: 15.h),
-                                          margin:
-                                              const EdgeInsets.only(right: 10),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12.r),
-                                            border: Border.all(
-                                              color: Colors.black38,
-                                              width: 0.6,
-                                            ),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                CupertinoIcons.sparkles,
-                                                color: Colors.black38,
-                                              ),
-                                              10.ph,
-                                              Expanded(
-                                                  child: paragraph(
-                                                text: optionsAi[index],
-                                                color: Colors.black87,
-                                              ))
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              controller: _scrollController,
-                              itemBuilder: (context, idx) {
-                                final content = _generatedContent[idx];
-
-                                return MessageWidget(
-                                  text: content.text!,
-                                  image: content.image,
-                                  isFromUser: content.fromUser,
-                                );
-                              },
-                              itemCount: _generatedContent.length,
-                            ),
-                ),
-                Material(
-                  elevation: 30,
-                  shadowColor: Colors.black45,
-                  borderRadius: BorderRadius.circular(40.r),
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          style:
-                              TextStyle(fontFamily: 'Cereal', fontSize: 18.sp),
-                          focusNode: _textFieldFocus,
-                          decoration: textFieldDecoration,
-                          controller: _textController,
-                          onSubmitted: (String value) {
-                            if (value.isNotEmpty) {
-                              _sendChatMessage(value);
-                              FocusScopeNode currentFocus =
-                                  FocusScope.of(context);
-                              if (!currentFocus.hasPrimaryFocus &&
-                                  currentFocus.focusedChild != null) {
-                                currentFocus.focusedChild!.unfocus();
-                              }
-                            }
-                          },
+    return SizedBox(
+      height: 0.8.sh,
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          controller: _scrollController,
+          shrinkWrap: true,
+          children: [
+            title(
+              text: 'AI Chat',
+              fontSize: 46.sp,
+              color: brandPrimaryColor,
+            ),
+            20.ph,
+            paragraph(
+              text:
+                  'Hi, I\'m Zulando. Ask me anything about adventures, resturants, night life, wildlife, or places to stay. 🇺🇬',
+            ),
+            20.ph,
+            SizedBox(
+              height: 200.h,
+              child: ListView.builder(
+                clipBehavior: Clip.none,
+                scrollDirection: Axis.horizontal,
+                itemCount: optionsAi.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      _sendChatMessage(optionsAi[index]);
+                      _scrollDown();
+                    },
+                    child: Container(
+                      width: 180.w,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 15.h),
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: Colors.black38,
+                          width: 0.6,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                30.ph,
-              ],
-            ),
-          ),
-          Positioned(
-              top: Platform.isAndroid ? 40.h : 60.h,
-              left: 20.w,
-              right: 20.w,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Row(
-                          children: [
-                            if (!widget.sheetView!) ...[
-                              Icon(CupertinoIcons.arrow_left,
-                                  color: brandPrimaryColor, size: 30.w),
-                              20.pw,
-                            ],
-                            title(
-                                text: 'Zulando',
-                                fontSize: 46.sp,
-                                color: brandPrimaryColor,
-                                textAlign: TextAlign.center),
-                          ],
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            CupertinoIcons.sparkles,
+                            color: Colors.black38,
+                          ),
+                          10.ph,
+                          Expanded(
+                              child: paragraph(
+                            text: optionsAi[index],
+                            color: Colors.black87,
+                          ))
+                        ],
                       ),
                     ),
-                  ])),
-        ],
+                  );
+                },
+              ),
+            ),
+            if (_generatedContent.isNotEmpty) ...[
+              30.ph,
+              const Divider(),
+            ],
+            30.ph,
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, idx) {
+                final content = _generatedContent[idx];
+
+                return MessageWidget(
+                  text: content.text!,
+                  image: content.image,
+                  isFromUser: content.fromUser,
+                );
+              },
+              itemCount: _generatedContent.length,
+            ),
+            30.ph,
+            
+            Material(
+              elevation: 30,
+              shadowColor: Colors.black45,
+              borderRadius: BorderRadius.circular(40.r),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      style: TextStyle(fontFamily: 'Cereal', fontSize: 18.sp),
+                      focusNode: _textFieldFocus,
+                      decoration: textFieldDecoration,
+                      controller: _textController,
+                      onSubmitted: (String value) {
+                        if (value.isNotEmpty) {
+                          _sendChatMessage(value);
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus &&
+                              currentFocus.focusedChild != null) {
+                            currentFocus.focusedChild!.unfocus();
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  // const SizedBox.square(
+                  //   dimension: 10,
+                  // ),
+                  // if (!_loading)
+                  //   IconButton(
+                  //     onPressed: () async {
+                  //       if (_textController.text.isNotEmpty) {
+                  //         _sendChatMessage(_textController.text);
+                  //         FocusScopeNode currentFocus = FocusScope.of(context);
+                  //         if (!currentFocus.hasPrimaryFocus &&
+                  //             currentFocus.focusedChild != null) {
+                  //           currentFocus.focusedChild!.unfocus();
+                  //         }
+                  //       }
+                  //     },
+                  //     icon: Icon(
+                  //       LucideIcons.send,
+                  //       color: brandPrimaryColor,
+                  //     ),
+                  //   )
+                  // else
+                  //   CircularProgressIndicator(
+                  //     color: brandPrimaryColor,
+                  //   ),
+                ],
+              ),
+            ),
+            30.ph,
+          ],
+        ),
       ),
     );
   }
@@ -327,7 +316,7 @@ class _ChatWidgetState extends State<ChatWidget> {
       setState(() {
         _loading = false;
       });
-      _textFieldFocus.requestFocus();
+      // _textFieldFocus.requestFocus();
     }
   }
 
@@ -379,7 +368,7 @@ class MessageWidget extends StatelessWidget {
                 color: isFromUser
                     ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
                     : Theme.of(context).colorScheme.onTertiaryContainer,
-                borderRadius: BorderRadius.circular(18.r),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               padding: EdgeInsets.symmetric(
                 vertical: 15.h,
@@ -387,7 +376,7 @@ class MessageWidget extends StatelessWidget {
               ),
               margin: const EdgeInsets.only(bottom: 8),
               child: Column(children: [
-                if (text case final text?)
+                if (text case final text)
                   MarkdownBody(
                     data: text,
                     styleSheet: MarkdownStyleSheet(
