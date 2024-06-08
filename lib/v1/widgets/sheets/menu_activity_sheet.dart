@@ -28,64 +28,65 @@ class MenuActivitySheet extends StatelessWidget {
               text: 'Menu / Activities',
               fontSize: 46.sp,
               color: brandPrimaryColor,
-              
               textAlign: TextAlign.center),
         ),
         20.ph,
-        ListView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          itemCount: locationMenuActivity.length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              decoration: BoxDecoration(
-                border: Border.all(color: brandPrimaryColor.withOpacity(0.4)),
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(6.r),
-                      child: OctoImage(
-                        width: double.infinity,
-                        height: 250.h,
-                        placeholderBuilder: OctoBlurHashFix.placeHolder(
-                            'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                        errorBuilder: OctoError.icon(color: Colors.red),
-                        image: CachedNetworkImageProvider(
-                          locationMenuActivity[index]
-                              .locationMenuActivityPictureUrl,
+        SizedBox(
+          height: 600.h,
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemCount: locationMenuActivity.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.r),
+                    border: Border.all(color: Colors.black26, width: 0.6)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(6.r),
+                        child: OctoImage(
+                          width: double.infinity,
+                          height: 250.h,
+                          placeholderBuilder: OctoBlurHashFix.placeHolder(
+                              'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                          errorBuilder: OctoError.icon(color: Colors.red),
+                          image: CachedNetworkImageProvider(
+                            locationMenuActivity[index]
+                                .locationMenuActivityPictureUrl,
+                          ),
+                          fit: BoxFit.cover,
+                        )),
+                    25.ph,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        paragraphBold(
+                          text: locationMenuActivity[index]
+                              .locationMenuActivityTitle,
+                          fontSize: 24.sp,
                         ),
-                        fit: BoxFit.cover,
-                      )),
-                  25.ph,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      paragraphBold(
+                        paragraphBold(
+                          text:
+                              'UGX${Helper.getTextDigit(locationMenuActivity[index].locationMenuActivityPrice.toString())}',
+                          fontSize: 20.sp,
+                        ),
+                      ],
+                    ),
+                    10.ph,
+                    paragraph(
                         text: locationMenuActivity[index]
-                            .locationMenuActivityTitle,
-                        fontSize: 24.sp,
-                      ),
-                      paragraphBold(
-                        text:
-                            'UGX${Helper.getTextDigit(locationMenuActivity[index].locationMenuActivityPrice.toString())}',
-                        fontSize: 20.sp,
-                      ),
-                    ],
-                  ),
-                  10.ph,
-                  paragraph(
-                      text: locationMenuActivity[index]
-                          .locationMenuActivityDescription,
-                      fontSize: 18.sp),
-                ],
-              ),
-            );
-          },
+                            .locationMenuActivityDescription,
+                        fontSize: 18.sp),
+                  ],
+                ),
+              );
+            },
+          ),
         )
       ],
     );

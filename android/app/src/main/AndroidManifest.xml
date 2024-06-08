@@ -1,13 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> -->
 
     <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
     <!-- <uses-permission android:name="android.permission.WRITE_CALENDAR" /> -->
     <application
-        android:label="ZulaVibe"
+        android:label="Zula"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -389,12 +389,11 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                         EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                        border: Border.all(
-                            color: brandPrimaryColor.withOpacity(0.4)),
+                        border: Border.all(width: 0.6, color: Colors.black26),
                         color: extraInfoState[0]
                             ? brandPrimaryColor.withOpacity(0.2)
-                            : brandPrimaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10.r)),
+                            : brandPrimaryColor.withOpacity(0.09),
+                        borderRadius: BorderRadius.circular(15.r)),
                     child: extraInfoState[0]
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -505,177 +504,194 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                     text:
                         'Event location is accessbile with ample parking. Make sure to travel early to avoid traffic around this area'),
                 15.ph,
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15.r),
-                  child:  SizedBox(
-                    width: double.infinity,
-                    height: 360.h,
-                    child: FlutterMap(
-                      
-                      options: MapOptions(
-                        onTap: (j,k){
-                           HapticFeedback.selectionClick();
-                    print('ddd');
-                    ScreenOverlay.showAppSheet(
-                      context,
-                      playHomeVideoFrame: false,
-                      sheet: Padding(
-                        padding: EdgeInsets.only(
-                            bottom: 30.h, left: 10.w, right: 10.w),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.r),
-                          child: SizedBox(
-                            width: 400.w,
-                            height: 710.h,
-                            child: FlutterMap(
-                              options: MapOptions(
-                                  minZoom: 5,
-                                  maxZoom: 20,
-                                  zoom: 17,
-                                  center: LatLng(
-                                      widget.ticketData.locationLatCoordinate,
-                                      widget
-                                          .ticketData.locationLongCoordinate)),
-                              children: [
-                                TileLayer(
-                                  maxNativeZoom: 30,
-                                  retinaMode: true,
-                                  maxZoom: 30,
-                                  tileProvider: NetworkTileProvider(),
-                                  urlTemplate:
-                                      'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
-                                ),
-                                MarkerLayer(
-                                  markers: [
-                                    Marker(
-                                      width: 180.0,
-                                      height: 50.0,
-                                      point: LatLng(
-                                          widget
-                                              .ticketData.locationLatCoordinate,
-                                          widget.ticketData
-                                              .locationLongCoordinate), // Set the marker position
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          ScreenOverlay.showConfirmationDialog(
-                                              context,
-                                              titleText: 'Open Maps',
-                                              description:
-                                                  'This will open another applicaiton to navigate to this location',
-                                              action: () {
-                                            LinkParser
-                                                .launchGoolgeMapsNavigation(
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.r),
+                      border: Border.all(color: Colors.black26, width: 0.6)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15.r),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 360.h,
+                      child: FlutterMap(
+                        options: MapOptions(
+                          onTap: (j, k) {
+                            HapticFeedback.selectionClick();
+                            print('ddd');
+                            ScreenOverlay.showAppSheet(
+                              context,
+                              playHomeVideoFrame: false,
+                              sheet: Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: 30.h, left: 10.w, right: 10.w),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      border: Border.all(
+                                          color: Colors.black26, width: 0.6)),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    child: SizedBox(
+                                      width: 400.w,
+                                      height: 710.h,
+                                      child: FlutterMap(
+                                        options: MapOptions(
+                                            minZoom: 5,
+                                            maxZoom: 20,
+                                            zoom: 17,
+                                            center: LatLng(
+                                                widget.ticketData
+                                                    .locationLatCoordinate,
+                                                widget.ticketData
+                                                    .locationLongCoordinate)),
+                                        children: [
+                                          TileLayer(
+                                            maxNativeZoom: 30,
+                                            retinaMode: true,
+                                            maxZoom: 30,
+                                            tileProvider: NetworkTileProvider(),
+                                            urlTemplate:
+                                                'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
+                                          ),
+                                          MarkerLayer(
+                                            markers: [
+                                              Marker(
+                                                width: 180.0,
+                                                height: 50.0,
+                                                point: LatLng(
                                                     widget.ticketData
                                                         .locationLatCoordinate,
                                                     widget.ticketData
-                                                        .locationLongCoordinate);
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: brandPrimaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10.r)),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              label(
-                                                  text: 'Go to Location',
-                                                  color: Colors.white),
-                                              10.pw,
-                                              Icon(
-                                                LucideIcons.locateFixed,
-                                                color: Colors
-                                                    .white, // Customize the marker color
-                                                size: 30.w,
-                                              ),
+                                                        .locationLongCoordinate), // Set the marker position
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    ScreenOverlay
+                                                        .showConfirmationDialog(
+                                                            context,
+                                                            titleText:
+                                                                'Open Maps',
+                                                            description:
+                                                                'This will open another applicaiton to navigate to this location',
+                                                            action: () {
+                                                      LinkParser.launchGoolgeMapsNavigation(
+                                                          widget.ticketData
+                                                              .locationLatCoordinate,
+                                                          widget.ticketData
+                                                              .locationLongCoordinate);
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            brandPrimaryColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    10.r)),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        label(
+                                                            text:
+                                                                'Go to Location',
+                                                            color:
+                                                                Colors.white),
+                                                        10.pw,
+                                                        Icon(
+                                                          LucideIcons
+                                                              .locateFixed,
+                                                          color: Colors
+                                                              .white, // Customize the marker color
+                                                          size: 30.w,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
                                             ],
-                                          ),
-                                        ),
+                                          )
+                                        ],
                                       ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                                       
-                                       
-                        },
-                        interactionOptions: const InteractionOptions(
-                            flags: InteractiveFlag.doubleTapZoom),
-                        minZoom: 5,
-                        maxZoom: 20,
-                        initialZoom: 17,
-                        initialCenter: LatLng(
-                            widget.ticketData.locationLatCoordinate,
-                            widget.ticketData.locationLongCoordinate),
-                      ),
-                      children: [
-                        TileLayer(
-                          maxNativeZoom: 30,
-                          retinaMode: true,
-                          maxZoom: 30,
-                          tileProvider: NetworkTileProvider(),
-                          urlTemplate:
-                              'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
-                        ),
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                              rotate: false,
-                              width: 180.0,
-                              height: 50.0,
-                              point: LatLng(
-                                  widget.ticketData.locationLatCoordinate,
-                                  widget.ticketData
-                                      .locationLongCoordinate), // Set the marker position
-                              child: GestureDetector(
-                                onTap: () {
-                                  ScreenOverlay.showConfirmationDialog(
-                                      context,
-                                      titleText: 'Open Maps',
-                                      description:
-                                          'This will open another applicaiton to navigate to this location',
-                                      action: () {
-                                    LinkParser.launchGoolgeMapsNavigation(
-                                        widget
-                                            .ticketData.locationLatCoordinate,
-                                        widget.ticketData
-                                            .locationLongCoordinate);
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: brandPrimaryColor,
-                                      borderRadius:
-                                          BorderRadius.circular(10.r)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    children: [
-                                      label(
-                                          text: 'Go to Location',
-                                          color: Colors.white),
-                                      10.pw,
-                                      Icon(
-                                        LucideIcons.locateFixed,
-                                        color: Colors
-                                            .white, // Customize the marker color
-                                        size: 30.w,
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            )
-                          ],
-                        )
-                      ],
+                            );
+                          },
+                          interactionOptions: const InteractionOptions(
+                              flags: InteractiveFlag.doubleTapZoom),
+                          minZoom: 5,
+                          maxZoom: 20,
+                          initialZoom: 17,
+                          initialCenter: LatLng(
+                              widget.ticketData.locationLatCoordinate,
+                              widget.ticketData.locationLongCoordinate),
+                        ),
+                        children: [
+                          TileLayer(
+                            maxNativeZoom: 30,
+                            retinaMode: true,
+                            maxZoom: 30,
+                            tileProvider: NetworkTileProvider(),
+                            urlTemplate:
+                                'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
+                          ),
+                          MarkerLayer(
+                            markers: [
+                              Marker(
+                                rotate: false,
+                                width: 180.0,
+                                height: 50.0,
+                                point: LatLng(
+                                    widget.ticketData.locationLatCoordinate,
+                                    widget.ticketData
+                                        .locationLongCoordinate), // Set the marker position
+                                child: GestureDetector(
+                                  onTap: () {
+                                    ScreenOverlay.showConfirmationDialog(
+                                        context,
+                                        titleText: 'Open Maps',
+                                        description:
+                                            'This will open another applicaiton to navigate to this location',
+                                        action: () {
+                                      LinkParser.launchGoolgeMapsNavigation(
+                                          widget
+                                              .ticketData.locationLatCoordinate,
+                                          widget.ticketData
+                                              .locationLongCoordinate);
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: brandPrimaryColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10.r)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        label(
+                                            text: 'Go to Location',
+                                            color: Colors.white),
+                                        10.pw,
+                                        Icon(
+                                          LucideIcons.locateFixed,
+                                          color: Colors
+                                              .white, // Customize the marker color
+                                          size: 30.w,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

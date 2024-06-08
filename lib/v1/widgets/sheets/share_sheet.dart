@@ -32,12 +32,12 @@ class ShareSheet extends StatelessWidget {
               : Column(
                 children: [
                   ClipRRect(
-                      borderRadius: BorderRadius.circular(8.r),
+                      borderRadius: BorderRadius.circular(15.r),
                       child: Stack(
                         children: [
                           OctoImage(
                             width: 420.w,
-                            height: 510.h,
+                            height: 540.h,
                             placeholderBuilder: OctoBlurHashFix.placeHolder(
                                 'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
                             errorBuilder: OctoError.icon(color: Colors.red),
@@ -48,7 +48,7 @@ class ShareSheet extends StatelessWidget {
                           ),
                           Container(
                             width: 420.w,
-                            height: 510.h,
+                            height: 540.h,
                             decoration: const BoxDecoration(
                                 gradient: LinearGradient(
                                     begin: Alignment.topCenter,
@@ -56,7 +56,7 @@ class ShareSheet extends StatelessWidget {
                                     colors: [Colors.transparent, Colors.black87])),
                           ),
                           Positioned(
-                            bottom: 65.h,
+                            bottom: 35.h,
                             left: 15.w,
                             right: 15.w,
                             child: Column(

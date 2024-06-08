@@ -95,12 +95,12 @@ class _ExploreDetailsState extends State<ExploreDetails>
         width: MediaQuery.of(context).size.width,
         height: 600.h,
         isClip: false,
-        onItemChanged: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        onClickItem: (index) {
+        // onItemChanged: (index) {
+        //   setState(() {
+        //     currentIndex = index;
+        //   });
+        // },
+        onClickItem: (currentIndex) {
           HapticFeedback.selectionClick();
           ScreenOverlay.showAppSheet(context,
               playHomeVideoFrame: false,
@@ -326,15 +326,13 @@ class _ExploreDetailsState extends State<ExploreDetails>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                           IconButton(
+                          IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
 
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
-                                    sheet: const ContextAi(
-                                   
-                                    ));
+                                    sheet: const ContextAi());
                               },
                               icon: Icon(CupertinoIcons.sparkles,
                                   color: brandPrimaryColor, size: 30.w)),
@@ -372,94 +370,103 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                   sheet: Padding(
                                     padding: EdgeInsets.only(
                                         bottom: 30.h, left: 10.w, right: 10.w),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                      child: SizedBox(
-                                        width: 400.w,
-                                        height: 730.h,
-                                        child: FlutterMap(
-                                          options: MapOptions(
-                                              minZoom: 5,
-                                              maxZoom: 20,
-                                              zoom: 17,
-                                              center: LatLng(
-                                                  widget.locationDetails
-                                                      .locationLatCoordinate,
-                                                  widget.locationDetails
-                                                      .locationLongCoordinate)),
-                                          children: [
-                                            TileLayer(
-                                              maxNativeZoom: 30,
-                                              retinaMode: true,
-                                              maxZoom: 30,
-                                              tileProvider:
-                                                  NetworkTileProvider(),
-                                              urlTemplate:
-                                                  'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
-                                            ),
-                                            MarkerLayer(
-                                              markers: [
-                                                Marker(
-                                                  width: 180.0,
-                                                  height: 50.0,
-                                                  point: LatLng(
-                                                      widget.locationDetails
-                                                          .locationLatCoordinate,
-                                                      widget.locationDetails
-                                                          .locationLongCoordinate), // Set the marker position
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      ScreenOverlay
-                                                          .showConfirmationDialog(
-                                                              context,
-                                                              titleText:
-                                                                  'Open Maps',
-                                                              description:
-                                                                  'This will open another applicaiton to navigate to this location',
-                                                              action: () {
-                                                        LinkParser.launchGoolgeMapsNavigation(
-                                                            widget
-                                                                .locationDetails
-                                                                .locationLatCoordinate,
-                                                            widget
-                                                                .locationDetails
-                                                                .locationLongCoordinate);
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              brandPrimaryColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.r)),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          label(
-                                                              text:
-                                                                  'Go to Location',
-                                                              color:
-                                                                  Colors.white),
-                                                          10.pw,
-                                                          Icon(
-                                                            LucideIcons
-                                                                .locateFixed,
-                                                            color: Colors
-                                                                .white, // Customize the marker color
-                                                            size: 30.w,
-                                                          ),
-                                                        ],
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          border: Border.all(
+                                              color: Colors.black26,
+                                              width: 0.6)),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.r),
+                                        child: SizedBox(
+                                          width: 400.w,
+                                          height: 730.h,
+                                          child: FlutterMap(
+                                            options: MapOptions(
+                                                minZoom: 5,
+                                                maxZoom: 20,
+                                                zoom: 17,
+                                                center: LatLng(
+                                                    widget.locationDetails
+                                                        .locationLatCoordinate,
+                                                    widget.locationDetails
+                                                        .locationLongCoordinate)),
+                                            children: [
+                                              TileLayer(
+                                                maxNativeZoom: 30,
+                                                retinaMode: true,
+                                                maxZoom: 30,
+                                                tileProvider:
+                                                    NetworkTileProvider(),
+                                                urlTemplate:
+                                                    'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
+                                              ),
+                                              MarkerLayer(
+                                                markers: [
+                                                  Marker(
+                                                    width: 180.0,
+                                                    height: 50.0,
+                                                    point: LatLng(
+                                                        widget.locationDetails
+                                                            .locationLatCoordinate,
+                                                        widget.locationDetails
+                                                            .locationLongCoordinate), // Set the marker position
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        ScreenOverlay
+                                                            .showConfirmationDialog(
+                                                                context,
+                                                                titleText:
+                                                                    'Open Maps',
+                                                                description:
+                                                                    'This will open another applicaiton to navigate to this location',
+                                                                action: () {
+                                                          LinkParser.launchGoolgeMapsNavigation(
+                                                              widget
+                                                                  .locationDetails
+                                                                  .locationLatCoordinate,
+                                                              widget
+                                                                  .locationDetails
+                                                                  .locationLongCoordinate);
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            color:
+                                                                brandPrimaryColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.r)),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            label(
+                                                                text:
+                                                                    'Go to Location',
+                                                                color: Colors
+                                                                    .white),
+                                                            10.pw,
+                                                            Icon(
+                                                              LucideIcons
+                                                                  .locateFixed,
+                                                              color: Colors
+                                                                  .white, // Customize the marker color
+                                                              size: 30.w,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                          ],
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -520,18 +527,17 @@ class _ExploreDetailsState extends State<ExploreDetails>
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 2, horizontal: 3),
+                                  vertical: 2, horizontal: 4),
                               decoration: BoxDecoration(
-                                  color: Colors.transparent,
+                                  color: Colors.red[300],
                                   border: Border.all(
-                                    width: 0.6,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20.r)),
+                                      width: 0.6, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(8.r)),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(LineIcons.heart,
-                                          color: brandPrimaryColor, size: 24.w)
+                                          color: Colors.white, size: 24.w)
                                       .animate(
                                         autoPlay: false,
                                         controller: likeAnimationController,
@@ -544,12 +550,11 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                       text:
                                           '${widget.locationDetails.likeCount}',
                                       fontSize: 22.sp,
-                                      color: brandPrimaryColor),
+                                      color: Colors.white),
                                 ],
                               ),
                             ),
                           ),
-              
                         ],
                       ),
                       20.ph,
@@ -690,8 +695,8 @@ class _ExploreDetailsState extends State<ExploreDetails>
                               horizontal: 20.w, vertical: 15.h),
                           width: double.infinity,
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: brandPrimaryColor.withOpacity(0.4)),
+                              border:
+                                  Border.all(width: 0.6, color: Colors.black26),
                               color: extraInfoState[0]
                                   ? brandPrimaryColor.withOpacity(0.2)
                                   : brandPrimaryColor.withOpacity(0.1),
