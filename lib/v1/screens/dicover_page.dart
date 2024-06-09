@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ import 'package:zula/v1/screens/search_result_page.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
+
+
 
 class CustomSearchDelegate extends SearchDelegate<String> {
   LocationController locationController = Get.find();
@@ -143,54 +146,56 @@ class DiscoverPage extends StatefulWidget {
 class _DiscoverPageState extends State<DiscoverPage> {
   LocationController locationController = Get.find();
 
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
+      // leading: Container(),
+      automaticallyImplyLeading: false,
+      actions: [
+        IconButton(
+          icon: Icon(
+            LucideIcons.search,
+            color: brandPrimaryColor,
+          ),
+          onPressed: () {
+            showSearch(
+                context: context,
+                useRootNavigator: true,
+                delegate: CustomSearchDelegate());
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            CupertinoIcons.sparkles,
+            color: brandPrimaryColor,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ChatWidget()));
+          },
+        ),
+      ],
+      title: title(
+          text: 'Discover',
+          fontSize: 46.sp,
+          color: brandPrimaryColor,
+          fontFamily: 'TypoGraphica',
+          textAlign: TextAlign.center),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _appBar(context),
       backgroundColor: Colors.white,
       body: Obx(() {
         return Stack(
           clipBehavior: Clip.none,
           children: [
             Positioned(
-                top: Platform.isAndroid ? 40.h : 60.h,
-                left: 20.w,
-                right: 20.w,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      title(
-                          text: 'Discover',
-                          fontSize: 46.sp,
-                          color: brandPrimaryColor,
-                          textAlign: TextAlign.center),
-                      const Spacer(),
-                      IconButton(
-                        icon: Icon(
-                          LucideIcons.search,
-                          color: brandPrimaryColor,
-                        ),
-                        onPressed: () {
-                          showSearch(
-                              context: context,
-                              useRootNavigator: true,
-                              delegate: CustomSearchDelegate());
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          CupertinoIcons.sparkles,
-                          color: brandPrimaryColor,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ChatWidget()));
-                        },
-                      ),
-                    ])),
-            Positioned(
-              top: 130.h,
+              top: 30.h,
               left: 20.w,
               right: 20.w,
               bottom: 90.0,

@@ -11,7 +11,6 @@ import 'package:flutter_gallery_3d/gallery3d.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -20,7 +19,6 @@ import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
 import 'package:zula/v1/controllers/location_controller.dart';
 import 'package:zula/v1/models/location_model.dart';
-import 'package:zula/v1/screens/ai_chat.dart';
 import 'package:zula/v1/screens/context_ai.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/link_parser.dart';
@@ -57,12 +55,11 @@ class _ExploreDetailsState extends State<ExploreDetails>
   late Gallery3DController controller;
 
   ScrollController activityScrollController = ScrollController();
-  List<bool> extraInfoState = [false, false];
+  List<bool> extraInfoState = [false];
 
   MapController controllerz = MapController();
   PageController galleryPageController = PageController(viewportFraction: 0.9);
   late AnimationController likeAnimationController;
-
   final DatePickerController dateController = DatePickerController();
 
   @override
@@ -95,13 +92,9 @@ class _ExploreDetailsState extends State<ExploreDetails>
         width: MediaQuery.of(context).size.width,
         height: 600.h,
         isClip: false,
-        // onItemChanged: (index) {
-        //   setState(() {
-        //     currentIndex = index;
-        //   });
-        // },
+    
         onClickItem: (currentIndex) {
-          HapticFeedback.selectionClick();
+          
           ScreenOverlay.showAppSheet(context,
               playHomeVideoFrame: false,
               sheet: SizedBox(
@@ -234,35 +227,35 @@ class _ExploreDetailsState extends State<ExploreDetails>
               });
             }
           }
-
+      
           return true;
         },
         child: Stack(
           children: [
-            ParallaxWidget(
-              top: topOne,
-              widget: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[Colors.white, Colors.transparent],
-                      stops: [0.6, 0.99],
-                    ).createShader(
-                      Rect.fromLTRB(
-                        0,
-                        0,
-                        bounds.width,
-                        bounds.height,
-                      ),
-                    );
-                  },
-                  blendMode: BlendMode.dstATop,
-                  child: BackgrounBlurView(
-                    imageUrl: widget.locationDetails
-                        .locationPicture[currentIndex].locationPictureUrl,
-                  )),
-            ),
+             ParallaxWidget(
+               top: topOne,
+               widget: ShaderMask(
+                   shaderCallback: (Rect bounds) {
+                     return const LinearGradient(
+                       begin: Alignment.topCenter,
+                       end: Alignment.bottomCenter,
+                       colors: <Color>[Colors.white, Colors.transparent],
+                       stops: [0.6, 0.99],
+                     ).createShader(
+                       Rect.fromLTRB(
+                         0,
+                         0,
+                         bounds.width,
+                         bounds.height,
+                       ),
+                     );
+                   },
+                   blendMode: BlendMode.dstATop,
+                   child: BackgrounBlurView(
+                     imageUrl: widget.locationDetails
+                         .locationPicture[currentIndex].locationPictureUrl,
+                   )),
+             ),
             ListView(
               padding: EdgeInsets.only(top: 65.h),
               shrinkWrap: true,
@@ -329,7 +322,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
-
+      
                                 ScreenOverlay.showAppSheet(context,
                                     playHomeVideoFrame: false,
                                     sheet: const ContextAi());
@@ -363,7 +356,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                           IconButton(
                               onPressed: () {
                                 HapticFeedback.selectionClick();
-
+      
                                 ScreenOverlay.showAppSheet(
                                   context,
                                   playHomeVideoFrame: false,
@@ -510,7 +503,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                             onTap: () {
                               HapticFeedback.selectionClick();
                               likeAnimationController.forward();
-
+      
                               locationController
                                   .favoriteLocation(
                                       locationId: widget.locationDetails.id)
@@ -573,33 +566,43 @@ class _ExploreDetailsState extends State<ExploreDetails>
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  HapticFeedback.selectionClick();
+                                  
                                   ScreenOverlay.showAppSheet(context,
                                       playHomeVideoFrame: false,
                                       sheet: Padding(
                                         padding: EdgeInsets.only(
+                                          top:30.h,
                                             bottom: 30.h,
                                             left: 10.w,
                                             right: 10.w),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.r),
-                                          child: OctoImage(
-                                            height: 720.h,
-                                            width: double.infinity,
-                                            placeholderBuilder:
-                                                OctoBlurHashFix.placeHolder(
-                                                    'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                                            errorBuilder: OctoError.icon(
-                                                color: Colors.red),
-                                            image: CachedNetworkImageProvider(
-                                              widget
-                                                  .locationDetails
-                                                  .locationActivity[index]
-                                                  .locationActivityPictureUrl,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                              child: OctoImage(
+                                                height: 690.h,
+                                                width: double.infinity,
+                                                placeholderBuilder:
+                                                    OctoBlurHashFix.placeHolder(
+                                                        'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                                                errorBuilder: OctoError.icon(
+                                                    color: Colors.red),
+                                                image: CachedNetworkImageProvider(
+                                                  widget
+                                                      .locationDetails
+                                                      .locationActivity[index]
+                                                      .locationActivityPictureUrl,
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
-                                            fit: BoxFit.cover,
-                                          ),
+                                            10.ph,
+                                            heading(text: widget
+                                                      .locationDetails
+                                                      .locationActivity[index].locationActivityName)
+                                          ],
                                         ),
                                       ));
                                 },

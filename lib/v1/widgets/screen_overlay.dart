@@ -70,7 +70,10 @@ class ScreenOverlay {
                     Center(
                         child: TextButton(
                       child: paragraph(text: 'Sign in later'),
-                      onPressed: () {},
+                      onPressed: () {
+                        authController.guestLogin(context);
+                        Navigator.pop(context);
+                      },
                     )),
                     20.ph,
                     paragraph(
@@ -226,8 +229,6 @@ class ScreenOverlay {
   }
 }
 
-
-
 class SignInButton extends StatelessWidget {
   const SignInButton({
     super.key,
@@ -271,8 +272,6 @@ class SignInButton extends StatelessWidget {
     );
   }
 }
-
-
 
 class AppTextBox extends StatefulWidget {
   const AppTextBox(

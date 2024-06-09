@@ -6,8 +6,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/constants/strings.dart';
+import 'package:zula/v1/screens/dicover_page.dart';
+import 'package:zula/v1/screens/notification_center.dart';
 import 'package:zula/v1/screens/settings_account.dart';
 import 'package:zula/v1/screens/settings_app_info.dart';
 import 'package:zula/v1/screens/settings_app_privacy.dart';
@@ -48,15 +51,54 @@ class _MySettingsState extends State<MySettings> {
     }
   }
 
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
+      actions: [
+        IconButton(
+          icon: Icon(
+            LineIcons.compass,
+            color: brandPrimaryColor,
+            size: 40.w,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const DiscoverPage()));
+          },
+        ),
+        // 10.pw,
+        IconButton(
+          icon: Icon(
+            LineIcons.bell,
+            color: brandPrimaryColor,
+            size: 40.w,
+          ),
+          onPressed: () {
+            ScreenOverlay.showAppSheet(context,
+                sheet: const NotificationCenter());
+          },
+        ),
+      ],
+      title: title(
+          text: 'Settings',
+          fontSize: 46.sp,
+          color: brandPrimaryColor,
+          fontFamily: 'TypoGraphica',
+          textAlign: TextAlign.center),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _appBar(context),
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           GridView.builder(
               padding: EdgeInsets.only(
-                  top: 130.h, left: 10.w, right: 10.w, bottom: 140),
+                  top: 30.h, left: 10.w, right: 10.w, bottom: 140),
               itemCount: settingsOptions.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisExtent: 255, crossAxisCount: 2),
@@ -107,10 +149,10 @@ class _MySettingsState extends State<MySettings> {
                   ),
                 );
               }),
-          const Header(
-            titleText: 'Settings',
-            headingText: '',
-          ),
+          // const Header(
+          //   titleText: 'Settings',
+          //   headingText: '',
+          // ),
         ],
       ),
     );

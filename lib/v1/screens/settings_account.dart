@@ -134,6 +134,7 @@ class AppAccountSection extends StatelessWidget {
                     action: () {
                   authController.guestLogout();
                   Navigator.pop(context);
+                  Navigator.pop(context);
                 });
               }),
           30.ph,

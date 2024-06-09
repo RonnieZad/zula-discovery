@@ -66,6 +66,22 @@ class _ChatWidgetState extends State<ChatWidget> {
     FirebaseAnalytics.instance.logScreenView(screenName: "AiCahtbotScreen");
   }
 
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
+      // leading: Container(),
+      // automaticallyImplyLeading: false,
+
+      title: title(
+          text: 'Zulando',
+          fontSize: 46.sp,
+          color: brandPrimaryColor,
+          fontFamily: 'TypoGraphica',
+          textAlign: TextAlign.center),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var textFieldDecoration = InputDecoration(
@@ -123,11 +139,12 @@ class _ChatWidgetState extends State<ChatWidget> {
     );
 
     return Scaffold(
-      backgroundColor: widget.sheetView! ? Colors.transparent : Colors.white,
+      backgroundColor: Colors.white,
+      appBar: _appBar(context),
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 80.h, left: 20.w, right: 20.w),
+            padding: EdgeInsets.only(left: 20.w, right: 20.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -205,6 +222,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                               ],
                             )
                           : ListView.builder(
+                            padding: EdgeInsets.only(top: 30.h),
                               shrinkWrap: true,
                               controller: _scrollController,
                               itemBuilder: (context, idx) {
@@ -219,6 +237,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                               itemCount: _generatedContent.length,
                             ),
                 ),
+                20.ph,
                 Material(
                   elevation: 30,
                   shadowColor: Colors.black45,
@@ -253,36 +272,6 @@ class _ChatWidgetState extends State<ChatWidget> {
               ],
             ),
           ),
-          Positioned(
-              top: Platform.isAndroid ? 40.h : 60.h,
-              left: 20.w,
-              right: 20.w,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Row(
-                          children: [
-                            if (!widget.sheetView!) ...[
-                              Icon(CupertinoIcons.arrow_left,
-                                  color: brandPrimaryColor, size: 30.w),
-                              20.pw,
-                            ],
-                            title(
-                                text: 'Zulando',
-                                fontSize: 46.sp,
-                                color: brandPrimaryColor,
-                                textAlign: TextAlign.center),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ])),
         ],
       ),
     );

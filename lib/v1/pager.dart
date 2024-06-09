@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:ui';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,8 +10,6 @@ import 'package:zula/v1/controllers/ticket_controller.dart';
 import 'package:zula/v1/screens/homepage.dart';
 import 'package:zula/v1/screens/settings.dart';
 import 'package:zula/v1/screens/ticket_page.dart';
-import 'package:zula/v1/utils/extensions.dart';
-import 'package:zula/v1/utils/typography.dart';
 
 class AppCanvas extends StatefulWidget {
   const AppCanvas({super.key});
@@ -47,74 +42,47 @@ class _AppCanvasState extends State<AppCanvas> {
               itemBuilder: (context, index) {
                 return appPages[index];
               }),
-
-              
           Positioned(
-              bottom: 0.h,
-              left: 0.w,
-              right: 0.w,
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.only(
-                    bottom: Platform.isAndroid ? 8.h : 30.h,
-                    top: 4.h,
-                    left: 40.w,
-                    right: 40.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: bottomNavbar
-                      .map((nav) => GestureDetector(
-                            onTap: () {
-                              HapticFeedback.lightImpact();
-                              analytics.logEvent(
-                                  name: 'pages_tracked',
-                                  parameters: {
-                                    "page_name": nav['label'],
-                                    "page_index": bottomNavbar.indexOf(nav)
-                                  });
-                              _appPageController
-                                  .jumpToPage(bottomNavbar.indexOf(nav));
-                              setState(() {
-                                locationController.currentPageIndex.value =
-                                    bottomNavbar.indexOf(nav);
-                              });
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    nav['icon'],
-                                    color: bottomNavbar.indexOf(nav) ==
-                                            locationController
-                                                .currentPageIndex.value
-                                        ? brandPrimaryColor
-                                        : brandPrimaryColor.withOpacity(0.7),
-                                    size: bottomNavbar.indexOf(nav) ==
-                                            locationController
-                                                .currentPageIndex.value
-                                        ? 38.w
-                                        : 28,
-                                  ),
-                                  6.ph,
-                                  label(
-                                    text: nav['label'],
-                                    color: bottomNavbar.indexOf(nav) ==
-                                            locationController
-                                                .currentPageIndex.value
-                                        ? brandPrimaryColor
-                                        : brandPrimaryColor.withOpacity(0.7),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                ),
-              ))
-        
-        
+            bottom: 0.h,
+            left: 0.w,
+            right: 0.w,
+            child: BottomNavigationBar(
+                enableFeedback: true,
+                unselectedIconTheme: IconThemeData(
+                    color: brandPrimaryColor.withOpacity(0.8), size: 30.w),
+                selectedIconTheme:
+                    IconThemeData(color: brandPrimaryColor, size: 35.w),
+                currentIndex: locationController.currentPageIndex.value,
+                selectedLabelStyle: TextStyle(
+                    fontSize: 18.sp,
+                    color: brandPrimaryColor,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Cereal'),
+                unselectedLabelStyle: TextStyle(
+                    fontSize: 17.sp,
+                    color: brandPrimaryColor,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Cereal'),
+                backgroundColor: Colors.white,
+                onTap: (value) {
+                  analytics.logEvent(name: 'pages_tracked', parameters: {
+                    "page_name": bottomNavbar[value]['label'],
+                    "page_index": value
+                  });
+                  _appPageController.jumpToPage(value);
+                  setState(() {
+                    locationController.currentPageIndex.value = value;
+                  });
+                },
+                items: bottomNavbar
+                    .map((nav) => BottomNavigationBarItem(
+                        tooltip: nav['label'],
+                        label: nav['label'],
+                        icon: Icon(
+                          nav['icon'],
+                        )))
+                    .toList()),
+          ),
         ],
       ),
     );

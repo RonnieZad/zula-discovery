@@ -14,7 +14,6 @@ import 'package:zula/v1/screens/docs.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:zula/v1/widgets/app_background.dart';
 import 'package:zula/v1/widgets/app_button.dart';
 import 'package:zula/v1/widgets/content_loading_widget.dart';
@@ -30,7 +29,7 @@ class GetStartedPage extends StatefulWidget {
 
 class _GetStartedPageState extends State<GetStartedPage>
     with TickerProviderStateMixin {
-  AuthController authController = Get.find();
+  AuthController authController = Get.put(AuthController());
   late final AnimationController _controller;
 
   @override
@@ -39,20 +38,14 @@ class _GetStartedPageState extends State<GetStartedPage>
       duration: const Duration(seconds: 5),
       vsync: this,
     )..repeat(reverse: true);
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   const SystemUiOverlayStyle(
-    //     statusBarColor: Colors.transparent,
-    //     systemNavigationBarColor: Colors.white,
-    //     systemNavigationBarIconBrightness: Brightness.dark,
-    //   ),
-    // );
+
     super.initState();
   }
 
   List<String> rowOne = [imageUrlList[0], imageUrlList[1], imageUrlList[2]];
   List<String> rowTwo = [imageUrlList[3], imageUrlList[4], imageUrlList[5]];
 
-  final deviceInfoPlugin = DeviceInfoPlugin();
+  // final deviceInfoPlugin = DeviceInfoPlugin();
 
   @override
   void didChangeDependencies() {
@@ -133,7 +126,11 @@ class _GetStartedPageState extends State<GetStartedPage>
                           hasPadding: false,
                           labelText: 'Get Started Already!',
                           action: () {
-                            ScreenOverlay.signInDialog(context, titleText: 'Get Started', description: 'Choose the most conveneint wsy to start', action: (){});
+                            ScreenOverlay.signInDialog(context,
+                                titleText: 'Get Started',
+                                description:
+                                    'Choose the most conveneint wsy to start',
+                                action: () {});
                             // authController.guestLogin(context);
 
                             FirebaseAnalytics.instance

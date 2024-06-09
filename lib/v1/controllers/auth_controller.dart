@@ -134,6 +134,9 @@ class AuthController extends GetxController {
       FirebaseAnalytics.instance.logEvent(name: 'AppSignOut');
       _userCredential.signOut();
       googleSignIn.signOut();
+      Get.reload();
+      Get.reset();
+      GetStorage().erase();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "operation-not-allowed":
