@@ -1,38 +1,38 @@
 import 'package:line_icons/line_icons.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-  List<String> optionsAi = [
-    "What are the top tourist attractions in Kampala?",
-    "Can you suggest some must-see places in Jinja?",
-    "What is the best time to visit Uganda?",
-    "What are some cultural customs I should be aware of when visiting Uganda?",
-    "How do I greet people in Uganda?",
-    "What are some traditional dishes to try in Uganda?",
-    "Can you help me plan a 7-day itinerary for Uganda?",
-    "What are some good day trips from Kampala?",
-    "How can I spend a weekend in Entebbe?",
-    "What are the best outdoor activities in Uganda?",
-    "Are there any hidden gems in Mbarara?",
-    "What are some family-friendly attractions in Uganda?",
-    "What is the best way to get around Kampala?",
-    "How can I use public transportation in Uganda?",
-    "Are there any reliable taxi apps in Uganda?",
-    "Can you recommend some budget hotels in Kampala?",
-    "What are the best areas to stay in Kampala?",
-    "How do I find last-minute hotel deals in Uganda?",
-    "Do I need a visa to travel to Uganda?",
-    "How long does it take to renew a passport for travel to Uganda?",
-    "What are the entry requirements for Uganda?",
-    "Are there any travel advisories for Uganda?",
-    "What vaccinations do I need for traveling to Uganda?",
-    "How do I get travel insurance for a trip to Uganda?",
-    "What are the top travel destinations in Uganda for 2024?",
-    "Where are the best places to travel in Uganda during winter?",
-    "Can you suggest some eco-friendly travel destinations in Uganda?",
-    "What are the best places for adventure travel in Uganda?",
-    "Can you recommend some romantic honeymoon destinations in Uganda?",
-    "Where are the best places for food lovers to visit in Uganda?"
-  ];
+List<String> optionsAi = [
+  "What are the top tourist attractions in Kampala?",
+  "Can you suggest some must-see places in Jinja?",
+  "What is the best time to visit Uganda?",
+  "What are some cultural customs I should be aware of when visiting Uganda?",
+  "How do I greet people in Uganda?",
+  "What are some traditional dishes to try in Uganda?",
+  "Can you help me plan a 7-day itinerary for Uganda?",
+  "What are some good day trips from Kampala?",
+  "How can I spend a weekend in Entebbe?",
+  "What are the best outdoor activities in Uganda?",
+  "Are there any hidden gems in Mbarara?",
+  "What are some family-friendly attractions in Uganda?",
+  "What is the best way to get around Kampala?",
+  "How can I use public transportation in Uganda?",
+  "Are there any reliable taxi apps in Uganda?",
+  "Can you recommend some budget hotels in Kampala?",
+  "What are the best areas to stay in Kampala?",
+  "How do I find last-minute hotel deals in Uganda?",
+  "Do I need a visa to travel to Uganda?",
+  "How long does it take to renew a passport for travel to Uganda?",
+  "What are the entry requirements for Uganda?",
+  "Are there any travel advisories for Uganda?",
+  "What vaccinations do I need for traveling to Uganda?",
+  "How do I get travel insurance for a trip to Uganda?",
+  "What are the top travel destinations in Uganda for 2024?",
+  "Where are the best places to travel in Uganda during winter?",
+  "Can you suggest some eco-friendly travel destinations in Uganda?",
+  "What are the best places for adventure travel in Uganda?",
+  "Can you recommend some romantic honeymoon destinations in Uganda?",
+  "Where are the best places for food lovers to visit in Uganda?"
+];
 
 List<String> imageUrlList = [
   "https://www.extremeadventures.co.ug/wp-content/uploads/2023/07/quad-bikes-1-1200.jpg",
@@ -143,37 +143,37 @@ final List<Map<String, dynamic>> experienceTabCategories = [
 
 List<Map<String, dynamic>> bottomNavbar = [
   {'icon': LineIcons.mapPin, 'label': 'Places'},
-  {'icon': LineIcons.alternateTicket, 'label': 'Tickets'},
+  {'icon': LineIcons.alternateTicket, 'label': 'Experiences'},
   {'icon': LineIcons.cog, 'label': 'Setup'}
 ];
 
-  List<Map<String, dynamic>> settingsOptions = [
-    {
-      'title': 'Account',
-      'description': 'Email Address\nPhone Number\nNotifications',
-      'icon': LucideIcons.user
-    },
-    // {
-    //   'title': 'Preferences',
-    //   'description': 'Theme\nLanguage\nInterests',
-    //   'icon': LucideIcons.settings
-    // },
-    {
-      'title': 'Privacy',
-      'description': 'Terms\nPrivacy\nPermissions',
-      'icon': LucideIcons.shield
-    },
-    {
-      'title': 'About',
-      'description': 'App Version\nTerms\nPrivacy Policy',
-      'icon': LucideIcons.info
-    },
-    // {
-    //   'title': 'About',
-    //   'description': 'App Version\nTerms\nPrivacy Policy',
-    //   'icon': LucideIcons.info
-    // }
-  ];
+List<Map<String, dynamic>> settingsOptions = [
+  {
+    'title': 'Account',
+    'description': 'Email Address\nPhone Number\nNotifications',
+    'icon': LucideIcons.user
+  },
+  // {
+  //   'title': 'Preferences',
+  //   'description': 'Theme\nLanguage\nInterests',
+  //   'icon': LucideIcons.settings
+  // },
+  {
+    'title': 'Privacy',
+    'description': 'Terms\nPrivacy\nPermissions',
+    'icon': LucideIcons.shield
+  },
+  {
+    'title': 'About',
+    'description': 'App Version\nTerms\nPrivacy Policy',
+    'icon': LucideIcons.info
+  },
+  // {
+  //   'title': 'About',
+  //   'description': 'App Version\nTerms\nPrivacy Policy',
+  //   'icon': LucideIcons.info
+  // }
+];
 
 String termsOfServie = '''
 

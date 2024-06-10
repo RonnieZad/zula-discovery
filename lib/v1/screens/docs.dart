@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zula/v1/constants/colors.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
 
@@ -25,20 +26,19 @@ class DocsPages extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          ListView(
-            padding: EdgeInsets.symmetric(horizontal: 30.w),
-            children: [
-              100.ph,
-              Center(
-                  child: title(
-                      text: headingText,
-                      textAlign: TextAlign.center,
-                      fontSize: 36.sp)),
-              20.ph,
-              paragraph(
-                  text: termsOfServie,
-                  fontSize: 22.sp,
-                  textAlign: textAlign ?? TextAlign.justify)
+          CustomScrollView(
+            slivers: [
+              _appBar(context),
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: paragraph(
+                      text: termsOfServie,
+                      fontSize: 22.sp,
+                      textAlign: textAlign ?? TextAlign.justify),
+                )
+              ]))
             ],
           ),
           Positioned(
@@ -83,6 +83,27 @@ class DocsPages extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  SliverAppBar _appBar(BuildContext context) {
+    return SliverAppBar(
+      floating: true,
+      pinned: true,
+      snap: true,
+      stretch: true,
+      automaticallyImplyLeading: false,
+      toolbarHeight: 130,
+      expandedHeight: 130.0,
+      backgroundColor: Colors.white,
+      centerTitle: true,
+      surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
+      title: title(
+          text: headingText,
+          fontSize: 46.sp,
+          color: brandPrimaryColor,
+          fontFamily: 'TypoGraphica',
+          textAlign: TextAlign.center),
     );
   }
 }

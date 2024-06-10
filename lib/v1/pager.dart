@@ -47,6 +47,7 @@ class _AppCanvasState extends State<AppCanvas> {
             left: 0.w,
             right: 0.w,
             child: BottomNavigationBar(
+              elevation: 0,
                 enableFeedback: true,
                 unselectedIconTheme: IconThemeData(
                     color: brandPrimaryColor.withOpacity(0.8), size: 30.w),

@@ -153,7 +153,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                               builder: (context) => DocsPages(
                                     termsOfServie: termsCondtionsText,
                                     headingText:
-                                        'Zula App\nTerms and Conditions',
+                                        'Terms and Conditions',
                                   )));
                     },
                     child: label(

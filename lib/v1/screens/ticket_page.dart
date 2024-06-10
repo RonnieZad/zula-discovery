@@ -47,7 +47,6 @@ class _TicketPageState extends State<TicketPage>
     super.initState();
   }
 
-
   AppBar _appBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
@@ -78,7 +77,7 @@ class _TicketPageState extends State<TicketPage>
         ),
       ],
       title: title(
-          text: 'Events',
+          text: 'Experiences',
           fontSize: 46.sp,
           color: brandPrimaryColor,
           fontFamily: 'TypoGraphica',
@@ -105,7 +104,6 @@ class _TicketPageState extends State<TicketPage>
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,10 +117,7 @@ class _TicketPageState extends State<TicketPage>
                     label: 'No Events found\nCheck your internet or Refresh')
                 : ListView.builder(
                         padding: EdgeInsets.only(
-                            top: Platform.isAndroid ? 25.h : 250.h,
-                            bottom: 90.h,
-                            left: 20.w,
-                            right: 20.w),
+                            top: 25.h, bottom: 90.h, left: 20.w, right: 20.w),
                         itemCount: tickerController.filteredEventTickets.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -153,27 +148,6 @@ class _TicketPageState extends State<TicketPage>
                     .animate()
                     .slideY(begin: 0.2, end: 0.0, duration: 150.ms)
                     .fade(duration: 500.ms),
-            // Header(
-            //   titleText: 'Events',
-            //   headingText: 'Experiences and Tickets',
-            //   bottomWidget: TabBar(
-            //       indicatorColor: brandPrimaryColor,
-            //       unselectedLabelColor: brandPrimaryColor.withOpacity(0.7),
-            //       labelColor: brandPrimaryColor,
-            //       tabAlignment: TabAlignment.start,
-            //       isScrollable: true,
-            //       controller: experienceTabController,
-            //       tabs: experienceTabCategories
-            //           .map((tapItem) => Tab(
-            //                 icon: Icon(tapItem['icon']),
-            //                 text: tapItem['label'],
-            //               ))
-            //           .toList(),
-            //       onTap: (tabIndex) {
-            //         HapticFeedback.lightImpact();
-            //         tickerController.filterEventCategory(tabIndex);
-            //       }),
-            // )
           ],
         );
       }),

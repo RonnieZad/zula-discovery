@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -26,6 +28,67 @@ import 'package:zula/v1/widgets/screen_overlay.dart';
 import 'package:zula/v1/widgets/sheets/purchase_ticket_sheet.dart';
 import 'package:zula/v1/widgets/sheets/share_sheet.dart';
 
+class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.showAppBar,
+    required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final bool showAppBar;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final double visibleHeight = showAppBar ? maxHeight : 0.0;
+    return SizedBox.expand(
+      child: AnimatedContainer(
+        // color: Colors.red,
+        duration: Duration(milliseconds: 300),
+        height: visibleHeight,
+        child: showAppBar ? child : null,
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        // minHeight != oldDelegate.minHeight ||
+        showAppBar != oldDelegate.showAppBar ||
+        child != oldDelegate.child;
+  }
+
+  SliverPersistentHeader buildPersistentHeader(
+      double shrinkOffset, bool overlapsContent) {
+    return SliverPersistentHeader(
+      delegate: this,
+    );
+  }
+
+  SliverGeometry getSliverGeometry(double shrinkOffset, bool overlapsContent) {
+    final double effectiveHeight = showAppBar ? maxHeight - shrinkOffset : 0.0;
+    return SliverGeometry(
+      scrollExtent: maxHeight,
+      paintExtent: effectiveHeight,
+      maxPaintExtent: maxHeight,
+      layoutExtent: effectiveHeight,
+      hasVisualOverflow: true,
+    );
+  }
+
+}
+
 class TicketPageDetail extends StatefulWidget {
   const TicketPageDetail({super.key, required this.ticketData});
   final Ticket ticketData;
@@ -41,14 +104,37 @@ class _TicketPageDetailState extends State<TicketPageDetail>
   PageController galleryPageController = PageController(viewportFraction: 0.9);
 
   late AnimationController likeAnimationController;
+  final ScrollController _scrollController = ScrollController();
+  bool _showAppBar = false;
 
   @override
   void initState() {
+    super.initState();
     likeAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 5),
     );
-    super.initState();
+    _scrollController.addListener(() {
+      double currentOffset = _scrollController.offset;
+
+      if (currentOffset > 300) {
+        // User is scrolling down
+        setState(() {
+          _showAppBar = true;
+        });
+      } else if (currentOffset < 300) {
+        // User is scrolling up
+        setState(() {
+          _showAppBar = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -57,665 +143,794 @@ class _TicketPageDetailState extends State<TicketPageDetail>
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Positioned(
-            top: 0.0,
-            left: 20.w,
-            right: 20.w,
-            bottom: 0.0,
-            child: ListView(
-              padding: EdgeInsets.only(top: 70.h),
-              shrinkWrap: true,
-              children: [
-                Hero(
-                        tag: widget.ticketData.eventTitle,
-                        child: EventTicketWidget(
-                          ticketData: widget.ticketData,
-                          showTicketDetails: true,
-                        ))
-                    .animate()
-                    .then(delay: 240.ms)
-                    .shakeX()
-                    .shakeY()
-                    .animate(onPlay: (controller) => controller.repeat())
-                    .then(delay: 940.ms)
-                    .shimmer(
-                        delay: 700.ms,
-                        duration: 2000.ms,
-                        color: Theme.of(context)
-                            .scaffoldBackgroundColor
-                            .withOpacity(0.3)),
-                10.ph,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    heading(
-                        text: 'About',
-                        fontSize: 27.sp,
-                        color: brandPrimaryColor),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        // IconButton(
-                        //     onPressed: () {},
-                        //     icon: Icon(Icons.threed_rotation,
-                        //         color: brandPrimaryColor, size: 30.w)),
-                        // IconButton(
-                        //     onPressed: () {},
-                        //     icon: Icon(LucideIcons.quote,
-                        //         color: brandPrimaryColor, size: 30.w)),
-                        IconButton(
-                                onPressed: () {
-                                  likeAnimationController.forward();
-                                  HapticFeedback.selectionClick();
-                                  tickerController
-                                      .favoriteEventTicket(
-                                          eventId: widget.ticketData.id)
-                                      .then((updatedCountLike) {
-                                    likeAnimationController.reset();
-                                    if (updatedCountLike != null) {
-                                      setState(() {
-                                        widget.ticketData.interestedCount =
-                                            updatedCountLike;
-                                      });
-                                    }
-                                  });
-                                  ;
-                                },
-                                icon: Icon(LineIcons.heart,
-                                    color: brandPrimaryColor, size: 30.w))
-                            .animate(
-                              autoPlay: false,
-                              controller: likeAnimationController,
-                              onComplete: (animController) {
-                                animController.repeat();
-                              },
-                            )
-                            .scaleXY(begin: 1.0, end: 0.6),
-                        IconButton(
-                            onPressed: () {
-                              ScreenOverlay.showAppSheet(context,
-                                  playHomeVideoFrame: false,
-                                  sheet: const ShareSheet());
-                            },
-                            icon: Icon(LineIcons.share,
-                                color: brandPrimaryColor, size: 30.w)),
+          CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+            
+            if(_showAppBar)...[
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: SliverAppBarDelegate(
+                    minHeight: Platform.isAndroid ? 100.h: 120.h,
+                    maxHeight: Platform.isAndroid ? 110.h : 140.h,
+                    showAppBar: _showAppBar,
+                    child: AppBar(
+                      backgroundColor: Colors.white,
+                      surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
+                      automaticallyImplyLeading: false,
+                      title: title(
+                        text: widget.ticketData.eventTitle,
+                        fontSize: 30.sp,
+                        color: brandPrimaryColor,
+                      ),
+                      actions: [
+                        GestureDetector(
+                          onTap: () {
+                            
+                            ScreenOverlay.showAppSheet(context,
+                                sheet: PurchaseTicketSheet(
+                                    ticketData: widget.ticketData));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 20.w),
+                            decoration: BoxDecoration(
+                              color: brandPrimaryColor.withOpacity(0.9),
+                              borderRadius: BorderRadius.circular(50.r),
+                              border: Border.all(
+                                  color: brandPrimaryColor.withOpacity(0.4),
+                                  width: 0.6),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Colors.white38,
+                                    blurRadius: 20.0,
+                                    spreadRadius: 1)
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50.r),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                    sigmaX: 30.0, sigmaY: 30.0),
+                                child: Container(
+                                    padding: EdgeInsets.all(10.w),
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white60),
+                                    child: label(text: 'Purchase Ticket')),
+                              ),
+                            ),
+                          ),
+                        )
                       ],
-                    ),
-                  ],
-                ),
-                10.ph,
-                Row(
-                  children: [
-                    Icon(Icons.favorite, color: Colors.red, size: 30.w),
-                    10.pw,
-                    label(
-                        text:
-                            '${widget.ticketData.interestedCount} people like this'),
-                  ],
-                ),
-                15.ph,
-                Row(
-                  children: [
-                    Icon(LucideIcons.building, size: 28.w),
-                    10.pw,
-                    label(text: widget.ticketData.organiserName),
-                  ],
-                ),
-                20.ph,
-                paragraph(text: widget.ticketData.eventDescription),
-                20.ph,
-                heading(
-                    text: 'Gallery', fontSize: 27.sp, color: brandPrimaryColor),
-                15.ph,
-                SizedBox(
-                  height: 410.h,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.r),
-                    child: GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        itemCount: widget.ticketData.ticketEventAlbum.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisSpacing: 4,
-                            mainAxisSpacing: 4,
-                            crossAxisCount: 3,
-                            mainAxisExtent: 200.h),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              ScreenOverlay.showAppSheet(context,
-                                  playHomeVideoFrame: false,
-                                  sheet: SizedBox(
-                                    height: 760.h,
-                                    child: PageView.builder(
-                                      controller: galleryPageController,
-                                      itemCount: widget
-                                          .ticketData.ticketEventAlbum.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5.w, vertical: 15.h),
-                                          child: Stack(
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(16.r),
-                                                child: OctoImage(
-                                                  height: double.infinity,
-                                                  width: double.infinity,
-                                                  placeholderBuilder:
-                                                      OctoBlurHashFix.placeHolder(
-                                                          'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                                                  errorBuilder: OctoError.icon(
-                                                      color: Colors.red),
-                                                  image:
-                                                      CachedNetworkImageProvider(
-                                                    widget
-                                                        .ticketData
-                                                        .ticketEventAlbum[index]
-                                                        .assetUrl,
-                                                  ),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 10.0,
-                                                right: 10.0,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.r),
-                                                  child: BackdropFilter(
-                                                    filter: ImageFilter.blur(
-                                                        sigmaX: 40.0,
-                                                        sigmaY: 40.0),
-                                                    child: Container(
+                    )),
+              )],
+             
+             
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            90.ph,
+                            Hero(
+                                    tag: widget.ticketData.eventTitle,
+                                    child: EventTicketWidget(
+                                      ticketData: widget.ticketData,
+                                      showTicketDetails: true,
+                                    ))
+                                .animate()
+                                .then(delay: 240.ms)
+                                .shakeX()
+                                .shakeY()
+                                .animate(
+                                    onPlay: (controller) => controller.repeat())
+                                .then(delay: 940.ms)
+                                .shimmer(
+                                    delay: 700.ms,
+                                    duration: 2000.ms,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor
+                                        .withOpacity(0.3)),
+                            10.ph,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                heading(
+                                    text: 'About',
+                                    fontSize: 27.sp,
+                                    color: brandPrimaryColor),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    // IconButton(
+                                    //     onPressed: () {},
+                                    //     icon: Icon(Icons.threed_rotation,
+                                    //         color: brandPrimaryColor, size: 30.w)),
+                                    // IconButton(
+                                    //     onPressed: () {},
+                                    //     icon: Icon(LucideIcons.quote,
+                                    //         color: brandPrimaryColor, size: 30.w)),
+                                    IconButton(
+                                            onPressed: () {
+                                              likeAnimationController.forward();
+                                              HapticFeedback.selectionClick();
+                                              tickerController
+                                                  .favoriteEventTicket(
+                                                      eventId:
+                                                          widget.ticketData.id)
+                                                  .then((updatedCountLike) {
+                                                likeAnimationController.reset();
+                                                if (updatedCountLike != null) {
+                                                  setState(() {
+                                                    widget.ticketData
+                                                            .interestedCount =
+                                                        updatedCountLike;
+                                                  });
+                                                }
+                                              });
+                                              
+                                            },
+                                            icon: Icon(LineIcons.heart,
+                                                color: brandPrimaryColor,
+                                                size: 30.w))
+                                        .animate(
+                                          autoPlay: false,
+                                          controller: likeAnimationController,
+                                          onComplete: (animController) {
+                                            animController.repeat();
+                                          },
+                                        )
+                                        .scaleXY(begin: 1.0, end: 0.6),
+                                    IconButton(
+                                        onPressed: () {
+                                          ScreenOverlay.showAppSheet(context,
+                                              playHomeVideoFrame: false,
+                                              sheet: const ShareSheet());
+                                        },
+                                        icon: Icon(LineIcons.share,
+                                            color: brandPrimaryColor,
+                                            size: 30.w)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            10.ph,
+                            Row(
+                              children: [
+                                Icon(Icons.favorite,
+                                    color: Colors.red, size: 30.w),
+                                10.pw,
+                                label(
+                                    text:
+                                        '${widget.ticketData.interestedCount} people like this'),
+                              ],
+                            ),
+                            15.ph,
+                            Row(
+                              children: [
+                                Icon(LucideIcons.building, size: 28.w),
+                                10.pw,
+                                label(text: widget.ticketData.organiserName),
+                              ],
+                            ),
+                            20.ph,
+                            paragraph(text: widget.ticketData.eventDescription),
+                            20.ph,
+                            heading(
+                                text: 'Gallery',
+                                fontSize: 27.sp,
+                                color: brandPrimaryColor),
+                            15.ph,
+                            SizedBox(
+                              height: 410.h,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.r),
+                                child: GridView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.zero,
+                                    itemCount: widget
+                                        .ticketData.ticketEventAlbum.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisSpacing: 4,
+                                            mainAxisSpacing: 4,
+                                            crossAxisCount: 3,
+                                            mainAxisExtent: 200.h),
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          ScreenOverlay.showAppSheet(context,
+                                              playHomeVideoFrame: false,
+                                              sheet: SizedBox(
+                                                height: 760.h,
+                                                child: PageView.builder(
+                                                  controller:
+                                                      galleryPageController,
+                                                  itemCount: widget.ticketData
+                                                      .ticketEventAlbum.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Padding(
                                                       padding:
                                                           EdgeInsets.symmetric(
-                                                              vertical: 5,
-                                                              horizontal: 15.w),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.r),
-                                                          color:
-                                                              Colors.black38),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
+                                                              horizontal: 5.w,
+                                                              vertical: 15.h),
+                                                      child: Stack(
                                                         children: [
-                                                          paragraph(
-                                                              text:
-                                                                  '${index + 1} out of ${widget.ticketData.ticketEventAlbum.length}',
-                                                              color:
-                                                                  Colors.white),
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        16.r),
+                                                            child: OctoImage(
+                                                              height: double
+                                                                  .infinity,
+                                                              width: double
+                                                                  .infinity,
+                                                              placeholderBuilder:
+                                                                  OctoBlurHashFix
+                                                                      .placeHolder(
+                                                                          'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                                                              errorBuilder:
+                                                                  OctoError.icon(
+                                                                      color: Colors
+                                                                          .red),
+                                                              image:
+                                                                  CachedNetworkImageProvider(
+                                                                widget
+                                                                    .ticketData
+                                                                    .ticketEventAlbum[
+                                                                        index]
+                                                                    .assetUrl,
+                                                              ),
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                          Positioned(
+                                                            top: 10.0,
+                                                            right: 10.0,
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.r),
+                                                              child:
+                                                                  BackdropFilter(
+                                                                filter: ImageFilter
+                                                                    .blur(
+                                                                        sigmaX:
+                                                                            40.0,
+                                                                        sigmaY:
+                                                                            40.0),
+                                                                child:
+                                                                    Container(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                          5,
+                                                                      horizontal:
+                                                                          15.w),
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(10
+                                                                              .r),
+                                                                      color: Colors
+                                                                          .black38),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      paragraph(
+                                                                          text:
+                                                                              '${index + 1} out of ${widget.ticketData.ticketEventAlbum.length}',
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
                                                         ],
                                                       ),
-                                                    ),
-                                                  ),
+                                                    );
+                                                  },
                                                 ),
+                                              ));
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                          child: OctoImage(
+                                            placeholderBuilder:
+                                                OctoBlurHashFix.placeHolder(
+                                                    'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                                            errorBuilder: OctoError.icon(
+                                                color: Colors.red),
+                                            image: CachedNetworkImageProvider(
+                                              widget
+                                                  .ticketData
+                                                  .ticketEventAlbum[index]
+                                                  .assetUrl,
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ),
+                            20.ph,
+                            heading(
+                                text: 'Itenary',
+                                fontSize: 27.sp,
+                                color: brandPrimaryColor),
+                            15.ph,
+                            paragraph(
+                                text: widget.ticketData.meetUpInstructions),
+                            20.ph,
+                            Timeline.tileBuilder(
+                              clipBehavior: Clip.none,
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              physics: const NeverScrollableScrollPhysics(),
+                              builder: TimelineTileBuilder(
+                                startConnectorBuilder: (context, index) {
+                                  return SolidLineConnector(
+                                    thickness: 5,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color!
+                                        .withOpacity(0.6),
+                                  );
+                                },
+                                endConnectorBuilder: (context, index) {
+                                  return SolidLineConnector(
+                                    thickness: 5,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color!
+                                        .withOpacity(0.6),
+                                  );
+                                },
+                                indicatorBuilder: (context, index) {
+                                  return Container(
+                                    width: 60.w,
+                                    height: 60.w,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: brandPrimaryColor),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        heading(
+                                            text: 'Day',
+                                            fontSize: 16.sp,
+                                            color: Colors.white),
+                                        paragraph(
+                                            text: '${index + 1}',
+                                            fontSize: 16.sp,
+                                            color: Colors.white)
+                                      ],
+                                    ),
+                                  );
+                                },
+                                contentsAlign: ContentsAlign.alternating,
+                                oppositeContentsBuilder: (context, index) =>
+                                    Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      captionBold(
+                                          text: widget.ticketData
+                                              .eventItinerary[index].title,
+                                          fontSize: 17.sp),
+                                      paragraph(
+                                          text: widget
+                                              .ticketData
+                                              .eventItinerary[index]
+                                              .description,
+                                          fontSize: 17.sp),
+                                      4.ph,
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(16.r),
+                                        child: OctoImage(
+                                          width: 90.w,
+                                          height: 90.w,
+                                          placeholderBuilder:
+                                              OctoBlurHashFix.placeHolder(
+                                                  'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                                          errorBuilder:
+                                              OctoError.icon(color: Colors.red),
+                                          image: CachedNetworkImageProvider(
+                                              widget
+                                                  .ticketData
+                                                  .eventItinerary[index]
+                                                  .assetUrl),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                itemCount:
+                                    widget.ticketData.eventItinerary.length,
+                              ),
+                            ),
+                            35.ph,
+                            heading(
+                                text: 'Extra Information',
+                                fontSize: 27.sp,
+                                color: brandPrimaryColor),
+                            15.ph,
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  
+                                  extraInfoState[0] = !extraInfoState[0];
+                                });
+                              },
+                              child: AnimatedContainer(
+                                margin: EdgeInsets.only(bottom: 10.h),
+                                duration: const Duration(milliseconds: 300),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 15.h),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 0.6, color: Colors.black26),
+                                    color: extraInfoState[0]
+                                        ? brandPrimaryColor.withOpacity(0.2)
+                                        : brandPrimaryColor.withOpacity(0.09),
+                                    borderRadius: BorderRadius.circular(15.r)),
+                                child: extraInfoState[0]
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              label(
+                                                  text: 'Things to do',
+                                                  color: brandPrimaryColor
+                                                      .withOpacity(0.8)),
+                                              Icon(
+                                                LucideIcons.chevronUp,
+                                                color: brandPrimaryColor
+                                                    .withOpacity(0.8),
                                               )
                                             ],
+                                          ),
+                                          ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              padding: EdgeInsets.only(
+                                                  left: 15.w, top: 10.h),
+                                              itemCount: widget.ticketData
+                                                  .eventActivities.length,
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 10.0),
+                                                  child: paragraph(
+                                                      fontSize: 19.5.sp,
+                                                      text:
+                                                          '- ${widget.ticketData.eventActivities[index].title}'),
+                                                );
+                                              }),
+                                          10.ph,
+                                          label(
+                                              text: 'Things to carry',
+                                              color: brandPrimaryColor
+                                                  .withOpacity(0.8)),
+                                          ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              padding: EdgeInsets.only(
+                                                  left: 15.w, top: 10.h),
+                                              itemCount: widget.ticketData
+                                                  .thingsToCarry.length,
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 10.0),
+                                                  child: paragraph(
+                                                      fontSize: 19.5.sp,
+                                                      text:
+                                                          '- ${widget.ticketData.thingsToCarry[index].title}'),
+                                                );
+                                              }),
+                                          10.ph,
+                                          label(
+                                              text: 'What is provided',
+                                              color: brandPrimaryColor
+                                                  .withOpacity(0.8)),
+                                          ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              padding: EdgeInsets.only(
+                                                  left: 15.w, top: 10.h),
+                                              itemCount: widget.ticketData
+                                                  .whatIsProvided.length,
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 10.0),
+                                                  child: paragraph(
+                                                      fontSize: 19.5.sp,
+                                                      text:
+                                                          '- ${widget.ticketData.whatIsProvided[index].title}'),
+                                                );
+                                              }),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              label(
+                                                  text: 'Things to do',
+                                                  color: brandPrimaryColor
+                                                      .withOpacity(0.8)),
+                                              Icon(
+                                                LucideIcons.chevronDown,
+                                                color: brandPrimaryColor
+                                                    .withOpacity(0.8),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                              ),
+                            ),
+                            20.ph,
+                            heading(
+                                text: 'Map Location',
+                                fontSize: 27.sp,
+                                color: brandPrimaryColor),
+                            15.ph,
+                            paragraph(
+                                text:
+                                    'Event location is accessbile with ample parking. Make sure to travel early to avoid traffic around this area'),
+                            15.ph,
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  border: Border.all(
+                                      color: Colors.black26, width: 0.6)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.r),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 360.h,
+                                  child: FlutterMap(
+                                    options: MapOptions(
+                                      onTap: (j, k) {
+                                        ScreenOverlay.showAppSheet(
+                                          context,
+                                          playHomeVideoFrame: false,
+                                          sheet: Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: 30.h,
+                                                left: 10.w,
+                                                right: 10.w),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.r),
+                                                  border: Border.all(
+                                                      color: Colors.black26,
+                                                      width: 0.6)),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.r),
+                                                child: SizedBox(
+                                                  width: 400.w,
+                                                  height: 710.h,
+                                                  child: FlutterMap(
+                                                    options: MapOptions(
+                                                        minZoom: 5,
+                                                        maxZoom: 20,
+                                                        zoom: 17,
+                                                        center: LatLng(
+                                                            widget.ticketData
+                                                                .locationLatCoordinate,
+                                                            widget.ticketData
+                                                                .locationLongCoordinate)),
+                                                    children: [
+                                                      TileLayer(
+                                                        maxNativeZoom: 30,
+                                                        retinaMode: true,
+                                                        maxZoom: 30,
+                                                        tileProvider:
+                                                            NetworkTileProvider(),
+                                                        urlTemplate:
+                                                            'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
+                                                      ),
+                                                      MarkerLayer(
+                                                        markers: [
+                                                          Marker(
+                                                            width: 180.0,
+                                                            height: 50.0,
+                                                            point: LatLng(
+                                                                widget
+                                                                    .ticketData
+                                                                    .locationLatCoordinate,
+                                                                widget
+                                                                    .ticketData
+                                                                    .locationLongCoordinate), // Set the marker position
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                ScreenOverlay.showConfirmationDialog(
+                                                                    context,
+                                                                    titleText:
+                                                                        'Open Maps',
+                                                                    description:
+                                                                        'This will open another applicaiton to navigate to this location',
+                                                                    action: () {
+                                                                  LinkParser.launchGoolgeMapsNavigation(
+                                                                      widget
+                                                                          .ticketData
+                                                                          .locationLatCoordinate,
+                                                                      widget
+                                                                          .ticketData
+                                                                          .locationLongCoordinate);
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                decoration: BoxDecoration(
+                                                                    color:
+                                                                        brandPrimaryColor,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10.r)),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    label(
+                                                                        text:
+                                                                            'Go to Location',
+                                                                        color: Colors
+                                                                            .white),
+                                                                    10.pw,
+                                                                    Icon(
+                                                                      LucideIcons
+                                                                          .locateFixed,
+                                                                      color: Colors
+                                                                          .white, // Customize the marker color
+                                                                      size:
+                                                                          30.w,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         );
                                       },
-                                    ),
-                                  ));
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.r),
-                              child: OctoImage(
-                                placeholderBuilder: OctoBlurHashFix.placeHolder(
-                                    'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                                errorBuilder: OctoError.icon(color: Colors.red),
-                                image: CachedNetworkImageProvider(
-                                  widget.ticketData.ticketEventAlbum[index]
-                                      .assetUrl,
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
-                ),
-                20.ph,
-                heading(
-                    text: 'Itenary', fontSize: 27.sp, color: brandPrimaryColor),
-                15.ph,
-                paragraph(text: widget.ticketData.meetUpInstructions),
-                20.ph,
-                Timeline.tileBuilder(
-                  clipBehavior: Clip.none,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  builder: TimelineTileBuilder(
-                    startConnectorBuilder: (context, index) {
-                      return SolidLineConnector(
-                        thickness: 5,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .color!
-                            .withOpacity(0.6),
-                      );
-                    },
-                    endConnectorBuilder: (context, index) {
-                      return SolidLineConnector(
-                        thickness: 5,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .color!
-                            .withOpacity(0.6),
-                      );
-                    },
-                    indicatorBuilder: (context, index) {
-                      return Container(
-                        width: 60.w,
-                        height: 60.w,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: brandPrimaryColor),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            heading(
-                                text: 'Day',
-                                fontSize: 16.sp,
-                                color: Colors.white),
-                            paragraph(
-                                text: '${index + 1}',
-                                fontSize: 16.sp,
-                                color: Colors.white)
-                          ],
-                        ),
-                      );
-                    },
-                    contentsAlign: ContentsAlign.alternating,
-                    oppositeContentsBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          captionBold(
-                              text:
-                                  widget.ticketData.eventItinerary[index].title,
-                              fontSize: 17.sp),
-                          paragraph(
-                              text: widget
-                                  .ticketData.eventItinerary[index].description,
-                              fontSize: 17.sp),
-                          4.ph,
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(16.r),
-                            child: OctoImage(
-                              width: 90.w,
-                              height: 90.w,
-                              placeholderBuilder: OctoBlurHashFix.placeHolder(
-                                  'LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                              errorBuilder: OctoError.icon(color: Colors.red),
-                              image: CachedNetworkImageProvider(widget
-                                  .ticketData.eventItinerary[index].assetUrl),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    itemCount: widget.ticketData.eventItinerary.length,
-                  ),
-                ),
-                35.ph,
-                heading(
-                    text: 'Extra Information',
-                    fontSize: 27.sp,
-                    color: brandPrimaryColor),
-                15.ph,
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      // extraInfoState = [false, false];
-                      extraInfoState[0] = !extraInfoState[0];
-                    });
-                  },
-                  child: AnimatedContainer(
-                    margin: EdgeInsets.only(bottom: 10.h),
-                    duration: const Duration(milliseconds: 300),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 0.6, color: Colors.black26),
-                        color: extraInfoState[0]
-                            ? brandPrimaryColor.withOpacity(0.2)
-                            : brandPrimaryColor.withOpacity(0.09),
-                        borderRadius: BorderRadius.circular(15.r)),
-                    child: extraInfoState[0]
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  label(
-                                      text: 'Things to do',
-                                      color:
-                                          brandPrimaryColor.withOpacity(0.8)),
-                                  Icon(
-                                    LucideIcons.chevronUp,
-                                    color: brandPrimaryColor.withOpacity(0.8),
-                                  )
-                                ],
-                              ),
-                              ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding:
-                                      EdgeInsets.only(left: 15.w, top: 10.h),
-                                  itemCount:
-                                      widget.ticketData.eventActivities.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10.0),
-                                      child: paragraph(
-                                          fontSize: 19.5.sp,
-                                          text:
-                                              '- ${widget.ticketData.eventActivities[index].title}'),
-                                    );
-                                  }),
-                              10.ph,
-                              label(
-                                  text: 'Things to carry',
-                                  color: brandPrimaryColor.withOpacity(0.8)),
-                              ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding:
-                                      EdgeInsets.only(left: 15.w, top: 10.h),
-                                  itemCount:
-                                      widget.ticketData.thingsToCarry.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10.0),
-                                      child: paragraph(
-                                          fontSize: 19.5.sp,
-                                          text:
-                                              '- ${widget.ticketData.thingsToCarry[index].title}'),
-                                    );
-                                  }),
-                              10.ph,
-                              label(
-                                  text: 'What is provided',
-                                  color: brandPrimaryColor.withOpacity(0.8)),
-                              ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding:
-                                      EdgeInsets.only(left: 15.w, top: 10.h),
-                                  itemCount:
-                                      widget.ticketData.whatIsProvided.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10.0),
-                                      child: paragraph(
-                                          fontSize: 19.5.sp,
-                                          text:
-                                              '- ${widget.ticketData.whatIsProvided[index].title}'),
-                                    );
-                                  }),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  label(
-                                      text: 'Things to do',
-                                      color:
-                                          brandPrimaryColor.withOpacity(0.8)),
-                                  Icon(
-                                    LucideIcons.chevronDown,
-                                    color: brandPrimaryColor.withOpacity(0.8),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                  ),
-                ),
-                20.ph,
-                heading(
-                    text: 'Map Location',
-                    fontSize: 27.sp,
-                    color: brandPrimaryColor),
-                15.ph,
-                paragraph(
-                    text:
-                        'Event location is accessbile with ample parking. Make sure to travel early to avoid traffic around this area'),
-                15.ph,
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.r),
-                      border: Border.all(color: Colors.black26, width: 0.6)),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.r),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 360.h,
-                      child: FlutterMap(
-                        options: MapOptions(
-                          onTap: (j, k) {
-                            HapticFeedback.selectionClick();
-                            print('ddd');
-                            ScreenOverlay.showAppSheet(
-                              context,
-                              playHomeVideoFrame: false,
-                              sheet: Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: 30.h, left: 10.w, right: 10.w),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      border: Border.all(
-                                          color: Colors.black26, width: 0.6)),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15.r),
-                                    child: SizedBox(
-                                      width: 400.w,
-                                      height: 710.h,
-                                      child: FlutterMap(
-                                        options: MapOptions(
-                                            minZoom: 5,
-                                            maxZoom: 20,
-                                            zoom: 17,
-                                            center: LatLng(
-                                                widget.ticketData
-                                                    .locationLatCoordinate,
-                                                widget.ticketData
-                                                    .locationLongCoordinate)),
-                                        children: [
-                                          TileLayer(
-                                            maxNativeZoom: 30,
-                                            retinaMode: true,
-                                            maxZoom: 30,
-                                            tileProvider: NetworkTileProvider(),
-                                            urlTemplate:
-                                                'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
-                                          ),
-                                          MarkerLayer(
-                                            markers: [
-                                              Marker(
-                                                width: 180.0,
-                                                height: 50.0,
-                                                point: LatLng(
-                                                    widget.ticketData
-                                                        .locationLatCoordinate,
-                                                    widget.ticketData
-                                                        .locationLongCoordinate), // Set the marker position
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    ScreenOverlay
-                                                        .showConfirmationDialog(
-                                                            context,
-                                                            titleText:
-                                                                'Open Maps',
-                                                            description:
-                                                                'This will open another applicaiton to navigate to this location',
-                                                            action: () {
-                                                      LinkParser.launchGoolgeMapsNavigation(
-                                                          widget.ticketData
-                                                              .locationLatCoordinate,
-                                                          widget.ticketData
-                                                              .locationLongCoordinate);
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            brandPrimaryColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    10.r)),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        label(
-                                                            text:
-                                                                'Go to Location',
-                                                            color:
-                                                                Colors.white),
-                                                        10.pw,
-                                                        Icon(
-                                                          LucideIcons
-                                                              .locateFixed,
-                                                          color: Colors
-                                                              .white, // Customize the marker color
-                                                          size: 30.w,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          interactionOptions: const InteractionOptions(
-                              flags: InteractiveFlag.doubleTapZoom),
-                          minZoom: 5,
-                          maxZoom: 20,
-                          initialZoom: 17,
-                          initialCenter: LatLng(
-                              widget.ticketData.locationLatCoordinate,
-                              widget.ticketData.locationLongCoordinate),
-                        ),
-                        children: [
-                          TileLayer(
-                            maxNativeZoom: 30,
-                            retinaMode: true,
-                            maxZoom: 30,
-                            tileProvider: NetworkTileProvider(),
-                            urlTemplate:
-                                'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
-                          ),
-                          MarkerLayer(
-                            markers: [
-                              Marker(
-                                rotate: false,
-                                width: 180.0,
-                                height: 50.0,
-                                point: LatLng(
-                                    widget.ticketData.locationLatCoordinate,
-                                    widget.ticketData
-                                        .locationLongCoordinate), // Set the marker position
-                                child: GestureDetector(
-                                  onTap: () {
-                                    ScreenOverlay.showConfirmationDialog(
-                                        context,
-                                        titleText: 'Open Maps',
-                                        description:
-                                            'This will open another applicaiton to navigate to this location',
-                                        action: () {
-                                      LinkParser.launchGoolgeMapsNavigation(
+                                      interactionOptions:
+                                          const InteractionOptions(
+                                              flags: InteractiveFlag
+                                                  .doubleTapZoom),
+                                      minZoom: 5,
+                                      maxZoom: 20,
+                                      initialZoom: 17,
+                                      initialCenter: LatLng(
                                           widget
                                               .ticketData.locationLatCoordinate,
                                           widget.ticketData
-                                              .locationLongCoordinate);
-                                    });
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: brandPrimaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(10.r)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        label(
-                                            text: 'Go to Location',
-                                            color: Colors.white),
-                                        10.pw,
-                                        Icon(
-                                          LucideIcons.locateFixed,
-                                          color: Colors
-                                              .white, // Customize the marker color
-                                          size: 30.w,
-                                        ),
-                                      ],
+                                              .locationLongCoordinate),
                                     ),
+                                    children: [
+                                      TileLayer(
+                                        maxNativeZoom: 30,
+                                        retinaMode: true,
+                                        maxZoom: 30,
+                                        tileProvider: NetworkTileProvider(),
+                                        urlTemplate:
+                                            'https://api.mapbox.com/styles/v1/ronzad/clglfccmb00ae01qtb0fy495p/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoicm9uemFkIiwiYSI6ImNsZ2wzdDUxNTB5Y3AzaWx2NmMxcWFhdzQifQ.747vVY_HUA_gHolQnWrx3A',
+                                      ),
+                                      MarkerLayer(
+                                        markers: [
+                                          Marker(
+                                            rotate: false,
+                                            width: 180.0,
+                                            height: 50.0,
+                                            point: LatLng(
+                                                widget.ticketData
+                                                    .locationLatCoordinate,
+                                                widget.ticketData
+                                                    .locationLongCoordinate), // Set the marker position
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                ScreenOverlay
+                                                    .showConfirmationDialog(
+                                                        context,
+                                                        titleText: 'Open Maps',
+                                                        description:
+                                                            'This will open another applicaiton to navigate to this location',
+                                                        action: () {
+                                                  LinkParser.launchGoolgeMapsNavigation(
+                                                      widget.ticketData
+                                                          .locationLatCoordinate,
+                                                      widget.ticketData
+                                                          .locationLongCoordinate);
+                                                });
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: brandPrimaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.r)),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    label(
+                                                        text: 'Go to Location',
+                                                        color: Colors.white),
+                                                    10.pw,
+                                                    Icon(
+                                                      LucideIcons.locateFixed,
+                                                      color: Colors
+                                                          .white, // Customize the marker color
+                                                      size: 30.w,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
                                   ),
                                 ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                              ),
+                            ),
+                            120.ph,
+                          ]),
+                    )
+                  ],
                 ),
-                30.ph,
-                AppButton(
-                        hasPadding: false,
-                        labelText: 'Purchase Ticket',
-                        action: () {
-                          HapticFeedback.lightImpact();
-                          ScreenOverlay.showAppSheet(context,
-                              sheet: PurchaseTicketSheet(
-                                  ticketData: widget.ticketData));
-                        })
-                    .animate()
-                    .then(delay: 940.ms)
-                    .slideY(
-                        begin: 0.25,
-                        end: 0,
-                        delay: 600.ms,
-                        duration: 7800.ms,
-                        curve: Curves.elasticInOut),
-                140.ph
-              ],
-            ),
+              )
+            ],
           ),
           Positioned(
             bottom: 30.h,

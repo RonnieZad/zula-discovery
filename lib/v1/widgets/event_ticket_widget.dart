@@ -13,7 +13,6 @@ import 'package:zula/v1/utils/helper.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:zula/v1/widgets/image_blur_backdrop.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
-import 'package:zula/v1/widgets/sheets/payment_sheet.dart';
 import 'package:zula/v1/widgets/sheets/purchase_ticket_sheet.dart';
 
 class EventTicketWidget extends StatefulWidget {
@@ -111,7 +110,7 @@ class _EventTicketWidgetState extends State<EventTicketWidget> {
                             15.ph,
                             BarcodeWidget(
                               drawText: false,
-                              height: 85.h,
+                              height: 65.h,
                               color: Colors.white60,
                               barcode: Barcode.code128(),
                               data: 'VIP PASS',

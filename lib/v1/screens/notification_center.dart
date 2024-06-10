@@ -53,28 +53,30 @@ class _NotificationCenterState extends State<NotificationCenter> {
             notificationController.notficationPageIsLoading.value
                 ? const Center(child: ContentLoadingWidget())
                 : notificationController.retrievedNotifications.isEmpty
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          140.ph,
-                          Icon(
-                            LineIcons.bellSlash,
-                            size: 120.w,
-                          ),
-                          15.ph,
-                          label(text: 'You have notifications'),
-                        ]
-                            .animate(
-                              onPlay: (controller) => controller.repeat(),
-                            )
-                            .then(delay: 440.ms)
-                            .slideY(
-                                begin: 0.1,
-                                end: 0,
-                                delay: 600.ms,
-                                duration: 3800.ms,
-                                curve: Curves.elasticInOut),
-                      )
+                    ? Center( 
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            140.ph,
+                            Icon(
+                              LineIcons.bellSlash,
+                              size: 120.w,
+                            ),
+                            15.ph,
+                            label(text: 'You have no notifications'),
+                          ]
+                              .animate(
+                                onPlay: (controller) => controller.repeat(),
+                              )
+                              .then(delay: 440.ms)
+                              .slideY(
+                                  begin: 0.1,
+                                  end: 0,
+                                  delay: 600.ms,
+                                  duration: 3800.ms,
+                                  curve: Curves.elasticInOut),
+                        ),
+                    )
                     : Expanded(
                         child: ListView.builder(
                             padding: EdgeInsets.only(top: 15.h),

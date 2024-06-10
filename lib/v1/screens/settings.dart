@@ -81,7 +81,7 @@ class _MySettingsState extends State<MySettings> {
         ),
       ],
       title: title(
-          text: 'Settings',
+          text: 'Setup',
           fontSize: 46.sp,
           color: brandPrimaryColor,
           fontFamily: 'TypoGraphica',
@@ -149,10 +149,6 @@ class _MySettingsState extends State<MySettings> {
                   ),
                 );
               }),
-          // const Header(
-          //   titleText: 'Settings',
-          //   headingText: '',
-          // ),
         ],
       ),
     );

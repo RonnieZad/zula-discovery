@@ -41,7 +41,7 @@ class AppPrivacySection extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => DocsPages(
                                 termsOfServie: termsCondtionsText,
-                                headingText: 'Zula App\nTerms and Conditions',
+                                headingText: 'Terms and Conditions',
                               )));
                 },
                 child: Container(
@@ -65,7 +65,7 @@ class AppPrivacySection extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => DocsPages(
                                 termsOfServie: privacyPolicyText,
-                                headingText: 'Zula App\nPrivacy Policy',
+                                headingText: 'Privacy Policy',
                               )));
                 },
                 child: Container(

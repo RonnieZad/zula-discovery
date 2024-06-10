@@ -84,12 +84,12 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white,
       appBar: _appBar(context),
       body: Obx(() {
-        return locationController.homePageViewIsLoading.value
+        return locationController.homePageViewIsLoading.value   
             ? Container(
-                height: 0.78.sh,
+                height: Platform.isAndroid ? 0.78.sh: 0.7.sh,
                 width: double.infinity,
                 margin: EdgeInsets.only(
-                    top: 20.h, left: 20.w, right: 20.w, bottom: 40.h),
+                   top: 15.h,  left: 20.w, right: 20.w, bottom: 0.h),
                 padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.r),
@@ -134,8 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: 'No Locations found\nCheck your internet or Refresh',
                   )
                 : Container(
-                    margin: EdgeInsets.only(top: 20.h),
-                    height: 0.78.sh,
+                    margin: EdgeInsets.only(top: 15.h, bottom: 0.h),
+                    height: Platform.isAndroid ? 0.78.sh: 0.7.sh,
                     width: double.infinity,
                     child: PageView.builder(
                         pageSnapping: true,
@@ -180,7 +180,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       closedElevation: 0,
                                       closedColor: Colors.transparent,
-                                      // middleColor: brandPrimaryColor,
                                       openBuilder: (context, closedContainer) {
                                         return ExploreDetails(
                                           locationDetails: locationController
@@ -227,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       visibilityInfo
                                                                               .visibleFraction *
                                                                           100;
-
+                
                                                                   if (visiblePercentage >
                                                                           50 &&
                                                                       locationController
@@ -330,7 +329,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 ),
                                               ),
                                               Positioned(
-                                                bottom: -2.h,
+                                                bottom:Platform.isIOS ? -26.h: -2.h,
                                                 right: 120.w,
                                                 left: 120.w,
                                                 child: Container(
