@@ -68,11 +68,9 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
+      centerTitle: false,
       backgroundColor: Colors.white,
       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
-      // leading: Container(),
-      // automaticallyImplyLeading: false,
-
       title: title(
           text: 'Zulando',
           fontSize: 46.sp,
@@ -222,7 +220,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                               ],
                             )
                           : ListView.builder(
-                            padding: EdgeInsets.only(top: 30.h),
+                              padding: EdgeInsets.only(top: 30.h),
                               shrinkWrap: true,
                               controller: _scrollController,
                               itemBuilder: (context, idx) {

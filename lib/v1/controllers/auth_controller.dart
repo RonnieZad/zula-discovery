@@ -20,8 +20,8 @@ class AuthController extends GetxController {
   var profilePic = ''.obs;
   var phoneNumber = '-'.obs;
   var name = ''.obs;
-  var emailAddress = ''.obs;
-  var lastSignInDate = ''.obs;
+  var emailAddress = '-'.obs;
+  var lastSignInDate = '-'.obs;
   var isAuthLoading = false.obs;
 
   @override
@@ -30,9 +30,9 @@ class AuthController extends GetxController {
 
     profilePic.value = GetStorage().read('profilePic') ?? '';
     phoneNumber.value = GetStorage().read('phoneNumber') ?? '-';
-    name.value = GetStorage().read('name') ?? '';
-    emailAddress.value = GetStorage().read('emailAddress') ?? '';
-    lastSignInDate.value = GetStorage().read('lastSignInDate') ?? '';
+    name.value = GetStorage().read('name') ?? '-';
+    emailAddress.value = GetStorage().read('emailAddress') ?? '-';
+    lastSignInDate.value = GetStorage().read('lastSignInDate') ?? '-';
   }
 
   privateServerAuth({required String emailAddress, required String name}) {

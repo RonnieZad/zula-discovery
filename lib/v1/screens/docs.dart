@@ -88,6 +88,7 @@ class DocsPages extends StatelessWidget {
 
   SliverAppBar _appBar(BuildContext context) {
     return SliverAppBar(
+      
       floating: true,
       pinned: true,
       snap: true,

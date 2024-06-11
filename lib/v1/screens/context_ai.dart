@@ -34,8 +34,6 @@ class _ChatWidgetState extends State<ContextAi> {
   final List<({Image? image, String? text, bool fromUser})> _generatedContent =
       <({Image? image, String? text, bool fromUser})>[];
 
-
-
   @override
   void initState() {
     super.initState();
@@ -92,9 +90,7 @@ class _ChatWidgetState extends State<ContextAi> {
                 height: 45.w,
                 padding: const EdgeInsets.all(2),
                 decoration: const BoxDecoration(
-                  color: Colors.black12,
-                  shape: BoxShape.circle
-                ),
+                    color: Colors.black12, shape: BoxShape.circle),
                 child: Icon(
                   LineIcons.arrowUp,
                   color: brandPrimaryColor,
@@ -119,7 +115,6 @@ class _ChatWidgetState extends State<ContextAi> {
           color: brandPrimaryColor.withOpacity(0.3),
         ),
       ),
-     
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(48.r),
@@ -217,7 +212,6 @@ class _ChatWidgetState extends State<ContextAi> {
               itemCount: _generatedContent.length,
             ),
             30.ph,
-            
             Material(
               elevation: 30,
               shadowColor: Colors.black45,
@@ -243,30 +237,6 @@ class _ChatWidgetState extends State<ContextAi> {
                       },
                     ),
                   ),
-                  // const SizedBox.square(
-                  //   dimension: 10,
-                  // ),
-                  // if (!_loading)
-                  //   IconButton(
-                  //     onPressed: () async {
-                  //       if (_textController.text.isNotEmpty) {
-                  //         _sendChatMessage(_textController.text);
-                  //         FocusScopeNode currentFocus = FocusScope.of(context);
-                  //         if (!currentFocus.hasPrimaryFocus &&
-                  //             currentFocus.focusedChild != null) {
-                  //           currentFocus.focusedChild!.unfocus();
-                  //         }
-                  //       }
-                  //     },
-                  //     icon: Icon(
-                  //       LucideIcons.send,
-                  //       color: brandPrimaryColor,
-                  //     ),
-                  //   )
-                  // else
-                  //   CircularProgressIndicator(
-                  //     color: brandPrimaryColor,
-                  //   ),
                 ],
               ),
             ),

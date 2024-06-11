@@ -30,7 +30,6 @@ class AppAccountSection extends StatelessWidget {
               text: 'Account',
               fontSize: 46.sp,
               color: brandPrimaryColor,
-              
               textAlign: TextAlign.center),
           30.ph,
           authController.profilePic.value.isNotEmpty
@@ -58,6 +57,22 @@ class AppAccountSection extends StatelessWidget {
                     color: brandPrimaryColor,
                   ),
                 ),
+                20.ph,
+          Column(
+            children: [
+              headingBig(text: authController.name.value),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(LineIcons.birthdayCake),
+                  10.pw,
+                  paragraph(text: 'Since'),
+                  10.pw,
+                  paragraph(text: 'Jan, 2024'),
+                ],
+              ),
+            ],
+          ),
           30.ph,
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20.w),
@@ -72,22 +87,21 @@ class AppAccountSection extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(LineIcons.user),
-                    10.pw,
-                    paragraph(text: 'Name'),
-                    const Spacer(),
-                    paragraph(text: authController.name.value),
-                  ],
-                ),
-                20.ph,
-              
-                Row(
-                  children: [
                     const Icon(LineIcons.at),
                     10.pw,
                     paragraph(text: 'Email'),
                     const Spacer(),
                     paragraph(text: authController.emailAddress.value),
+                  ],
+                ),
+                20.ph,
+                Row(
+                  children: [
+                    const Icon(LineIcons.locationArrow),
+                    10.pw,
+                    paragraph(text: 'Location'),
+                    const Spacer(),
+                    paragraph(text: 'Kampala, Uganda'),
                   ],
                 ),
                 20.ph,

@@ -46,7 +46,8 @@ class _TicketPageState extends State<TicketPage>
 
   SliverAppBar _appBar(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 130.h,
+      centerTitle: false,
+      expandedHeight: 140.h,
       pinned: true,
       stretch: true,
       floating: true,
@@ -54,6 +55,7 @@ class _TicketPageState extends State<TicketPage>
       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
       actions: [
         IconButton(
+          tooltip: 'Discover',
           icon: Icon(
             LineIcons.compass,
             color: brandPrimaryColor,
@@ -64,8 +66,8 @@ class _TicketPageState extends State<TicketPage>
                 MaterialPageRoute(builder: (context) => const DiscoverPage()));
           },
         ),
-        // 10.pw,
         IconButton(
+          tooltip: 'Notifications',
           icon: Icon(
             LineIcons.bell,
             color: brandPrimaryColor,
@@ -120,8 +122,7 @@ class _TicketPageState extends State<TicketPage>
                       top: 25.h, bottom: 90.h, left: 20.w, right: 20.w),
                   sliver: tickerController.filteredEventTickets.isEmpty
                       ? const SliverFillRemaining(
-                      
-                        hasScrollBody: false,
+                          hasScrollBody: false,
                           child: NoContentWidget(
                               label:
                                   'No Events found\nCheck your internet or Refresh'),

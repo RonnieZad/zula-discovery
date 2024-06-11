@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -43,6 +42,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
+      centerTitle: false,
       backgroundColor: Colors.white,
       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
       title: title(

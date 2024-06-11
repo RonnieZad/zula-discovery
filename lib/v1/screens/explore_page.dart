@@ -284,6 +284,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                         maxHeight: Platform.isAndroid ? 110.h : 140.h,
                         showAppBar: _showAppBar,
                         child: AppBar(
+                          
                           backgroundColor: Colors.white,
                           surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
                           automaticallyImplyLeading: false,
@@ -522,6 +523,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 IconButton(
+                                  tooltip: 'AI',
                                     onPressed: () {
                                       ScreenOverlay.showAppSheet(context,
                                           playHomeVideoFrame: false,
@@ -530,6 +532,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                     icon: Icon(CupertinoIcons.sparkles,
                                         color: brandPrimaryColor, size: 30.w)),
                                 IconButton(
+                                  tooltip: 'Vitual Walkthrough',
                                     onPressed: () {
                                       ScreenOverlay.showAppSheet(context,
                                           playHomeVideoFrame: false,
@@ -541,6 +544,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                     icon: Icon(Icons.threed_rotation,
                                         color: brandPrimaryColor, size: 30.w)),
                                 IconButton(
+                                  tooltip: 'Reviews',
                                     onPressed: () {
                                       ScreenOverlay.showAppSheet(context,
                                           playHomeVideoFrame: false,
@@ -552,6 +556,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                     icon: Icon(LucideIcons.quote,
                                         color: brandPrimaryColor, size: 30.w)),
                                 IconButton(
+                                  tooltip: 'Map Location',
                                     onPressed: () {
                                       ScreenOverlay.showAppSheet(
                                         context,
@@ -669,6 +674,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                     icon: Icon(LineIcons.map,
                                         color: brandPrimaryColor, size: 30.w)),
                                 IconButton(
+                                  tooltip: 'Activity Listing',
                                     onPressed: () {
                                       ScreenOverlay.showAppSheet(context,
                                           playHomeVideoFrame: false,
@@ -680,6 +686,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                     icon: Icon(Icons.restaurant,
                                         color: brandPrimaryColor, size: 30.w)),
                                 IconButton(
+                                  tooltip: 'Share',
                                     onPressed: () {
                                       ScreenOverlay.showAppSheet(context,
                                           playHomeVideoFrame: false,
@@ -699,6 +706,7 @@ class _ExploreDetailsState extends State<ExploreDetails>
                                     icon: Icon(LineIcons.share,
                                         color: brandPrimaryColor, size: 30.w)),
                                 GestureDetector(
+                                  
                                   onTap: () {
                                     HapticFeedback.selectionClick();
                                     likeAnimationController.forward();

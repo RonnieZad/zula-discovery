@@ -16,7 +16,6 @@ import 'package:zula/v1/screens/settings_app_info.dart';
 import 'package:zula/v1/screens/settings_app_privacy.dart';
 import 'package:zula/v1/utils/extensions.dart';
 import 'package:zula/v1/utils/typography.dart';
-import 'package:zula/v1/widgets/header.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
 
 class MySettings extends StatefulWidget {
@@ -33,7 +32,6 @@ class _MySettingsState extends State<MySettings> {
   }
 
   void _appSettingsRoute({required String settingsRoute}) {
-    print(settingsRoute);
     switch (settingsRoute) {
       case 'account':
         ScreenOverlay.showAppSheet(context, sheet: const AppAccountSection());
@@ -53,10 +51,12 @@ class _MySettingsState extends State<MySettings> {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
+      centerTitle: false,
       backgroundColor: Colors.white,
       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
       actions: [
         IconButton(
+          tooltip: 'Discover',
           icon: Icon(
             LineIcons.compass,
             color: brandPrimaryColor,
@@ -67,8 +67,8 @@ class _MySettingsState extends State<MySettings> {
                 MaterialPageRoute(builder: (context) => const DiscoverPage()));
           },
         ),
-        // 10.pw,
         IconButton(
+          tooltip: 'Notifications',
           icon: Icon(
             LineIcons.bell,
             color: brandPrimaryColor,
@@ -117,11 +117,11 @@ class _MySettingsState extends State<MySettings> {
                       child: Stack(
                         children: [
                           Positioned(
-                              right: -40,
-                              top: -34,
+                              right: -40.w,
+                              top: -34.h,
                               child: Icon(
                                 settingsOptions[index]['icon'],
-                                size: 140.0,
+                                size: 150.w,
                                 color: Colors.black26,
                               )),
                           Container(

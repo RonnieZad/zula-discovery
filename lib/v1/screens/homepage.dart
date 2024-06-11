@@ -43,10 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
+      centerTitle: false,
       backgroundColor: Colors.white,
       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
       actions: [
         IconButton(
+          tooltip: 'Discover',
           icon: Icon(
             LineIcons.compass,
             color: brandPrimaryColor,
@@ -57,8 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 MaterialPageRoute(builder: (context) => const DiscoverPage()));
           },
         ),
-        // 10.pw,
         IconButton(
+          tooltip: 'Notifications',
           icon: Icon(
             LineIcons.bell,
             color: brandPrimaryColor,
@@ -84,12 +86,12 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white,
       appBar: _appBar(context),
       body: Obx(() {
-        return locationController.homePageViewIsLoading.value   
+        return locationController.homePageViewIsLoading.value
             ? Container(
-                height: Platform.isAndroid ? 0.78.sh: 0.7.sh,
+                height: Platform.isAndroid ? 0.78.sh : 0.7.sh,
                 width: double.infinity,
                 margin: EdgeInsets.only(
-                   top: 15.h,  left: 20.w, right: 20.w, bottom: 0.h),
+                    top: 15.h, left: 20.w, right: 20.w, bottom: 0.h),
                 padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.r),
@@ -135,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 : Container(
                     margin: EdgeInsets.only(top: 15.h, bottom: 0.h),
-                    height: Platform.isAndroid ? 0.78.sh: 0.7.sh,
+                    height: Platform.isAndroid ? 0.78.sh : 0.7.sh,
                     width: double.infinity,
                     child: PageView.builder(
                         pageSnapping: true,
@@ -226,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       visibilityInfo
                                                                               .visibleFraction *
                                                                           100;
-                
+
                                                                   if (visiblePercentage >
                                                                           50 &&
                                                                       locationController
@@ -329,7 +331,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 ),
                                               ),
                                               Positioned(
-                                                bottom:Platform.isIOS ? -26.h: -2.h,
+                                                bottom: Platform.isIOS
+                                                    ? -26.h
+                                                    : -2.h,
                                                 right: 120.w,
                                                 left: 120.w,
                                                 child: Container(

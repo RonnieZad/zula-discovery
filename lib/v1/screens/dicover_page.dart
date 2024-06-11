@@ -29,6 +29,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
     // Build the actions for the AppBar (e.g., clear query button).
     return [
       IconButton(
+        tooltip: 'Clear',
         icon: Icon(
           Icons.clear,
           color: brandPrimaryColor,
@@ -46,6 +47,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
   Widget buildLeading(BuildContext context) {
     // Build the leading icon for the AppBar (e.g., back button).
     return IconButton(
+      tooltip: 'Back',
       icon: Icon(
         Icons.arrow_back_ios_new_rounded,
         color: brandPrimaryColor,
@@ -150,10 +152,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
-      // leading: Container(),
+      centerTitle: false,
       automaticallyImplyLeading: false,
       actions: [
         IconButton(
+          tooltip: 'Search',
           icon: Icon(
             LucideIcons.search,
             color: brandPrimaryColor,
@@ -166,6 +169,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           },
         ),
         IconButton(
+          tooltip: 'Zulando AI',
           icon: Icon(
             CupertinoIcons.sparkles,
             color: brandPrimaryColor,

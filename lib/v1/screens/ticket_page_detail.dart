@@ -155,6 +155,7 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                     maxHeight: Platform.isAndroid ? 110.h : 140.h,
                     showAppBar: _showAppBar,
                     child: AppBar(
+                      centerTitle: false,
                       backgroundColor: Colors.white,
                       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
                       automaticallyImplyLeading: false,
@@ -253,6 +254,7 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                                     //     icon: Icon(LucideIcons.quote,
                                     //         color: brandPrimaryColor, size: 30.w)),
                                     IconButton(
+                                      tooltip: 'Like',
                                             onPressed: () {
                                               likeAnimationController.forward();
                                               HapticFeedback.selectionClick();
@@ -284,6 +286,7 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                                         )
                                         .scaleXY(begin: 1.0, end: 0.6),
                                     IconButton(
+                                      tooltip: 'Share',
                                         onPressed: () {
                                           ScreenOverlay.showAppSheet(context,
                                               playHomeVideoFrame: false,
