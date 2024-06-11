@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +13,6 @@ import 'package:zula/v1/screens/notification_center.dart';
 import 'package:zula/v1/screens/ticket_page_detail.dart';
 import 'package:zula/v1/utils/typography.dart';
 import 'package:zula/v1/widgets/event_ticket_widget.dart';
-import 'package:zula/v1/widgets/header.dart';
 import 'package:zula/v1/widgets/screen_helpers.dart';
 import 'package:zula/v1/widgets/screen_overlay.dart';
 
@@ -47,8 +44,12 @@ class _TicketPageState extends State<TicketPage>
     super.initState();
   }
 
-  AppBar _appBar(BuildContext context) {
-    return AppBar(
+  SliverAppBar _appBar(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 130.h,
+      pinned: true,
+      stretch: true,
+      floating: true,
       backgroundColor: Colors.white,
       surfaceTintColor: brandPrimaryColor.withOpacity(0.2),
       actions: [
@@ -83,7 +84,7 @@ class _TicketPageState extends State<TicketPage>
           fontFamily: 'TypoGraphica',
           textAlign: TextAlign.center),
       bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(70),
+          preferredSize: const Size.fromHeight(74),
           child: TabBar(
               indicatorColor: brandPrimaryColor,
               unselectedLabelColor: brandPrimaryColor.withOpacity(0.7),
@@ -107,47 +108,61 @@ class _TicketPageState extends State<TicketPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(context),
       backgroundColor: Colors.white,
       body: Obx(() {
         return Stack(
           children: [
-            tickerController.filteredEventTickets.isEmpty
-                ? const NoContentWidget(
-                    label: 'No Events found\nCheck your internet or Refresh')
-                : ListView.builder(
-                        padding: EdgeInsets.only(
-                            top: 25.h, bottom: 90.h, left: 20.w, right: 20.w),
-                        itemCount: tickerController.filteredEventTickets.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () {
-                                HapticFeedback.lightImpact();
-                                tickerController.ticketsToBuy.value =
-                                    List.filled(
-                                        tickerController
-                                            .filteredEventTickets[index]
-                                            .ticketCategory
-                                            .length,
-                                        0);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TicketPageDetail(
-                                            ticketData: tickerController
-                                                .filteredEventTickets[index])));
-                              },
-                              child: Hero(
-                                tag: tickerController
-                                    .filteredEventTickets[index].eventTitle,
-                                child: EventTicketWidget(
-                                    ticketData: tickerController
-                                        .filteredEventTickets[index]),
-                              ));
-                        })
-                    .animate()
-                    .slideY(begin: 0.2, end: 0.0, duration: 150.ms)
-                    .fade(duration: 500.ms),
+            CustomScrollView(
+              slivers: [
+                _appBar(context),
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                      top: 25.h, bottom: 90.h, left: 20.w, right: 20.w),
+                  sliver: tickerController.filteredEventTickets.isEmpty
+                      ? const SliverFillRemaining(
+                      
+                        hasScrollBody: false,
+                          child: NoContentWidget(
+                              label:
+                                  'No Events found\nCheck your internet or Refresh'),
+                        )
+                      : SliverList.builder(
+                          itemCount:
+                              tickerController.filteredEventTickets.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                                    onTap: () {
+                                      HapticFeedback.lightImpact();
+                                      tickerController.ticketsToBuy.value =
+                                          List.filled(
+                                              tickerController
+                                                  .filteredEventTickets[index]
+                                                  .ticketCategory
+                                                  .length,
+                                              0);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => TicketPageDetail(
+                                                  ticketData: tickerController
+                                                          .filteredEventTickets[
+                                                      index])));
+                                    },
+                                    child: Hero(
+                                      tag: tickerController
+                                          .filteredEventTickets[index]
+                                          .eventTitle,
+                                      child: EventTicketWidget(
+                                          ticketData: tickerController
+                                              .filteredEventTickets[index]),
+                                    ))
+                                .animate()
+                                .slideY(begin: 0.2, end: 0.0, duration: 150.ms)
+                                .fade(duration: 500.ms);
+                          }),
+                )
+              ],
+            ),
           ],
         );
       }),
