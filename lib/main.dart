@@ -40,6 +40,7 @@ void main() async {
 
 
     // just testing purposes
+    // test two
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
     // Lock the device orientation to portrait mode
