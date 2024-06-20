@@ -1,4 +1,4 @@
-# vybe
+# zula
 
 A new Flutter project.
 
