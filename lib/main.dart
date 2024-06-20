@@ -38,6 +38,8 @@ void main() async {
       debugPrint("Failed to initialize Firebase: $e");
     }
 
+
+    // just testing purposes
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
     // Lock the device orientation to portrait mode
