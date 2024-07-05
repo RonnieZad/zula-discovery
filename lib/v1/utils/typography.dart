@@ -14,13 +14,15 @@ Widget title(
         int delay = 0,
         fontFamily = 'TypoGraphica',
         double fontSize = 40}) =>
-    Text(text,
-        style: TextStyle(
-            fontSize: fontSize.sp,
-            color: color,
-            fontWeight: FontWeight.bold,
-            fontFamily: fontFamily),
-        textAlign: textAlign);
+    Text(
+      text,
+      style: TextStyle(
+          fontSize: fontSize.sp,
+          color: color,
+          fontWeight: FontWeight.bold,
+          fontFamily: fontFamily),
+      textAlign: textAlign,
+    );
 Widget subtitle(
         {String text = '',
         Color? color,

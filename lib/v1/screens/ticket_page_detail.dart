@@ -475,6 +475,8 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                             paragraph(
                                 text: widget.ticketData.meetUpInstructions),
                             20.ph,
+                          
+                          
                             Timeline.tileBuilder(
                               clipBehavior: Clip.none,
                               shrinkWrap: true,
@@ -571,6 +573,8 @@ class _TicketPageDetailState extends State<TicketPageDetail>
                                     widget.ticketData.eventItinerary.length,
                               ),
                             ),
+                          
+                          
                             35.ph,
                             heading(
                                 text: 'Extra Information',

@@ -74,6 +74,7 @@ class AppAccountSection extends StatelessWidget {
             ],
           ),
           30.ph,
+
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20.w),
             width: double.infinity,
@@ -137,6 +138,8 @@ class AppAccountSection extends StatelessWidget {
               ],
             ),
           ),
+         
+         
           35.ph,
           AppButton(
               labelText: 'Log Out',
