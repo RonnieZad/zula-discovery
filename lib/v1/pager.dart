@@ -26,7 +26,8 @@ class _AppCanvasState extends State<AppCanvas> {
 
   List<Widget> appPages = [
     const MyHomePage(),
-    const TicketPage(),
+    // const TicketPage(),
+    const TestDummyFile(),
     const MySettings()
   ];
 
