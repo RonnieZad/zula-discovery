@@ -18,13 +18,13 @@ import 'package:zula/v1/screens/get_started_page.dart';
 void main() async {
   runZonedGuarded<Future<void>>(() async {
     // Ensure that widget binding is initialized before running the app
-    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
-    );
+    // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    // SystemChrome.setEnabledSystemUIMode(
+    //   SystemUiMode.manual,
+    //   overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
+    // );
     // Preserve the native splash screen until manual removal
-    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
     // Initialize local storage for the app
     await GetStorage.init();
