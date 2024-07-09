@@ -15,6 +15,10 @@ import 'package:zula/v1/controllers/auth_controller.dart';
 import 'package:zula/v1/pager.dart';
 import 'package:zula/v1/screens/get_started_page.dart';
 
+class Serealiser{
+  //do some stuff here
+}
+
 void main() async {
   runZonedGuarded<Future<void>>(() async {
     // Ensure that widget binding is initialized before running the app
